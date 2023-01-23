@@ -20,3 +20,7 @@ const MazadatImagePicker = NativeModules.MazadatImagePicker
 export function multiply(a: number, b: number): Promise<number> {
   return MazadatImagePicker.multiply(a, b);
 }
+
+export function openCamera(length: number): Promise<number> {
+  return MazadatImagePicker.openCamera(length);
+}
