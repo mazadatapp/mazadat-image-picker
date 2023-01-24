@@ -6,7 +6,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.5.2'
+    classpath 'com.android.tools.build:gradle:4.2.2'
   }
 }
 
@@ -135,6 +135,12 @@ dependencies {
 
   //recyclerview
   implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+  //round image view
+  implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 // From node_modules
 }
 

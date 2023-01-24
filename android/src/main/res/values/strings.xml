@@ -6,4 +6,12 @@
   <string name="delete">Delete</string>
   <string name="done">Done</string>
   <string name="max_number_selected_images_is">The maximum number of selected photos is</string>
+  <string name="select_to_edit">Select to edit</string>
+
+
+  //confirmation dialog
+  <string name="are_you_sure_you_want_to_close">Are you sure you want to close?</string>
+  <string name="cancel">Cancel</string>
+  <string name="yes_close">Yes, Close</string>
+  <string name="all_images_and_edits_you_did_will_be_delete">All images and edits you did will be delete</string>
 </resources>

@@ -36,9 +36,9 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void openCamera(int length, Promise promise) {
+  public void openCamera(int maxImagesSize, Promise promise) {
     Intent intent = new Intent(getCurrentActivity(), CameraActivity.class);
-    intent.putExtra("maxLength", length);
+    intent.putExtra("maxImagesSize", maxImagesSize);
 
     Objects.requireNonNull(getCurrentActivity()).startActivity(intent);
   }

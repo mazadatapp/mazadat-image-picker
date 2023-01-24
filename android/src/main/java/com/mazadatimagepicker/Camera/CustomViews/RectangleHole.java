@@ -1,4 +1,4 @@
-package com.mazadatimagepicker.Camera;
+package com.mazadatimagepicker.Camera.CustomViews;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
@@ -16,6 +18,7 @@ public class RectangleHole extends ViewGroup {
     float dp;
     int aspect_ratio_x=4;
     int aspect_ratio_y=3;
+    RectF focusArea;
     public RectangleHole(Context context) {
         super(context);
         init(context);
@@ -54,9 +57,19 @@ public class RectangleHole extends ViewGroup {
         aspect_ratio_y=y;
         invalidate();
     }
-    @Override
+
+  public RectF getFocusArea() {
+    return focusArea;
+  }
+
+  @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
+        if(focusArea==null){
+          float width= getWidth()*0.91f;
+          float height=width*aspect_ratio_y/aspect_ratio_x;
+          focusArea = new RectF(getWidth()/2f - width/2f,getHeight()*0.2f, getWidth()/2f + width/2,getHeight()*0.2f + height);
+        }
         Paint black=new Paint();
         black.setColor(getContext().getResources().getColor(R.color.black_70));
         canvas.drawRect(0,0,getWidth(),getHeight(),black);
@@ -64,8 +77,7 @@ public class RectangleHole extends ViewGroup {
         Paint eraser = new Paint();
         eraser.setAntiAlias(true);
         eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        float width= getWidth()*0.91f;
-        float height=width*aspect_ratio_y/aspect_ratio_x;
-        canvas.drawRect(getWidth()/2f - width/2f,getHeight()*0.2f, getWidth()/2f + width/2,getHeight()*0.2f + height, eraser);
+
+        canvas.drawRect(focusArea, eraser);
     }
 }
