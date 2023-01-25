@@ -257,7 +257,7 @@ public class CameraActivity extends AppCompatActivity {
 
           Log.i("datadata_width",bitmap.getWidth()+" "+rectangleHole.getWidth());
 
-          Rect scaledRectangle=scaledRect(bitmap.getWidth(),bitmap.getHeight());
+          Rect scaledRectangle= getScaledRect(bitmap.getWidth(),bitmap.getHeight());
           Bitmap croppedBitmap = Bitmap.createBitmap(bitmap, scaledRectangle.left, scaledRectangle.top, scaledRectangle.width(), scaledRectangle.height());
 
           File file = ImageUtils.bitmapToFile(CameraActivity.this, croppedBitmap);
@@ -267,7 +267,7 @@ public class CameraActivity extends AppCompatActivity {
       }
     });
   }
-  private Rect scaledRect(int originalBitmapWidth,int originalBitmapHeight){
+  private Rect getScaledRect(int originalBitmapWidth, int originalBitmapHeight){
     int rectangleWidth=rectangleHole.getWidth();
     int rectangleHeight=rectangleHole.getHeight();
     int left = (int) rectangleHole.getFocusArea().left * originalBitmapWidth / rectangleWidth;
