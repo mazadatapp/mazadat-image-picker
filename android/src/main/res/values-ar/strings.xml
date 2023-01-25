@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="gallery">المكتبة</string>
+  <string name="camera_capture_hint">من فضلك ، اعرض المنتج الخاص بك داخل المربع أدناه. تأكد من أن صورتك واضحة للحصول على أفضل النتائج</string>
+  <string name="crop">قص</string>
+  <string name="rotate">استدارة</string>
+  <string name="delete">مسح</string>
+  <string name="done">تم</string>
+  <string name="max_number_selected_images_is">الحد الأقصى لعدد الصور المختارة هو</string>
+  <string name="select_to_edit">تعديل</string>
+
+  //confirmation dialog
+  <string name="are_you_sure_you_want_to_close">هل أنت متأكد أنك تريد الإغلاق؟</string>
+  <string name="cancel">لا</string>
+  <string name="yes_close">إغلاق</string>
+  <string name="all_images_and_edits_you_did_will_be_delete">سيتم حذف جميع الصور والتعديلات التي قمت بها</string>
+
+  //confirmation dialog
+  <string name="are_you_sure_to_delete">هل انت متأكد من الحذف؟</string>
+  <string name="yes_delete">نعم, إحذف</string>
+</resources>

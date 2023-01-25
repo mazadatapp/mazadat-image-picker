@@ -21,6 +21,10 @@ export function multiply(a: number, b: number): Promise<number> {
   return MazadatImagePicker.multiply(a, b);
 }
 
-export function openCamera(length: number): Promise<number> {
-  return MazadatImagePicker.openCamera(length);
+export function openCamera(length: number,lang: String): Promise<number> {
+  return MazadatImagePicker.openCamera(length, lang);
+}
+
+export function editPhoto(path: String,lang: String): Promise<number> {
+  return MazadatImagePicker.editPhoto(path, lang);
 }

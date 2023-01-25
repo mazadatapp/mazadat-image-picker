@@ -2,6 +2,7 @@ package com.mazadatimagepicker.Camera.Image;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
 
   public LinkedList<ImageItem> images;
   CameraActivity cameraActivity;
-  Context context;
 
   // Pass in the contact array into the constructor
   public ImageItemsAdapter(CameraActivity cameraActivity, LinkedList<ImageItem> images) {
@@ -41,12 +41,11 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-    context = parent.getContext();
-    LayoutInflater inflater = LayoutInflater.from(context);
+    LayoutInflater inflater = LayoutInflater.from(cameraActivity);
 
     View invitationView = inflater.inflate(R.layout.adapter_image_item, parent, false);
 
-    return new ViewHolder(context, invitationView);
+    return new ViewHolder(invitationView);
 
   }
 
@@ -70,7 +69,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
     TextView selectToEdit;
 
 
-    public ViewHolder(Context context, View itemView) {
+    public ViewHolder(View itemView) {
       super(itemView);
       image = itemView.findViewById(R.id.image);
       selectToEdit = itemView.findViewById(R.id.select_to_edit_tv);
@@ -81,6 +80,8 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
       selectToEdit.setVisibility(model.getFile()!=null?View.VISIBLE:View.GONE);
       if(model.getFile()!=null){
         image.setImageURI(Uri.fromFile(model.getFile()));
+      }else{
+        image.setImageDrawable(null);
       }
 
       itemView.setOnClickListener(view -> cameraActivity.editOrCapturePhoto(position));

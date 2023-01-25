@@ -4,6 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/black"
   tools:context=".Camera.CameraActivity">
 
   <com.otaliastudios.cameraview.CameraView
@@ -11,6 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cameraAudio="off"
+    app:cameraEngine="camera2"
     app:cameraRequestPermissions="true" />
 
   <com.mazadatimagepicker.Camera.CustomViews.RectangleHole
@@ -24,30 +26,35 @@
     android:layout_height="0dp"
     app:layout_constraintHeight_percent="0.131"
     app:layout_constraintTop_toTopOf="parent" />
+
   <View
     android:id="@+id/spacer_top"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     app:layout_constraintHeight_percent="0.2"
     app:layout_constraintTop_toTopOf="parent" />
+
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/edit_cl"
     android:layout_width="0dp"
     android:layout_height="0dp"
-    app:layout_constraintTop_toBottomOf="@id/spacer_top"
-    app:layout_constraintWidth_percent="0.91"
+    android:visibility="gone"
     app:layout_constraintDimensionRatio="H,4:3"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    android:visibility="gone">
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/spacer_top"
+    app:layout_constraintWidth_percent="0.91">
+
     <ImageView
       android:id="@+id/image"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+      android:layout_height="match_parent" />
+
     <com.mazadatimagepicker.Camera.CustomViews.ImageCropper
       android:id="@+id/image_cropper"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+      android:layout_height="match_parent"
+      android:visibility="gone" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <ImageView
@@ -78,17 +85,20 @@
     android:background="@android:color/transparent"
     android:drawableStart="@drawable/ic_gallery"
     android:drawablePadding="6dp"
+    android:fontFamily="@font/montserrat_semibold"
     android:gravity="center"
-    android:text="Gallery"
+    android:text="@string/gallery"
     android:textColor="@color/white_74"
     app:layout_constraintBottom_toBottomOf="@id/close_im"
     app:layout_constraintEnd_toStartOf="@id/close_im"
     app:layout_constraintTop_toTopOf="@id/close_im" />
 
   <TextView
+    android:id="@+id/capture_hint_tv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
+    android:fontFamily="@font/montserrat_regular"
     android:gravity="center"
     android:text="@string/camera_capture_hint"
     android:textColor="@color/white_74"
@@ -112,9 +122,9 @@
     android:layout_marginStart="32dp"
     android:layout_marginBottom="20dp"
     android:src="@drawable/ic_confirm"
+    android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@id/recycler"
-    app:layout_constraintStart_toStartOf="parent"
-    android:visibility="gone"/>
+    app:layout_constraintStart_toStartOf="parent" />
 
   <ImageView
     android:id="@+id/decline_im"
@@ -123,9 +133,9 @@
     android:layout_marginEnd="32dp"
     android:layout_marginBottom="20dp"
     android:src="@drawable/ic_decline"
+    android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@id/recycler"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:visibility="gone"/>
+    app:layout_constraintEnd_toEndOf="parent" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler"
@@ -138,7 +148,8 @@
     android:id="@+id/max_images_tv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
+    android:layout_marginHorizontal="16dp"
+    android:fontFamily="@font/montserrat_regular"
     android:text="@string/max_number_selected_images_is"
     android:textColor="@color/white_74"
     android:textSize="12dp"
@@ -167,11 +178,13 @@
       android:background="@android:color/transparent"
       android:drawableTop="@drawable/ic_crop"
       android:drawablePadding="4dp"
+      android:fontFamily="@font/montserrat_medium"
       android:gravity="center"
       android:minWidth="1dp"
       android:text="@string/crop"
       android:textAllCaps="false"
       android:textColor="@color/white"
+      android:textSize="11dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
@@ -185,11 +198,13 @@
       android:background="@android:color/transparent"
       android:drawableTop="@drawable/ic_rotate"
       android:drawablePadding="4dp"
+      android:fontFamily="@font/montserrat_medium"
       android:gravity="center"
       android:minWidth="1dp"
       android:text="@string/rotate"
       android:textAllCaps="false"
       android:textColor="@color/white"
+      android:textSize="11dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toEndOf="@id/crop_btn"
       app:layout_constraintTop_toTopOf="parent" />
@@ -203,20 +218,24 @@
       android:background="@android:color/transparent"
       android:drawableTop="@drawable/ic_trash"
       android:drawablePadding="4dp"
+      android:fontFamily="@font/montserrat_medium"
       android:gravity="center"
       android:minWidth="1dp"
       android:text="@string/delete"
       android:textAllCaps="false"
       android:textColor="@color/white"
+      android:textSize="11dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toEndOf="@id/rotate_btn"
       app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+      android:id="@+id/done_btn"
       android:layout_width="110dp"
       android:layout_height="match_parent"
       android:layout_marginEnd="16dp"
       android:background="@drawable/custom_blue_round_15"
+      android:fontFamily="@font/montserrat_semibold"
       android:text="@string/done"
       android:textAllCaps="false"
       android:textColor="@color/white"

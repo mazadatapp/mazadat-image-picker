@@ -1,8 +1,8 @@
 buildscript {
   repositories {
-      google()
-      mavenCentral()
-      maven { url 'https://jitpack.io' }
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
   }
 
   dependencies {
@@ -11,7 +11,7 @@ buildscript {
 }
 
 def isNewArchitectureEnabled() {
-  return rootProject.hasProperty("newArchEnabled") &&  rootProject.getProperty("newArchEnabled") == "true"
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
 
 apply plugin: 'com.android.library'
@@ -39,6 +39,9 @@ android {
   buildTypes {
     release {
       minifyEnabled false
+    }
+    all {
+      buildConfigField "String", "BROADCAST_ACTION", "\"Mazadat-Image-Picker\""
     }
   }
 
@@ -118,14 +121,14 @@ repositories {
   if (!found) {
     throw new GradleException(
       "${project.name}: unable to locate React Native android sources. " +
-      "Ensure you have you installed React Native as a dependency in your project and try again."
+        "Ensure you have you installed React Native as a dependency in your project and try again."
     )
   }
 }
 
 
 dependencies {
-    //noinspection GradleDynamicVersion
+  //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation 'com.android.support:appcompat-v7:28.0.0'
   implementation 'com.android.support.constraint:constraint-layout:2.0.4'
@@ -138,9 +141,12 @@ dependencies {
 
   //round image view
   implementation 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+  implementation 'androidx.appcompat:appcompat:1.6.0'
+  implementation 'com.google.android.material:material:1.4.0'
+  implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+  //image orientation
+  implementation "com.android.support:exifinterface:28.0.0"
 // From node_modules
 }
 

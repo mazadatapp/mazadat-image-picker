@@ -20,21 +20,10 @@
     android:layout_marginTop="16dp"
     android:fontFamily="@font/montserrat_bold"
     android:gravity="center"
-    android:text="@string/are_you_sure_you_want_to_close"
+    android:text="@string/are_you_sure_to_delete"
     android:textColor="@color/black_70"
     android:textSize="18dp" />
 
-  <TextView
-    android:id="@+id/hint_tv"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginTop="16dp"
-    android:fontFamily="@font/montserrat_medium"
-    android:gravity="center"
-    android:text="@string/all_images_and_edits_you_did_will_be_delete"
-    android:textColor="@color/black_60"
-    android:textSize="14dp" />
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -57,7 +46,7 @@
       android:textSize="14dp" />
 
     <Button
-      android:id="@+id/close_btn"
+      android:id="@+id/confirm_delete_btn"
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="1"
@@ -65,7 +54,7 @@
       android:backgroundTint="@color/turquoise_blue"
       android:fontFamily="@font/montserrat_semibold"
       android:gravity="center"
-      android:text="@string/yes_close"
+      android:text="@string/yes_delete"
       android:textAllCaps="false"
       android:textColor="@color/white"
       android:textSize="14dp" />
