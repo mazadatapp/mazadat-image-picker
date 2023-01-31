@@ -22,17 +22,24 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.editBtn.isEnabled=false
         cell.editBtn.setTitle(lang == "en" ? "Select to edit" : "إضغط للتعديل", for: .normal)
         cell.editBtn.sizeToFit()
-        cell.editBtn.centerVertically(padding: 2)
+        cell.editBtn.centerVertically(padding: 2, lang: lang)
         if(imageItems[indexPath.row].image != nil){
             cell.image_.image = imageItems[indexPath.row].image
+        }else{
+            cell.image_.image = nil
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if(imageItems[indexPath.row].image != nil){
+        itemSelected(index: indexPath.row)
+    }
+    
+    func itemSelected(index:Int){
+        if(imageItems[index].image != nil){
+            print("yes")
             editView.isHidden=false
-            editImage.image = imageItems[indexPath.row].image
+            editImage.image = imageItems[index].image
             showPreviewLayer(flag: false)
             editMode = true
             
@@ -43,9 +50,10 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
             confirmBtn.isHidden = false
             confirmBtn.alpha = 0.38
             captureBtn.isHidden=true
-            editSelectedIndex=indexPath.row
+            editSelectedIndex=index
         }else if(editModeType == EditModeTypes.NOTHING){
             resetUI()
+            editMode = false
         }
     }
     
@@ -54,6 +62,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
     }
     
     func resetUI(){
+        editMode = false
         editView.isHidden=true
         showPreviewLayer(flag: true)
         cropBtn.alpha=0.38
@@ -63,6 +72,8 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         
         confirmBtn.isHidden=true
         declineBtn.isHidden=true
+        
+        editModeType = EditModeTypes.NOTHING
     }
     
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

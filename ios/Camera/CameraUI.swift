@@ -82,7 +82,6 @@ extension CameraController{
         addConstraints(currentView: imagesCollection, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.65*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 8, trailing: true, trailingValue: -16, width: false, widthValue: 0, height: true, heightValue: 76)
         
         //max number of images
-        let maxNoOfImagesL=UILabel()
         maxNoOfImagesL.text = (lang == "en" ? "The maximum number of selected photos is " : "الحد الأقصى لعدد الصور المختارة هو") + String(maxImagesSize)
         maxNoOfImagesL.numberOfLines=0
         maxNoOfImagesL.textColor = UIColor.white
@@ -108,7 +107,7 @@ extension CameraController{
         cropBtn.sizeToFit()
         view.addSubview(cropBtn)
         addConstraints(currentView: cropBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.88*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: true, heightValue: 80)
-        cropBtn.centerVertically()
+        cropBtn.centerVertically(padding: 6, lang: lang)
         cropBtn.alpha = 0.38
         
         //crop button
@@ -118,18 +117,18 @@ extension CameraController{
         rotateBtn.sizeToFit()
         view.addSubview(rotateBtn)
         addConstraints(currentView: rotateBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.88*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 76, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: true, heightValue: 80)
-        rotateBtn.centerVertically()
+        rotateBtn.centerVertically(padding: 6, lang: lang)
         rotateBtn.alpha = 0.38
         
         //delete button
         deleteBtn.setImage(UIImage(named: "ic_picker_trash")?.maskWithColor(color: UIColor.white), for: .normal)
         deleteBtn.setTitle(lang == "en" ? "Delete" : "مسح", for: .normal)
-        deleteBtn.sizeToFit()
         deleteBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 11)
         //deleteBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 27, bottom: 38, right: 4)
         view.addSubview(deleteBtn)
         addConstraints(currentView: deleteBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.88*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 146, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: true, heightValue: 80)
-        deleteBtn.centerVertically()
+        deleteBtn.sizeToFit()
+        deleteBtn.centerVertically(padding: 6, lang: lang)
         deleteBtn.alpha = 0.38
         
         view.addSubview(editView)
@@ -146,14 +145,29 @@ extension CameraController{
         editView.isHidden=true
         imageCropper.isHidden=true
         
+        if(editPhotoPath != nil){
+            imageItems[0].image = UIImage(contentsOfFile: editPhotoPath!)
+            print(editPhotoPath)
+            itemSelected(index: 0)
+            galleryBtn.isHidden=true
+            imagesCollection.isHidden=true
+            cameraHintL.isHidden=true
+            maxNoOfImagesL.isHidden=true
+            captureBtn.isHidden=true
+            flashBtn.isHidden=true
+            deleteBtn.isHidden=true
+        }
         
         galleryBtn.addTarget(self, action: #selector(openGallery(_:)), for: .touchUpInside)
         cropBtn.addTarget(self, action: #selector(cropPressed(_:)), for: .touchUpInside)
         rotateBtn.addTarget(self, action: #selector(rotatePressed(_:)), for: .touchUpInside)
-        deleteBtn.addTarget(self, action: #selector(openGallery(_:)), for: .touchUpInside)
+        deleteBtn.addTarget(self, action: #selector(deletePressed(_:)), for: .touchUpInside)
         
         confirmBtn.addTarget(self, action: #selector(confirmPressed(_:)), for: .touchUpInside)
         declineBtn.addTarget(self, action: #selector(declinePressed(_:)), for: .touchUpInside)
+        
+        closeBtn.addTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
+        doneBtn.addTarget(self, action: #selector(donePressed(_:)), for: .touchUpInside)
     }
     
     @objc func openGallery(_ sender: AnyObject) {
@@ -164,7 +178,7 @@ extension CameraController{
     }
     
     @objc func cropPressed(_ sender: AnyObject) {
-        if(editMode && editModeType == EditModeTypes.NOTHING){
+        if((editMode || editPhotoPath != nil) && editModeType == EditModeTypes.NOTHING){
             editModeType = EditModeTypes.CROP
             let blueCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color: Colors.blueColor())
             cropBtn.setImage(blueCropImage, for: .normal)
@@ -178,20 +192,77 @@ extension CameraController{
     }
     
     @objc func rotatePressed(_ sender: AnyObject) {
-        if(editMode && editModeType == EditModeTypes.NOTHING){
-            editModeType = EditModeTypes.ROTATE
-            originalImage = imageItems[editSelectedIndex].image
-            
-            let blueRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color: Colors.blueColor())
-            rotateBtn.setImage(blueRotateImage, for: .normal)
-            
-            confirmBtn.alpha=1.0
-            declineBtn.isHidden=false
+        if(editMode || editPhotoPath != nil){
+            if(editModeType == EditModeTypes.NOTHING){
+                editModeType = EditModeTypes.ROTATE
+                originalImage = imageItems[editSelectedIndex].image
+                
+                let blueRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color: Colors.blueColor())
+                rotateBtn.setImage(blueRotateImage, for: .normal)
+                
+                confirmBtn.alpha=1.0
+                declineBtn.isHidden=false
+            }
+            editImageRotation -= .pi/2
+            editImage.image = originalImage.rotate(radians: editImageRotation)
         }
-        editImageRotation -= .pi/2
-        editImage.image = originalImage.rotate(radians: editImageRotation)
         //editImage.image=imageItems[editSelectedIndex].image
         
+    }
+    
+    @objc func deletePressed(_ sender: AnyObject) {
+        if(editMode){
+            let deleteController=DeleteDialog()
+            deleteController.modalPresentationStyle = .overFullScreen
+            deleteController.setData(controller: self, lang: lang)
+            present(deleteController, animated: true)
+        }
+    }
+    
+    func deleteConfirm(){
+        editModeType = EditModeTypes.DELETE
+        imageItems.remove(at: editSelectedIndex)
+        if(imageTurn == maxImagesSize){
+            maxNoOfImagesL.textColor = UIColor.init(white: 1, alpha: 0.74)
+            captureBtn.isHidden = false
+            imageItems.append(ImageItem())
+        }
+        imagesCollection.reloadData()
+        imageTurn -= 1
+        
+        if(imageTurn>0){
+            doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
+        }else{
+            doneBtn.setTitle(lang == "en" ? "Done" : "تم", for: .normal)
+        }
+        resetUI()
+        editMode=false
+    }
+    
+    @objc func closePressed(_ sender: AnyObject) {
+        if((imageItems.count == 1 && imageItems[0].image != nil) || imageItems.count>1){
+            let closeController=CloseDialog()
+            closeController.modalPresentationStyle = .overFullScreen
+            closeController.setData(controller: self, lang: lang)
+            present(closeController, animated: true)
+        }else{
+            dismiss(animated: true)
+        }
+    }
+    
+    @objc func donePressed(_ sender: AnyObject) {
+        var result = ""
+        for item in imageItems{
+            if(item.image != nil){
+                var path = item.image.saveImage(name: "\(Int(Date().timeIntervalSince1970)).jpg")
+                result = result + path.path + ","
+            }
+        }
+        if(result.count>0){
+            result = String(result.dropLast(1))
+        }
+        promise(result)
+        dismiss(animated: true)
     }
     
     @objc func confirmPressed(_ sender: AnyObject) {
@@ -217,7 +288,7 @@ extension CameraController{
     }
     
     @objc func declinePressed(_ sender: AnyObject?) {
-        if(editModeType==EditModeTypes.CROP){
+        if(editModeType==EditModeTypes.ROTATE){
             imageItems[editSelectedIndex].image = originalImage
         }
         let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
@@ -226,6 +297,7 @@ extension CameraController{
         let whiteRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color:.white)
         rotateBtn.setImage(whiteRotateImage, for: .normal)
         
+        print(editSelectedIndex)
         imageCropper.isHidden=true
         editImage.image = imageItems[editSelectedIndex].image
         
@@ -233,7 +305,7 @@ extension CameraController{
         declineBtn.isHidden=true
         
         editModeType = EditModeTypes.NOTHING
-        editMode = false
+        
         editImageRotation = 0
     }
     

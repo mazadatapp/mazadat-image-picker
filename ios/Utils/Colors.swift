@@ -17,4 +17,8 @@ class Colors{
     static func tealishColor()->UIColor{
         return UIColor(red: 0.2, green: 0.745, blue: 0.77, alpha: 1)
     }
+    
+    static func redColor()->UIColor{
+        return UIColor(red: 0.93, green: 0.3, blue: 0.255, alpha: 1)
+    }
 }

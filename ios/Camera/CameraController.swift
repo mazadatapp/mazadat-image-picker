@@ -21,6 +21,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     let confirmBtn=UIButton()
     let declineBtn=UIButton()
     let imagesCollection=UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    let maxNoOfImagesL=UILabel()
     let doneBtn=UIButton()
     let cropBtn=UIButton()
     let rotateBtn=UIButton()
@@ -41,6 +42,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var editSelectedIndex = -1
     var originalImage:UIImage!
     var editImageRotation:Double=0
+    var editPhotoPath:String!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,6 +58,12 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         print(maxImagesSize)
     }
     
+    func setData(path:String,lang:String){
+        self.lang = lang
+        self.editPhotoPath = path
+        print(maxImagesSize)
+    }
+    
     func setPromise(promise:@escaping RCTPromiseResolveBlock){
         self.promise = promise
     }
@@ -64,9 +72,13 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         imageItems[imageTurn].image=image
         reloadCell(index: imageTurn)
         imageTurn += 1
-        
-        imageItems.append(ImageItem())
+        if(imageTurn==maxImagesSize){
+            maxNoOfImagesL.textColor = Colors.redColor()
+        }else{
+            imageItems.append(ImageItem())
+        }
         imagesCollection.reloadData()
+        doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
     }
     
     func swiftyCam(_ swiftyCam: SwiftyCamViewController, didTake photo: UIImage) {

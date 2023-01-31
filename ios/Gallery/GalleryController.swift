@@ -24,11 +24,9 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
         view.addSubview(cropIm)
         cropIm.image = UIImage(named: "ic_picker_crop")
         addConstraints(currentView: cropIm, MainView: view, centerX: true, centerXValue: 0, centerY: false, centerYValue: 0, top: false, topValue: 0, bottom: true, bottomValue: -32, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: 40, height: true, heightValue: 40)
+        
         cropIm.isHidden=true
-        
-        
         cropView.isHidden=true
-        
         
         imagePickerController.allowsEditing = false //If you want edit option set "true"
         imagePickerController.sourceType = .photoLibrary
@@ -52,7 +50,7 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        print("image selected")
+        
         let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         
         cropView.isHidden = false

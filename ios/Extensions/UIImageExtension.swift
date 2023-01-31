@@ -53,4 +53,17 @@ extension UIImage {
         
         return newImage!
     }
+    
+    func saveImage(name:String)->URL{
+      var fileName = getDocumentsDirectory().appendingPathComponent(name)
+        if let data = jpegData(compressionQuality: 0.5) {
+        try? data.write(to: fileName)
+      }
+      return fileName
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
 }

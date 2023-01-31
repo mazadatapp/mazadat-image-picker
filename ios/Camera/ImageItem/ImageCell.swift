@@ -30,7 +30,6 @@ class ImageCell: UICollectionViewCell {
         
         editBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 9)
         frame.addSubview(editBtn)
-        
         addConstraints(currentView: editBtn, MainView: frame, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: true, heightValue: 80)
         
         
