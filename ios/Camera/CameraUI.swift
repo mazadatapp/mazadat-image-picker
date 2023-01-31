@@ -35,7 +35,7 @@ extension CameraController{
         galleryBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         galleryBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 4)
         view.addSubview(galleryBtn)
-        addConstraints(currentView: galleryBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.06*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -60, width: false, widthValue: 0, height: false, heightValue: 0)
+        addConstraints(currentView: galleryBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.06*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -60, width: true, widthValue: 80, height: true, heightValue: 40)
         
         
         //camera hint label
@@ -51,18 +51,18 @@ extension CameraController{
         //capture button
         view.addSubview(captureBtn)
         captureBtn.setImage(UIImage(named: "ic_picker_capture_photo"), for: .normal)
-        addConstraints(currentView: captureBtn, MainView: view, centerX: true, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.53*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+        addConstraints(currentView: captureBtn, MainView: view, centerX: true, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.61*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
         //confirm button
         view.addSubview(confirmBtn)
         confirmBtn.setImage(UIImage(named: "ic_picker_confirm"), for: .normal)
-        addConstraints(currentView: confirmBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.55*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 32, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+        addConstraints(currentView: confirmBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.62*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 32, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         confirmBtn.isHidden=true
         
         //decline button
         view.addSubview(declineBtn)
         declineBtn.setImage(UIImage(named: "ic_picker_decline"), for: .normal)
-        addConstraints(currentView: declineBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.55*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -32, width: false, widthValue: 0, height: false, heightValue: 0)
+        addConstraints(currentView: declineBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.62*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -32, width: false, widthValue: 0, height: false, heightValue: 0)
         declineBtn.isHidden=true
         
         //collection view
@@ -79,7 +79,7 @@ extension CameraController{
         imagesCollection.collectionViewLayout = layout
         imagesCollection.isScrollEnabled=true
         view.addSubview(imagesCollection)
-        addConstraints(currentView: imagesCollection, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.65*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 8, trailing: true, trailingValue: -16, width: false, widthValue: 0, height: true, heightValue: 76)
+        addConstraints(currentView: imagesCollection, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.74*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 8, trailing: true, trailingValue: -16, width: false, widthValue: 0, height: true, heightValue: 76)
         
         //max number of images
         maxNoOfImagesL.text = (lang == "en" ? "The maximum number of selected photos is " : "الحد الأقصى لعدد الصور المختارة هو") + String(maxImagesSize)
@@ -87,7 +87,7 @@ extension CameraController{
         maxNoOfImagesL.textColor = UIColor.white
         maxNoOfImagesL.font = UIFont(name: "Montserrat-Regular", size: 12)
         view.addSubview(maxNoOfImagesL)
-        addConstraints(currentView: maxNoOfImagesL, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.75*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+        addConstraints(currentView: maxNoOfImagesL, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.85*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
         
         //done button
@@ -159,6 +159,7 @@ extension CameraController{
         }
         
         galleryBtn.addTarget(self, action: #selector(openGallery(_:)), for: .touchUpInside)
+        captureBtn.addTarget(self, action: #selector(capturePressed(_:)), for: .touchUpInside)
         cropBtn.addTarget(self, action: #selector(cropPressed(_:)), for: .touchUpInside)
         rotateBtn.addTarget(self, action: #selector(rotatePressed(_:)), for: .touchUpInside)
         deleteBtn.addTarget(self, action: #selector(deletePressed(_:)), for: .touchUpInside)
@@ -168,13 +169,28 @@ extension CameraController{
         
         closeBtn.addTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
         doneBtn.addTarget(self, action: #selector(donePressed(_:)), for: .touchUpInside)
+        
+        flashBtn.addTarget(self, action: #selector(flashPressed(_:)), for: .touchUpInside)
     }
     
     @objc func openGallery(_ sender: AnyObject) {
+        if(imageTurn==maxImagesSize || editMode){
+            return
+        }
         let controller=GalleryController()
         controller.setCameraController(cameraController: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true)
+    }
+    
+    @objc func capturePressed(_ sender: AnyObject) {
+        takePhoto()
+    }
+    
+    @objc func flashPressed(_ sender: AnyObject) {
+        isFlashOn = !isFlashOn
+        flashMode = isFlashOn ? .on : .off
+        flashBtn.setImage(isFlashOn ? UIImage(named: "ic_picker_flash_on") : UIImage(named: "ic_picker_flash_off"), for: .normal)
     }
     
     @objc func cropPressed(_ sender: AnyObject) {
@@ -192,20 +208,22 @@ extension CameraController{
     }
     
     @objc func rotatePressed(_ sender: AnyObject) {
-        if(editMode || editPhotoPath != nil){
-            if(editModeType == EditModeTypes.NOTHING){
-                editModeType = EditModeTypes.ROTATE
-                originalImage = imageItems[editSelectedIndex].image
-                
-                let blueRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color: Colors.blueColor())
-                rotateBtn.setImage(blueRotateImage, for: .normal)
-                
-                confirmBtn.alpha=1.0
-                declineBtn.isHidden=false
-            }
+        if(editMode && editModeType == EditModeTypes.NOTHING){
+            editModeType = EditModeTypes.ROTATE
+            originalImage = imageItems[editSelectedIndex].image
+            let blueRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color: Colors.blueColor())
+            rotateBtn.setImage(blueRotateImage, for: .normal)
+            
+            confirmBtn.alpha=1.0
+            declineBtn.isHidden=false
+            
+            editImageRotation -= .pi/2
+            editImage.image = originalImage.rotate(radians: editImageRotation)
+        }else if(editModeType == EditModeTypes.ROTATE){
             editImageRotation -= .pi/2
             editImage.image = originalImage.rotate(radians: editImageRotation)
         }
+        
         //editImage.image=imageItems[editSelectedIndex].image
         
     }
@@ -224,8 +242,9 @@ extension CameraController{
         imageItems.remove(at: editSelectedIndex)
         if(imageTurn == maxImagesSize){
             maxNoOfImagesL.textColor = UIColor.init(white: 1, alpha: 0.74)
-            captureBtn.isHidden = false
             imageItems.append(ImageItem())
+            captureBtn.alpha=1.0
+            captureBtn.isEnabled=true
         }
         imagesCollection.reloadData()
         imageTurn -= 1

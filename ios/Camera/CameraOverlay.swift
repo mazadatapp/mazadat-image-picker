@@ -26,16 +26,16 @@ class CameraOverlay: UIView {
             cameraView = CGRect(x: rect.width/2 - width / 2, y: rect.height * 0.2 , width: width, height: height)
             
             topView=UIView(frame: CGRect(x: 0, y: 0, width: rect.width, height: cameraView.minY))
-            topView.backgroundColor = UIColor.init(red: 1, green: 0, blue: 0, alpha: 0.7)
+            topView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.7)
             
             bottomView=UIView(frame: CGRect(x: 0, y: cameraView.maxY, width: rect.width, height: rect.height - cameraView.maxY))
-            bottomView.backgroundColor = UIColor.init(red: 1, green: 0, blue: 0, alpha: 0.7)
+            bottomView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.7)
             
             leftView = UIView(frame: CGRect(x: 0, y: cameraView.minY, width: cameraView.minX, height: cameraView.height))
-            leftView.backgroundColor = UIColor.init(red: 1, green: 0, blue: 0, alpha: 0.7)
+            leftView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.7)
             
             rightView = UIView(frame: CGRect(x: cameraView.maxX, y: cameraView.minY, width: rect.width - cameraView.maxX, height: cameraView.height))
-            rightView.backgroundColor = UIColor.init(red: 1, green: 0, blue: 0, alpha: 0.7)
+            rightView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.7)
             
             addSubview(topView)
             addSubview(bottomView)
@@ -50,6 +50,7 @@ class CameraOverlay: UIView {
         self.aspectRatioY = aspect_ratio_y
         setNeedsDisplay()
     }
+    
    
 
 }

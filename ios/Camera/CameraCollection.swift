@@ -36,7 +36,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
     }
     
     func itemSelected(index:Int){
-        if(imageItems[index].image != nil){
+        if(editModeType == EditModeTypes.NOTHING && imageItems[index].image != nil){
             print("yes")
             editView.isHidden=false
             editImage.image = imageItems[index].image
@@ -46,6 +46,9 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
             cropBtn.alpha=1.0
             rotateBtn.alpha=1.0
             deleteBtn.alpha=1.0
+            
+            galleryBtn.isHidden=true
+            flashBtn.isHidden=true
             
             confirmBtn.isHidden = false
             confirmBtn.alpha = 0.38
@@ -72,6 +75,9 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         
         confirmBtn.isHidden=true
         declineBtn.isHidden=true
+        
+        galleryBtn.isHidden=false
+        flashBtn.isHidden=false
         
         editModeType = EditModeTypes.NOTHING
     }
