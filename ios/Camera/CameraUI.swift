@@ -35,7 +35,7 @@ extension CameraController{
         galleryBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         galleryBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 4)
         view.addSubview(galleryBtn)
-        addConstraints(currentView: galleryBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.06*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -60, width: true, widthValue: 80, height: true, heightValue: 40)
+        addConstraints(currentView: galleryBtn, MainView: view, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.05*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -60, width: true, widthValue: 80, height: true, heightValue: 40)
         
         
         //camera hint label
