@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -32,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.jsibbold.zoomage.ZoomageView;
 import com.mazadatimagepicker.BuildConfig;
 import com.mazadatimagepicker.Camera.CloseDialog.CloseDialog;
 import com.mazadatimagepicker.Camera.CustomViews.ImageCropper;
@@ -57,7 +60,7 @@ public class CameraActivity extends AppCompatActivity {
   //edit views
   private ConstraintLayout editCl;
   private ImageView image;
-  private ImageCropper imageCropper;
+  private ZoomageView imageCropper;
   private Button cropBtn;
   private Button rotateBtn;
   private Button deleteBtn;
@@ -427,7 +430,7 @@ public class CameraActivity extends AppCompatActivity {
 
   private void confirmPressed() {
     if (editType == 1) {
-      Bitmap croppedBitmap = imageCropper.crop();
+      Bitmap croppedBitmap = getBitmapFromView(imageCropper);
       File file = ImageUtils.bitmapToFile(this, croppedBitmap);
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
@@ -439,6 +442,24 @@ public class CameraActivity extends AppCompatActivity {
 
     image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
     resetPressed();
+  }
+
+  private Bitmap getBitmapFromView(View view) {
+    Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+    //Bind a canvas to it
+    Canvas canvas = new Canvas(returnedBitmap);
+    //Get the view's background
+    Drawable bgDrawable = view.getBackground();
+    if (bgDrawable != null)
+      //has background drawable, then draw it on the canvas
+      bgDrawable.draw(canvas);
+    else
+      //does not have background drawable, then draw white background on the canvas
+      canvas.drawColor(Color.TRANSPARENT);
+    // draw the view on the canvas
+    view.draw(canvas);
+    //return the bitmap
+    return returnedBitmap;
   }
 
   private void resetPressed() {
