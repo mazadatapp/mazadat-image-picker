@@ -37,10 +37,43 @@ class CameraOverlay: UIView {
             rightView = UIView(frame: CGRect(x: cameraView.maxX, y: cameraView.minY, width: rect.width - cameraView.maxX, height: cameraView.height))
             rightView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.7)
             
+            
             addSubview(topView)
             addSubview(bottomView)
             addSubview(leftView)
             addSubview(rightView)
+            
+            let topTopLeftLine = UIView(frame: CGRect(x: cameraView.minX, y: cameraView.minY - 2, width: 30, height: 2))
+            topTopLeftLine.backgroundColor = Colors.blueColor()
+            addSubview(topTopLeftLine)
+            
+            let topLeftLine = UIView(frame: CGRect(x: cameraView.minX - 2 ,y: cameraView.minY - 2, width: 2, height: 30))
+            topLeftLine.backgroundColor = Colors.blueColor()
+            addSubview(topLeftLine)
+            
+            let topTopRightLine = UIView(frame: CGRect(x: cameraView.maxX - 30, y: cameraView.minY - 2, width: 30, height: 2))
+            topTopRightLine.backgroundColor = Colors.blueColor()
+            addSubview(topTopRightLine)
+            
+            let topRightLine = UIView(frame: CGRect(x: cameraView.maxX ,y: cameraView.minY - 2, width: 2, height: 30))
+            topRightLine.backgroundColor = Colors.blueColor()
+            addSubview(topRightLine)
+            
+            let bottomBottomLeftLine = UIView(frame: CGRect(x: cameraView.minX, y: cameraView.maxY , width: 30, height: 2))
+            bottomBottomLeftLine.backgroundColor = Colors.blueColor()
+            addSubview(bottomBottomLeftLine)
+            
+            let bottomLeftLine = UIView(frame: CGRect(x: cameraView.minX - 2 ,y: cameraView.maxY - 30, width: 2, height: 32))
+            bottomLeftLine.backgroundColor = Colors.blueColor()
+            addSubview(bottomLeftLine)
+            
+            let bottomBottomRightLine = UIView(frame: CGRect(x: cameraView.maxX - 30, y: cameraView.maxY , width: 30, height: 2))
+            bottomBottomRightLine.backgroundColor = Colors.blueColor()
+            addSubview(bottomBottomRightLine)
+            
+            let bottomRightLine = UIView(frame: CGRect(x: cameraView.maxX ,y: cameraView.maxY - 30, width: 2, height: 32))
+            bottomRightLine.backgroundColor = Colors.blueColor()
+            addSubview(bottomRightLine)
         }
     }
     
