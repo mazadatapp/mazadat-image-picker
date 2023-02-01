@@ -374,6 +374,7 @@ public class CameraActivity extends AppCompatActivity {
       editType = 1;
       cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropBlue, null, null);
       imageCropper.setVisibility(View.VISIBLE);
+      image.setVisibility(View.GONE);
       imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
       declineIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
@@ -462,6 +463,7 @@ public class CameraActivity extends AppCompatActivity {
     }
     rotationAngle = 0;
     imageCropper.setVisibility(View.GONE);
+    image.setVisibility(View.VISIBLE);
     cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropWhite, null, null);
     rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateWhite, null, null);
     editType = 0;
