@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 
@@ -36,6 +37,7 @@ public class ImageCropper extends AppCompatImageView {
   float old_x;
   float old_y;
   float old_width;
+  float old_height;
   float min_width;
   float dp;
   float offset_height;
@@ -189,67 +191,67 @@ public class ImageCropper extends AppCompatImageView {
         old_x = x;
         old_y = y;
         old_width = cropView.width();
+        old_height = cropView.height();
         break;
       case MotionEvent.ACTION_MOVE:
         float diff_x = raw_x - start_x;
         float diff_y = raw_y - start_y;
-        if (area == 1 && old_width - diff_x > min_width &&
-          (old_y + diff_x * aspectRatioY / aspectRatioX) > 0 &&
+        if (area == 1 && old_width - diff_x > min_width
+          && old_height - diff_y > min_width &&
+          (old_y + diff_y) > 0 &&
           old_x + diff_x > 0) {
           x = old_x + diff_x;
-          y = old_y + diff_x * aspectRatioY / aspectRatioX;
+          y = old_y + diff_y;
           width = old_width - diff_x;
-          height = width * aspectRatioY / aspectRatioX;
+          height = old_height - diff_y;
           invalidate();
         } else if (area == 2 && old_width + diff_x > min_width &&
-          old_y - diff_x * aspectRatioY / aspectRatioX > 0
+          old_height - diff_y > min_width &&
+          old_y + diff_y  > 0
           && cropView.left + old_width + diff_x < getWidth()) {
-          y = old_y - diff_x * aspectRatioY / aspectRatioX;
+          y = old_y + diff_y;
           width = old_width + diff_x;
-          height = width * aspectRatioY / aspectRatioX;
+          height = old_height - diff_y;
           invalidate();
         } else if (area == 3 && old_width - diff_x > min_width &&
-          (cropView.top + (old_width - diff_x) * aspectRatioY / aspectRatioX) < getHeight() &&
+          old_height + diff_y > min_width &&
+          (cropView.top + old_height + diff_y ) < getHeight() &&
           old_x + diff_x > 0) {
           x = old_x + diff_x;
           width = old_width - diff_x;
-          height = width * aspectRatioY / aspectRatioX;
+          height = old_height + diff_y;
           invalidate();
         } else if (area == 4 && old_width + diff_x > min_width &&
-          (cropView.top + (old_width + diff_x) * aspectRatioY / aspectRatioX) < getHeight() &&
+          old_height + diff_y > min_width &&
+          (cropView.top + old_height + diff_y) < getHeight() &&
           cropView.left + old_width + diff_x < getWidth()) {
           width = old_width + diff_x;
-          height = width * aspectRatioY / aspectRatioX;
+          height = old_height + diff_y;
           invalidate();
-        } else if (area == 5 && old_width - diff_y > min_width &&
-          (old_x + diff_y / 2) > 0 && (old_x + (diff_y / 2) + old_width - diff_y) < getWidth() &&
-          (old_y + diff_y * aspectRatioY / aspectRatioX) > 0) {
-          y = old_y + diff_y * aspectRatioY / aspectRatioX;
-          x = old_x + diff_y / 2;
-          width = old_width - diff_y;
-          height = width * aspectRatioY / aspectRatioX;
+        } else if (area == 5 && old_height - diff_y > min_width &&
+          (old_y + diff_y) > 0) {
+          y = old_y + diff_y;
+          height = old_height - diff_y;
           invalidate();
         } else if (area == 6 && old_width + diff_x > min_width &&
-          (old_y - diff_x / 2) > 0 &&
-          (old_y - diff_x / 2 + ((old_width + diff_x) * aspectRatioY / aspectRatioX) < getHeight())) {
-          y = old_y - diff_x / 2;
+          (old_width + diff_x) > min_width &&
+          (diff_x + old_x + old_width < getWidth())) {
           width = old_width + diff_x;
-          height = width * aspectRatioY / aspectRatioX;
+
           invalidate();
-        } else if (area == 7 && old_width + diff_y > min_width &&
-          (old_x - diff_y / 2) > 0 && (old_x - (diff_y / 2) + old_width + diff_y) < getWidth() &&
-          (old_y + ((old_width + diff_y) * aspectRatioY / aspectRatioX)) < getHeight()) {
-          x = old_x - diff_y / 2;
-          width = old_width + diff_y;
-          height = width * aspectRatioY / aspectRatioX;
+        } else if (area == 7 &&
+          (old_height + diff_y) > min_width &&
+          (old_y + old_height + diff_y) < getHeight()) {
+
+          height = old_height + diff_y;
           invalidate();
         } else if (area == 8 && old_width - diff_x > min_width &&
-          (old_y + diff_x / 2) > 0 &&
-          (old_y + diff_x / 2 + ((old_width - diff_x) * aspectRatioY / aspectRatioX) < getHeight())) {
-          y = old_y + diff_x / 2;
+          (old_x + diff_x) > 0 &&
+          (old_width - diff_x) > min_width) {
+
           x = old_x + diff_x;
           width = old_width - diff_x;
-          height = width * aspectRatioY / aspectRatioX;
+
           invalidate();
         } else if (area == 9) {
           if (old_x + diff_x > 0 && offset_width + raw_x < getWidth()) {
