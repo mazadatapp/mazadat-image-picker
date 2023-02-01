@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 
@@ -83,14 +82,14 @@ public class ImageCropper extends AppCompatImageView {
   @Override
   public void setImageURI(@Nullable Uri uri) {
     super.setImageURI(uri);
-    if(frame_width>0) {
+    if (frame_width > 0) {
       ViewGroup.LayoutParams params = getLayoutParams();
       params.height = frame_height;
       params.width = frame_width;
       setLayoutParams(params);
     }
 
-    once=true;
+    once = true;
     invalidate();
   }
 
@@ -190,7 +189,6 @@ public class ImageCropper extends AppCompatImageView {
         old_x = x;
         old_y = y;
         old_width = cropView.width();
-        Log.i("datadata", area + "");
         break;
       case MotionEvent.ACTION_MOVE:
         float diff_x = raw_x - start_x;
@@ -270,12 +268,5 @@ public class ImageCropper extends AppCompatImageView {
     }
 
     return true;
-  }
-
-  public void setAspectRatio(int aspect_ratio_x, int aspect_ratio_y) {
-    this.aspectRatioX = aspect_ratio_x;
-    this.aspectRatioY = aspect_ratio_y;
-    once = true;
-    invalidate();
   }
 }

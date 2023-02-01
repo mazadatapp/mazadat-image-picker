@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="101dp"
   android:layout_height="76dp"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_marginStart="16dp"
   android:background="@drawable/custom_image_boarder">
+
   <com.makeramen.roundedimageview.RoundedImageView
     android:id="@+id/image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="2dp"
-    app:riv_corner_radius="8dp"/>
+    app:riv_corner_radius="8dp" />
+
   <TextView
     android:id="@+id/select_to_edit_tv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:text="@string/select_to_edit"
-    android:textSize="9dp"
     android:drawableTop="@drawable/ic_edit"
-    android:textColor="@color/white_74"/>
+    android:text="@string/select_to_edit"
+    android:textColor="@color/white_74"
+    android:textSize="9dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

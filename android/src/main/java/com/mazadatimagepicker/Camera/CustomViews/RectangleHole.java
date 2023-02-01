@@ -55,16 +55,6 @@ public class RectangleHole extends ViewGroup {
     return false;
   }
 
-  public void setAspectRatio(int x, int y) {
-    aspectRatioX = x;
-    aspectRatioY = y;
-    invalidate();
-  }
-
-  public RectF getFocusArea() {
-    return focusArea;
-  }
-
   @Override
   protected void dispatchDraw(Canvas canvas) {
     super.dispatchDraw(canvas);
@@ -81,11 +71,11 @@ public class RectangleHole extends ViewGroup {
     eraser.setAntiAlias(true);
     eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
-    canvas.drawRect(getWidth() / 2f - width / 2f -2*dp, getHeight() * 0.2f - 2*dp, getWidth() / 2f - width / 2f +30*dp , getHeight() * 0.2f+30*dp,blue);
-    canvas.drawRect(getWidth() / 2f + width / 2f -30*dp, getHeight() * 0.2f - 2*dp, getWidth() / 2f + width / 2f +2*dp , getHeight() * 0.2f+30*dp,blue);
+    canvas.drawRect(getWidth() / 2f - width / 2f - 2 * dp, getHeight() * 0.2f - 2 * dp, getWidth() / 2f - width / 2f + 30 * dp, getHeight() * 0.2f + 30 * dp, blue);
+    canvas.drawRect(getWidth() / 2f + width / 2f - 30 * dp, getHeight() * 0.2f - 2 * dp, getWidth() / 2f + width / 2f + 2 * dp, getHeight() * 0.2f + 30 * dp, blue);
 
-    canvas.drawRect(getWidth() / 2f - width / 2f -2*dp, getHeight() * 0.2f + height - 30*dp, getWidth() / 2f - width / 2f +30*dp , getHeight() * 0.2f+ height +2*dp,blue);
-    canvas.drawRect(getWidth() / 2f + width / 2f -30*dp, getHeight() * 0.2f + height - 32*dp, getWidth() / 2f + width / 2f +2*dp , getHeight() * 0.2f+ height +2*dp,blue);
+    canvas.drawRect(getWidth() / 2f - width / 2f - 2 * dp, getHeight() * 0.2f + height - 30 * dp, getWidth() / 2f - width / 2f + 30 * dp, getHeight() * 0.2f + height + 2 * dp, blue);
+    canvas.drawRect(getWidth() / 2f + width / 2f - 30 * dp, getHeight() * 0.2f + height - 32 * dp, getWidth() / 2f + width / 2f + 2 * dp, getHeight() * 0.2f + height + 2 * dp, blue);
 
     canvas.drawRect(focusArea, eraser);
 

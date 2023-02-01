@@ -29,8 +29,8 @@ public class CloseDialog extends DialogFragment {
 
     View view = inflater.inflate(R.layout.dialog_close_confirmation, container, false);
 
-    Button cancelBtn=view.findViewById(R.id.cancel_btn);
-    Button confirmCloseBtn=view.findViewById(R.id.close_btn);
+    Button cancelBtn = view.findViewById(R.id.cancel_btn);
+    Button confirmCloseBtn = view.findViewById(R.id.close_btn);
 
     confirmCloseBtn.setBackgroundResource(cameraActivity.getLang().equals("en") ?
       R.drawable.custom_gray_round_bottom_right_20 : R.drawable.custom_gray_round_bottom_left_20);
@@ -38,7 +38,7 @@ public class CloseDialog extends DialogFragment {
       R.drawable.custom_gray_round_bottom_left_20 : R.drawable.custom_gray_round_bottom_right_20);
 
     cancelBtn.setOnClickListener((v) -> dismiss());
-    confirmCloseBtn.setOnClickListener((v) ->{
+    confirmCloseBtn.setOnClickListener((v) -> {
       cameraActivity.finish();
       dismiss();
     });
@@ -56,6 +56,6 @@ public class CloseDialog extends DialogFragment {
 
     getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     getDialog().getWindow().setGravity(Gravity.CENTER);
-    getDialog().getWindow().setLayout((int)(getContext().getResources().getDisplayMetrics().widthPixels * 0.9), ViewGroup.LayoutParams.WRAP_CONTENT);
+    getDialog().getWindow().setLayout((int) (getContext().getResources().getDisplayMetrics().widthPixels * 0.9), ViewGroup.LayoutParams.WRAP_CONTENT);
   }
 }

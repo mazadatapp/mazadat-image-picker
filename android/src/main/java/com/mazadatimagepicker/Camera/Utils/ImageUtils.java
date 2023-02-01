@@ -75,6 +75,7 @@ public class ImageUtils {
     }
     int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
       ExifInterface.ORIENTATION_UNDEFINED);
+    Log.i("datadata_orientation", orientation + "");
     Matrix matrix = new Matrix();
     switch (orientation) {
       case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
@@ -108,8 +109,7 @@ public class ImageUtils {
       Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
       bitmap.recycle();
       return bmRotated;
-    }
-    catch (OutOfMemoryError e) {
+    } catch (OutOfMemoryError e) {
       e.printStackTrace();
       return null;
     }

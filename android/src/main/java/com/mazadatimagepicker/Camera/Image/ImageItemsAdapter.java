@@ -1,8 +1,6 @@
 package com.mazadatimagepicker.Camera.Image;
 
-import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,10 +75,10 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
     }
 
     public void onBind(ImageItem model, int position) {
-      selectToEdit.setVisibility(model.getFile()!=null?View.VISIBLE:View.GONE);
-      if(model.getFile()!=null){
+      selectToEdit.setVisibility(model.getFile() != null ? View.VISIBLE : View.GONE);
+      if (model.getFile() != null) {
         image.setImageURI(Uri.fromFile(model.getFile()));
-      }else{
+      } else {
         image.setImageDrawable(null);
       }
 

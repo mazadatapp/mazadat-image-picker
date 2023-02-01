@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,13 +17,21 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.Camera;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.mazadatimagepicker.BuildConfig;
 import com.mazadatimagepicker.Camera.CloseDialog.CloseDialog;
 import com.mazadatimagepicker.Camera.CustomViews.ImageCropper;
@@ -35,10 +42,6 @@ import com.mazadatimagepicker.Camera.Image.ImageItem;
 import com.mazadatimagepicker.Camera.Image.ImageItemsAdapter;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
-import com.otaliastudios.cameraview.CameraListener;
-import com.otaliastudios.cameraview.CameraView;
-import com.otaliastudios.cameraview.PictureResult;
-import com.otaliastudios.cameraview.controls.Flash;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -46,8 +49,8 @@ import java.util.LinkedList;
 public class CameraActivity extends AppCompatActivity {
 
   final int GALLERY_REQUEST_CODE = 10;
-
-  private CameraView cameraView;
+  final int CAMERA_PERMISSION = 21;
+  private PreviewView previewView;
   private ImageView captureIm;
   private ImageView flashIm;
 
@@ -65,12 +68,10 @@ public class CameraActivity extends AppCompatActivity {
   private ImageView declineIm;
 
   private Button galleryBtn;
-  private ImageView closeIm;
 
   private RectangleHole rectangleHole;
 
   private TextView maxImagesTv;
-  private TextView captureHintTv;
 
   private RecyclerView recycler;
   private ImageItemsAdapter adapter;
@@ -82,11 +83,9 @@ public class CameraActivity extends AppCompatActivity {
   private int editType = 0;
 
   private String lang;
-  private String editPhotoPath;
 
   private boolean flashIsOn = false;
   private boolean isEditModeOn = false;
-  private boolean editOnlyOnePhoto = false;
 
   private Drawable cropBlue;
   private Drawable cropWhite;
@@ -98,20 +97,24 @@ public class CameraActivity extends AppCompatActivity {
   private Bitmap originalBitmap;
   private Bitmap rotationBitmap;
 
+  private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+  private Camera camera;
+  private boolean cameraPermissionEnabled = false;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_camera);
 
-    cameraView = findViewById(R.id.camera);
+    previewView = findViewById(R.id.preview);
     captureIm = findViewById(R.id.capture_im);
     flashIm = findViewById(R.id.flash_im);
     recycler = findViewById(R.id.recycler);
     rectangleHole = findViewById(R.id.rectangle_hole);
     maxImagesTv = findViewById(R.id.max_images_tv);
-    captureHintTv = findViewById(R.id.capture_hint_tv);
+    TextView captureHintTv = findViewById(R.id.capture_hint_tv);
     galleryBtn = findViewById(R.id.gallery_btn);
-    closeIm = findViewById(R.id.close_im);
+    ImageView closeIm = findViewById(R.id.close_im);
     doneBtn = findViewById(R.id.done_btn);
     //edit views
     editCl = findViewById(R.id.edit_cl);
@@ -132,7 +135,7 @@ public class CameraActivity extends AppCompatActivity {
     cameraHandler();
 
     maxImagesSize = getIntent().getIntExtra("maxImagesSize", 0);
-    editOnlyOnePhoto = getIntent().getBooleanExtra("editOnlyOnePhoto", false);
+    boolean editOnlyOnePhoto = getIntent().getBooleanExtra("editOnlyOnePhoto", false);
     lang = getIntent().getStringExtra("lang");
 
     maxImagesTv.setText(String.format("%s %s", getString(R.string.max_number_selected_images_is), maxImagesSize));
@@ -157,8 +160,8 @@ public class CameraActivity extends AppCompatActivity {
     confirmIm.setOnClickListener(view -> confirmPressed());
     declineIm.setOnClickListener(view -> resetPressed());
 
-    if(editOnlyOnePhoto){
-      editPhotoPath=getIntent().getStringExtra("path");
+    if (editOnlyOnePhoto) {
+      String editPhotoPath = getIntent().getStringExtra("path");
       imageItems.get(0).setFile(new File(editPhotoPath));
       editOrCapturePhoto(0);
       recycler.setVisibility(View.GONE);
@@ -169,6 +172,7 @@ public class CameraActivity extends AppCompatActivity {
       flashIm.setVisibility(View.GONE);
       deleteBtn.setVisibility(View.GONE);
     }
+
   }
 
   public String getLang() {
@@ -176,7 +180,7 @@ public class CameraActivity extends AppCompatActivity {
   }
 
   private void openGallery() {
-    if(imageTurn == maxImagesSize){
+    if (imageTurn == maxImagesSize) {
       return;
     }
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -191,94 +195,108 @@ public class CameraActivity extends AppCompatActivity {
   }
 
   private void openClosConfirmationDialog() {
-    if(imageItems.size()>1 || (imageItems.size()==1 && imageItems.get(0).getFile()!=null)){
+    if (imageItems.size() > 1 || (imageItems.size() == 1 && imageItems.get(0).getFile() != null)) {
       CloseDialog dialog = new CloseDialog();
       dialog.setCameraActivity(this);
       dialog.show(getSupportFragmentManager(), "dialog");
-    }else{
+    } else {
       finish();
     }
 
   }
 
-  private void donePressed(){
-    if(editType>0){
+  private void donePressed() {
+    if (editType > 0) {
       return;
     }
-    String output="";
-    for(int i=0;i<imageItems.size();i++){
-      if(imageItems.get(i).getFile()!=null){
-        output+=imageItems.get(i).getFile().getPath()+",";
+    StringBuilder output = new StringBuilder();
+    for (int i = 0; i < imageItems.size(); i++) {
+      if (imageItems.get(i).getFile() != null) {
+        output.append(imageItems.get(i).getFile().getPath()).append(",");
       }
     }
-    if(output.length()>0) {
-      output = output.substring(0, output.length() - 1);
+    if (output.length() > 0) {
+      output = new StringBuilder(output.substring(0, output.length() - 1));
     }
     Intent intent = new Intent();
     intent.setAction(BuildConfig.BROADCAST_ACTION);
-    intent.putExtra("data", output);
+    intent.putExtra("data", output.toString());
     sendBroadcast(intent);
     finish();
   }
 
   private void capturePressed() {
-    cameraView.takePicture();
+    if (!cameraPermissionEnabled) {
+      return;
+    }
+    Bitmap scaledBitmap = previewView.getBitmap();
+    assert scaledBitmap != null;
+    float width = (0.91f * scaledBitmap.getWidth());
+    float height = (width * rectangleHole.getAspectRatioY() / rectangleHole.getAspectRatioX());
+    RectF rect = new RectF(scaledBitmap.getWidth() / 2f - width / 2f, scaledBitmap.getHeight() * 0.2f, scaledBitmap.getWidth() / 2f - width / 2f + width, scaledBitmap.getHeight() * 0.2f + height);
+
+
+    Bitmap croppedBitmap = Bitmap.createBitmap(scaledBitmap, (int) rect.left, (int) rect.top, (int) rect.width(), (int) rect.height());
+    File file = ImageUtils.bitmapToFile(CameraActivity.this, croppedBitmap);
+    addImageToList(file);
+
   }
 
   private void flashPressed() {
     flashIsOn = !flashIsOn;
-    flashIm.setImageResource(flashIsOn ? R.drawable.ic_flash_off : R.drawable.ic_flash_on);
-    cameraView.setFlash(flashIsOn ? Flash.ON : Flash.OFF);
+    flashIm.setImageResource(flashIsOn ? R.drawable.ic_flash_on : R.drawable.ic_flash_off);
+
+    camera.getCameraControl().enableTorch(flashIsOn);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    cameraView.open();
+    //cameraView.open();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    cameraView.close();
   }
 
   private void cameraHandler() {
-    cameraView.addCameraListener(new CameraListener() {
+
+    cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+    cameraProviderFuture.addListener(new Runnable() {
       @Override
-      public void onPictureTaken(@NonNull PictureResult result) {
-        super.onPictureTaken(result);
-        cameraView.setSnapshotMaxWidth(rectangleHole.getWidth());
-        cameraView.setSnapshotMaxHeight(rectangleHole.getHeight());
-        result.toBitmap(rectangleHole.getWidth(), rectangleHole.getHeight(), bitmap -> {
-          assert bitmap != null;
-          File originalFile = ImageUtils.bitmapToFile(CameraActivity.this, bitmap);
-          bitmap=ImageUtils.checkBitmapIfRotated(bitmap,originalFile.getPath());
+      public void run() {
+        try {
+          ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
-          Log.i("datadata_width",bitmap.getWidth()+" "+rectangleHole.getWidth());
+          if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            cameraPermissionEnabled = true;
+            startCameraX(cameraProvider);
+          } else {
+            ActivityCompat.requestPermissions(CameraActivity.this,
+              new String[]{Manifest.permission.CAMERA},
+              CAMERA_PERMISSION);
+          }
 
-          Rect scaledRectangle= getScaledRect(bitmap.getWidth(),bitmap.getHeight());
-          Bitmap croppedBitmap = Bitmap.createBitmap(bitmap, scaledRectangle.left, scaledRectangle.top, scaledRectangle.width(), scaledRectangle.height());
-
-          File file = ImageUtils.bitmapToFile(CameraActivity.this, croppedBitmap);
-          addImageToList(file);
-        });
-
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
-    });
-  }
-  private Rect getScaledRect(int originalBitmapWidth, int originalBitmapHeight){
-    int rectangleWidth=rectangleHole.getWidth();
-    int rectangleHeight=rectangleHole.getHeight();
-    int left = (int) rectangleHole.getFocusArea().left * originalBitmapWidth / rectangleWidth;
-    int top = (int) rectangleHole.getFocusArea().top * originalBitmapHeight / rectangleHeight;
-    int width = (int) rectangleHole.getFocusArea().width() * originalBitmapWidth / rectangleWidth;
-    int height = width * rectangleHole.getAspectRatioY() / rectangleHole.getAspectRatioX();
-    //int height = (int) rectangleHole.getFocusArea().top * originalBitmapHeight / rectangleHeight;
-    Log.i("datadata_ratio",width+" "+height);
-    return new Rect(left,top,left+width,top+height);
+    }, ContextCompat.getMainExecutor(this));
+
 
   }
+
+  private void startCameraX(ProcessCameraProvider cameraProvider) {
+    cameraProvider.unbindAll();
+    CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+    Preview preview = new Preview.Builder().build();
+    preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+    ImageCapture imageCapture = new ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).build();
+    camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+  }
+
 
   private void addImageToList(File file) {
 
@@ -288,7 +306,7 @@ public class CameraActivity extends AppCompatActivity {
 
     imageTurn++;
     if (imageTurn < maxImagesSize) {
-      doneBtn.setText(getString(R.string.done) + " (" + (imageTurn) + ")");
+      doneBtn.setText(getString(R.string.done) + " (" + imageTurn + ")");
       imageItems.addLast(new ImageItem());
       adapter.notifyItemInserted(imageTurn);
     } else {
@@ -309,10 +327,8 @@ public class CameraActivity extends AppCompatActivity {
 
       galleryBtn.setVisibility(View.GONE);
       flashIm.setVisibility(View.GONE);
-      cameraView.setVisibility(View.GONE);
+      previewView.setVisibility(View.GONE);
       captureIm.setVisibility(View.GONE);
-      cameraView.close();
-      cameraView.stopVideo();
 
       confirmIm.setAlpha(0.38f);
 
@@ -334,12 +350,10 @@ public class CameraActivity extends AppCompatActivity {
     confirmIm.setVisibility(View.GONE);
     declineIm.setVisibility(View.GONE);
     captureIm.setVisibility(View.VISIBLE);
-    cameraView.setVisibility(View.VISIBLE);
+    previewView.setVisibility(View.VISIBLE);
 
     galleryBtn.setVisibility(View.VISIBLE);
     flashIm.setVisibility(View.VISIBLE);
-
-    cameraView.open();
 
     cropBtn.setAlpha(0.38f);
     rotateBtn.setAlpha(0.38f);
@@ -384,13 +398,15 @@ public class CameraActivity extends AppCompatActivity {
   }
 
   private void deletePressed() {
-    DeleteDialog dialog = new DeleteDialog();
-    dialog.setCameraActivity(this);
-    dialog.show(getSupportFragmentManager(), "dialog");
+    if (isEditModeOn) {
+      DeleteDialog dialog = new DeleteDialog();
+      dialog.setCameraActivity(this);
+      dialog.show(getSupportFragmentManager(), "dialog");
+    }
   }
 
   public void deleteConfirmed() {
-    editType=3;
+    editType = 3;
     imageItems.remove(selectedEditIndex);
     if (imageTurn == maxImagesSize) {
       maxImagesTv.setTextColor(getResources().getColor(R.color.white_74));
@@ -400,9 +416,9 @@ public class CameraActivity extends AppCompatActivity {
     }
     adapter.notifyDataSetChanged();
     imageTurn--;
-    if(imageTurn>0) {
+    if (imageTurn > 0) {
       doneBtn.setText(getString(R.string.done) + " (" + (imageTurn) + ")");
-    }else{
+    } else {
       doneBtn.setText(getString(R.string.done));
     }
     resetPressed();
@@ -426,10 +442,10 @@ public class CameraActivity extends AppCompatActivity {
   }
 
   private void resetPressed() {
-    if(editType==2){
+    if (editType == 2) {
       image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
     }
-    rotationAngle=0;
+    rotationAngle = 0;
     imageCropper.setVisibility(View.GONE);
     cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropWhite, null, null);
     rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateWhite, null, null);
@@ -445,6 +461,15 @@ public class CameraActivity extends AppCompatActivity {
     if (resultCode == RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
       String path = data.getStringExtra("path");
       addImageToList(new File(path));
+    }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    if (requestCode == CAMERA_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      cameraPermissionEnabled = true;
+      cameraHandler();
     }
   }
 }

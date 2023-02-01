@@ -7,13 +7,10 @@
   android:background="@color/black"
   tools:context=".Camera.CameraActivity">
 
-  <com.otaliastudios.cameraview.CameraView
-    android:id="@+id/camera"
+  <androidx.camera.view.PreviewView
+    android:id="@+id/preview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cameraAudio="off"
-    app:cameraEngine="camera2"
-    app:cameraRequestPermissions="true" />
+    android:layout_height="match_parent" />
 
   <com.mazadatimagepicker.Camera.CustomViews.RectangleHole
     android:id="@+id/rectangle_hole"
@@ -59,11 +56,12 @@
 
   <ImageView
     android:id="@+id/flash_im"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="24dp"
-    android:src="@drawable/ic_flash_on"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:padding="8dp"
+    android:src="@drawable/ic_flash_off"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 

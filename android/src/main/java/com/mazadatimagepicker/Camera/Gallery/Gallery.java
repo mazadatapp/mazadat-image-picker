@@ -39,11 +39,11 @@ public class Gallery extends AppCompatActivity {
   }
 
   private void cropImagePressed() {
-    Bitmap croppedBitmap=imageCropper.crop();
-    File file = ImageUtils.bitmapToFile(this,croppedBitmap);
-    Intent intent=new Intent();
-    intent.putExtra("path",file.getPath());
-    setResult(RESULT_OK,intent);
+    Bitmap croppedBitmap = imageCropper.crop();
+    File file = ImageUtils.bitmapToFile(this, croppedBitmap);
+    Intent intent = new Intent();
+    intent.putExtra("path", file.getPath());
+    setResult(RESULT_OK, intent);
     finish();
   }
 
@@ -54,7 +54,7 @@ public class Gallery extends AppCompatActivity {
       Uri selectedImageUri = data.getData();
       String path = fileUtils.getPath(selectedImageUri);
       imageCropper.setImageURI(Uri.fromFile(new File(path)));
-    }else{
+    } else {
       finish();
     }
   }

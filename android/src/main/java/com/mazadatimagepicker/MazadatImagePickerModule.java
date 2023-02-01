@@ -32,6 +32,7 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
 
     }
   };
+
   public MazadatImagePickerModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
@@ -61,7 +62,7 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void openCamera(int maxImagesSize, String lang, Promise promise) {
     this.promise = promise;
-    setLocale(getCurrentActivity(),lang);
+    setLocale(getCurrentActivity(), lang);
     Intent intent = new Intent(getCurrentActivity(), CameraActivity.class);
     intent.putExtra("maxImagesSize", maxImagesSize);
     intent.putExtra("lang", lang);
@@ -76,7 +77,7 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void editPhoto(String path, String lang, Promise promise) {
     this.promise = promise;
-    setLocale(getCurrentActivity(),lang);
+    setLocale(getCurrentActivity(), lang);
     Intent intent = new Intent(getCurrentActivity(), CameraActivity.class);
     intent.putExtra("editOnlyOnePhoto", true);
     intent.putExtra("path", path);
