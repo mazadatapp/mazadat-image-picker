@@ -29,7 +29,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     
     let editView=UIView()
     let editImage=UIImageView()
-    let imageCropper=CropperView()
+    let imageCropper=ImageScrollView()
     
     let aspectRatioX=4.0
     let aspectRatioY=3.0

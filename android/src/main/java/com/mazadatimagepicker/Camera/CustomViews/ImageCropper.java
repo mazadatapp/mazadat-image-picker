@@ -233,7 +233,7 @@ public class ImageCropper extends AppCompatImageView {
           y = old_y + diff_y;
           height = old_height - diff_y;
           invalidate();
-        } else if (area == 6 && old_width + diff_x > min_width &&
+        } else if (area == 6 &&
           (old_width + diff_x) > min_width &&
           (diff_x + old_x + old_width < getWidth())) {
           width = old_width + diff_x;

@@ -17,6 +17,7 @@ class CropperView: UIView {
     var oldY:CGFloat!
     var oldX:CGFloat!
     var oldWidth:CGFloat!
+    var oldHeight:CGFloat!
     var color:UIColor!
     var aspectRatioX=4.0
     var aspectRatioY=3.0
@@ -221,7 +222,13 @@ class CropperView: UIView {
         setMargins()
     }
     open func getCroppedImage()->UIImage{
-        return imageView.snapshot(of: cropArea)
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: allRect.width, height: allRect.width * aspectRatioY / aspectRatioX))
+        container.backgroundColor = .black
+        let image=UIImageView(frame: CGRect(x: 0, y: 0, width: allRect.width, height: allRect.width * aspectRatioY / aspectRatioX))
+        image.contentMode = .scaleAspectFit
+        image.image = imageView.snapshot(of: cropArea)
+        container.addSubview(image)
+        return container.snapshot(of: container.bounds)
         
     }
     
@@ -301,6 +308,7 @@ class CropperView: UIView {
         oldX=cropArea.origin.x
         oldY=cropArea.origin.y
         oldWidth=cropArea.width
+        oldHeight=cropArea.height
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -313,63 +321,62 @@ class CropperView: UIView {
         let area_8_expression = oldY + x/2 + (oldWidth - x)
         
         if(area == 1 && oldWidth-x > minWidth &&
-           (oldY+x * CGFloat(aspectRatioY/aspectRatioX)>minY) &&
+           oldHeight - y > minWidth &&
+           oldY+y > minY &&
            oldX+x > minX){
             cropArea.origin.x=oldX+x
-            cropArea.origin.y=oldY+x * CGFloat(aspectRatioY/aspectRatioX)
+            cropArea.origin.y=oldY+y
             cropArea.size.width=oldWidth-x
-            cropArea.size.height = CGFloat(Double((oldWidth!-x)) * aspectRatioY/aspectRatioX)
+            cropArea.size.height = oldHeight-y
             setNeedsDisplay()
             
         }else if(area == 2 && oldWidth+x > minWidth &&
-                 oldY-x * CGFloat(aspectRatioY/aspectRatioX)>minY &&
+                 oldHeight - y > minWidth &&
+                 oldY+y > minY &&
                  cropArea.minX + oldWidth + x < maxX){
-            cropArea.origin.y=oldY-x * CGFloat(aspectRatioY/aspectRatioX)
+            cropArea.origin.y=oldY+y
             cropArea.size.width=oldWidth+x
-            cropArea.size.height = CGFloat(Double((oldWidth!+x)) * aspectRatioY/aspectRatioX)
+            cropArea.size.height = oldHeight - y
             setNeedsDisplay()
         }else if(area == 3 && oldWidth-x > minWidth &&
-                 (cropArea.minY+((oldWidth - x) * allAspectRatio)) < maxY &&
+                 oldHeight + y > minWidth &&
+                 cropArea.minY + oldHeight + y < maxY &&
                  oldX + x > minX){
             cropArea.origin.x=oldX+x
             cropArea.size.width=oldWidth-x
-            cropArea.size.height = CGFloat(Double((oldWidth!-x)) * aspectRatioY/aspectRatioX)
+            cropArea.size.height = oldHeight + y
             setNeedsDisplay()
         }else if(area == 4 && oldWidth+x > minWidth &&
-                 (cropArea.minY+((oldWidth + x) * allAspectRatio)) < maxY &&
+                 oldHeight + y > minWidth &&
+                 cropArea.minY + oldHeight + y < maxY &&
                  cropArea.minX + oldWidth + x < maxX){
             cropArea.size.width=oldWidth+x
-            cropArea.size.height = CGFloat(Double((oldWidth!+x)) * aspectRatioY/aspectRatioX)
+            cropArea.size.height = oldHeight+y
             
             setNeedsDisplay()
-        }else if(area == 5 && oldWidth-y > minWidth &&
-                 (oldX + y / 2)>minX &&  (oldX + (y / 2) + oldWidth - y) < maxX && (oldY + y * CGFloat(aspectRatioY / aspectRatioX))>minY){
-            cropArea.origin.y=oldY+y * CGFloat(aspectRatioY/aspectRatioX)
-            cropArea.origin.x=(oldX+y/2)
-            cropArea.size.width=oldWidth-y
-            cropArea.size.height = CGFloat(Double((oldWidth!-y)) * aspectRatioY/aspectRatioX)
+        }else if(area == 5 && oldHeight-y > minWidth &&
+                 oldY + y > minY){
+            cropArea.origin.y=oldY+y
+            cropArea.size.height = oldHeight - y
             setNeedsDisplay()
         }else if(area == 6 && oldWidth+x > minWidth &&
-                 (oldY - x / 2) > minY && area_6_expression * allAspectRatio < maxY){
-            cropArea.origin.y=oldY-x/2
+                 x + oldX + oldWidth < maxY){
+            
             cropArea.size.width=oldWidth+x
-            cropArea.size.height = CGFloat(Double((oldWidth!+x)) * aspectRatioY/aspectRatioX)
-            //cropArea.origin.x=(old_x-y/2)
             
             setNeedsDisplay()
-        }else if(area == 7 && oldWidth+y > minWidth &&
-                 (oldX - y / 2)>minX &&  (oldX - (y / 2) + oldWidth + y) < maxX && (oldY + oldWidth+y * allAspectRatio)<maxY){
+        }else if(area == 7 && oldHeight+y > minWidth &&
+                 oldY + oldHeight + y < maxY){
             //cropArea.origin.y=old_y+y
-            cropArea.origin.x=(oldX-y/2)
-            cropArea.size.width=oldWidth+y
-            cropArea.size.height = CGFloat((oldWidth!+y) * allAspectRatio)
+            
+            cropArea.size.height = oldHeight + y
             setNeedsDisplay()
         }else if(area == 8 && oldWidth-x > minWidth &&
-                 (oldY + x / 2) > minY && area_8_expression * allAspectRatio < maxY){
-            cropArea.origin.y=oldY+x/2
+                 (oldX + x) > minX){
+            
             cropArea.origin.x=oldX+x
             cropArea.size.width=oldWidth-x
-            cropArea.size.height = CGFloat(Double((oldWidth!-x)) * aspectRatioY/aspectRatioX)
+            
             
             setNeedsDisplay()
         }else if(area == 9){

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		50ACB347298BBC7F00E8D8ED /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ACB346298BBC7F00E8D8ED /* ImageScrollView.swift */; };
 		50CEEED429868730006C3166 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEED329868730006C3166 /* CameraController.swift */; };
 		50CEEED629868B8C006C3166 /* SwiftyCamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEED529868B8C006C3166 /* SwiftyCamViewController.swift */; };
 		50CEEED829868BA2006C3166 /* SwiftyCamViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEED729868BA2006C3166 /* SwiftyCamViewControllerDelegate.swift */; };
@@ -28,6 +29,7 @@
 		50CEEF082987BFD3006C3166 /* GalleryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEF072987BFD3006C3166 /* GalleryController.swift */; };
 		50CEEF0A2987C67F006C3166 /* ImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEF092987C67F006C3166 /* ImageItem.swift */; };
 		50CEEF0C2987E772006C3166 /* EditModeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEF0B2987E772006C3166 /* EditModeTypes.swift */; };
+		50CEEF10298BB020006C3166 /* UIImageViewExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEF0F298BB020006C3166 /* UIImageViewExtention.swift */; };
 		F4FF95D7245B92E800C19C63 /* MazadatImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* MazadatImagePicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libMazadatImagePicker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMazadatImagePicker.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		50ACB346298BBC7F00E8D8ED /* ImageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
 		50CEEED329868730006C3166 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		50CEEED529868B8C006C3166 /* SwiftyCamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyCamViewController.swift; sourceTree = "<group>"; };
 		50CEEED729868BA2006C3166 /* SwiftyCamViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyCamViewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +69,7 @@
 		50CEEF072987BFD3006C3166 /* GalleryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryController.swift; sourceTree = "<group>"; };
 		50CEEF092987C67F006C3166 /* ImageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageItem.swift; sourceTree = "<group>"; };
 		50CEEF0B2987E772006C3166 /* EditModeTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditModeTypes.swift; sourceTree = "<group>"; };
+		50CEEF0F298BB020006C3166 /* UIImageViewExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtention.swift; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* MazadatImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MazadatImagePicker.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* MazadatImagePicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MazadatImagePicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* MazadatImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MazadatImagePicker.swift; sourceTree = "<group>"; };
@@ -124,6 +128,7 @@
 				50CEEEF52986BE33006C3166 /* UIImageExtension.swift */,
 				50CEEEF72986C263006C3166 /* ButtonExtension.swift */,
 				50CEEEFF2986D4EF006C3166 /* UIViewControllerExtension.swift */,
+				50CEEF0F298BB020006C3166 /* UIImageViewExtention.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				50CEEEFA2986C720006C3166 /* ImageCropper.swift */,
+				50ACB346298BBC7F00E8D8ED /* ImageScrollView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -255,6 +261,8 @@
 				50CEEF082987BFD3006C3166 /* GalleryController.swift in Sources */,
 				50CEEF052987BC34006C3166 /* CloseDialog.swift in Sources */,
 				50CEEF0A2987C67F006C3166 /* ImageItem.swift in Sources */,
+				50CEEF10298BB020006C3166 /* UIImageViewExtention.swift in Sources */,
+				50ACB347298BBC7F00E8D8ED /* ImageScrollView.swift in Sources */,
 				50CEEEDA29868BBA006C3166 /* SwiftyCamButton.swift in Sources */,
 				50CEEEF82986C264006C3166 /* ButtonExtension.swift in Sources */,
 				50CEEEF12986A278006C3166 /* ViewExtension.swift in Sources */,

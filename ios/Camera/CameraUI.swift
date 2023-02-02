@@ -133,6 +133,7 @@ extension CameraController{
         
         view.addSubview(editView)
         editView.backgroundColor = .black
+        editView.clipsToBounds = true
         addConstraints(currentView: editView, MainView: view, centerX: true, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.2*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: 0.91*viewWidth, height: true, heightValue: 0.91*viewWidth * aspectRatioY / aspectRatioX)
         
         editView.addSubview(editImage)
@@ -203,7 +204,8 @@ extension CameraController{
             declineBtn.isHidden=false
             
             imageCropper.isHidden = false
-            imageCropper.setImage(image: imageItems[editSelectedIndex].image)
+            imageCropper.display(image: imageItems[editSelectedIndex].image)
+            editImage.isHidden=true
         }
     }
     
@@ -287,10 +289,11 @@ extension CameraController{
     @objc func confirmPressed(_ sender: AnyObject) {
         if(editMode && editModeType != EditModeTypes.NOTHING){
             if(editModeType==EditModeTypes.CROP){
-                let image=imageCropper.getCroppedImage()
+                let image=editView.snapshot(of: editView.bounds)
                 imageItems[editSelectedIndex].image=image
                 reloadCell(index: editSelectedIndex)
                 imageCropper.isHidden=true
+                editImage.isHidden=false
                 let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
                 cropBtn.setImage(whiteCropImage, for: .normal)
             }else if(editModeType==EditModeTypes.ROTATE){
@@ -318,6 +321,7 @@ extension CameraController{
         
         print(editSelectedIndex)
         imageCropper.isHidden=true
+        editImage.isHidden=false
         editImage.image = imageItems[editSelectedIndex].image
         
         confirmBtn.alpha=0.38
