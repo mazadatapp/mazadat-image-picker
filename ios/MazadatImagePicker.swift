@@ -2,11 +2,6 @@ import UIKit
 @objc(MazadatImagePicker)
 class MazadatImagePicker: NSObject {
 
-  @objc(multiply:withB:withResolver:withRejecter:)
-  func multiply(a: Float, b: Float, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
-    resolve(a*b)
-  }
-    
     @objc
     func openCamera(_ length:Int, lang: String, resolve : @escaping  RCTPromiseResolveBlock,reject : @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async{

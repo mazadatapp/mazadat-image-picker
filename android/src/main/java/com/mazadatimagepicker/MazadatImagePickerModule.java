@@ -54,10 +54,6 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
 
   // Example method
   // See https://reactnative.dev/docs/native-modules-android
-  @ReactMethod
-  public void multiply(double a, double b, Promise promise) {
-    promise.resolve(a * b);
-  }
 
   @ReactMethod
   public void openCamera(int maxImagesSize, String lang, Promise promise) {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Button } from 'react-native';
-import { multiply,openCamera,editPhoto } from 'mazadat-image-picker';
+import { openCamera,editPhoto } from 'mazadat-image-picker';
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();

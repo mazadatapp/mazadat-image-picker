@@ -1,6 +1,6 @@
 # mazadat-image-picker
 
-test
+library to get image from camera from pick image from gallery
 
 ## Installation
 
@@ -11,11 +11,19 @@ npm install mazadat-image-picker
 ## Usage
 
 ```js
-import { multiply } from 'mazadat-image-picker';
+import { openCamera,editPhoto } from 'mazadat-image-picker';
 
 // ...
 
-const result = await multiply(3, 7);
+openCamera(3,"en").then((value: string) => {
+        console.log({value})
+        setResult(value)
+      })
+
+editPhoto(path/to/image,"en").then((value: string) => {
+              console.log({value})
+              setResult(value)
+            })
 ```
 
 ## Contributing
@@ -24,7 +32,7 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 
 ## License
 
-MIT
+MAZADAT
 
 ---
 
