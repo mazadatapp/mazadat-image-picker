@@ -14,13 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.mazadatimagepicker.Camera.CameraActivity;
+import com.mazadatimagepicker.Camera.PickerCameraActivity;
 import com.mazadatimagepicker.R;
 
 public class DeleteDialog extends DialogFragment {
 
 
-  private CameraActivity cameraActivity;
+  private PickerCameraActivity pickerCameraActivity;
 
   @Nullable
   @Override
@@ -32,22 +32,22 @@ public class DeleteDialog extends DialogFragment {
     Button cancelBtn = view.findViewById(R.id.cancel_btn);
     Button confirmDeleteBtn = view.findViewById(R.id.confirm_delete_btn);
 
-    confirmDeleteBtn.setBackgroundResource(cameraActivity.getLang().equals("en") ?
+    confirmDeleteBtn.setBackgroundResource(pickerCameraActivity.getLang().equals("en") ?
       R.drawable.custom_gray_round_bottom_right_20 : R.drawable.custom_gray_round_bottom_left_20);
-    cancelBtn.setBackgroundResource(cameraActivity.getLang().equals("en") ?
+    cancelBtn.setBackgroundResource(pickerCameraActivity.getLang().equals("en") ?
       R.drawable.custom_gray_round_bottom_left_20 : R.drawable.custom_gray_round_bottom_right_20);
 
     cancelBtn.setOnClickListener((v) -> dismiss());
     confirmDeleteBtn.setOnClickListener((v) -> {
-      cameraActivity.deleteConfirmed();
+      pickerCameraActivity.deleteConfirmed();
       dismiss();
     });
 
     return view;
   }
 
-  public void setCameraActivity(CameraActivity cameraActivity) {
-    this.cameraActivity = cameraActivity;
+  public void setCameraActivity(PickerCameraActivity pickerCameraActivity) {
+    this.pickerCameraActivity = pickerCameraActivity;
   }
 
   @Override

@@ -29,7 +29,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,7 +36,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.jsibbold.zoomage.ZoomageView;
 import com.mazadatimagepicker.BuildConfig;
 import com.mazadatimagepicker.Camera.CloseDialog.CloseDialog;
-import com.mazadatimagepicker.Camera.CustomViews.ImageCropper;
 import com.mazadatimagepicker.Camera.CustomViews.RectangleHole;
 import com.mazadatimagepicker.Camera.DeleteDialog.DeleteDialog;
 import com.mazadatimagepicker.Camera.Gallery.Gallery;
@@ -49,7 +47,7 @@ import com.mazadatimagepicker.R;
 import java.io.File;
 import java.util.LinkedList;
 
-public class CameraActivity extends AppCompatActivity {
+public class PickerCameraActivity extends AppCompatActivity {
 
   final int GALLERY_REQUEST_CODE = 10;
   final int CAMERA_PERMISSION = 21;
@@ -107,7 +105,7 @@ public class CameraActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_camera);
+    setContentView(R.layout.activity_picker_camera);
 
     previewView = findViewById(R.id.preview);
     captureIm = findViewById(R.id.capture_im);
@@ -240,7 +238,7 @@ public class CameraActivity extends AppCompatActivity {
 
 
     Bitmap croppedBitmap = Bitmap.createBitmap(scaledBitmap, (int) rect.left, (int) rect.top, (int) rect.width(), (int) rect.height());
-    File file = ImageUtils.bitmapToFile(CameraActivity.this, croppedBitmap);
+    File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, croppedBitmap);
     addImageToList(file);
 
   }
@@ -272,11 +270,11 @@ public class CameraActivity extends AppCompatActivity {
         try {
           ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
-          if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+          if (ContextCompat.checkSelfPermission(PickerCameraActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             cameraPermissionEnabled = true;
             startCameraX(cameraProvider);
           } else {
-            ActivityCompat.requestPermissions(CameraActivity.this,
+            ActivityCompat.requestPermissions(PickerCameraActivity.this,
               new String[]{Manifest.permission.CAMERA},
               CAMERA_PERMISSION);
           }

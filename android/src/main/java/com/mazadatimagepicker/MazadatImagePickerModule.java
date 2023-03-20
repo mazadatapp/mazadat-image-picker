@@ -15,7 +15,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
-import com.mazadatimagepicker.Camera.CameraActivity;
+import com.mazadatimagepicker.Camera.PickerCameraActivity;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -59,7 +59,7 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
   public void openCamera(int maxImagesSize, String lang, Promise promise) {
     this.promise = promise;
     setLocale(getCurrentActivity(), lang);
-    Intent intent = new Intent(getCurrentActivity(), CameraActivity.class);
+    Intent intent = new Intent(getCurrentActivity(), PickerCameraActivity.class);
     intent.putExtra("maxImagesSize", maxImagesSize);
     intent.putExtra("lang", lang);
 
@@ -74,7 +74,7 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
   public void editPhoto(String path, String lang, Promise promise) {
     this.promise = promise;
     setLocale(getCurrentActivity(), lang);
-    Intent intent = new Intent(getCurrentActivity(), CameraActivity.class);
+    Intent intent = new Intent(getCurrentActivity(), PickerCameraActivity.class);
     intent.putExtra("editOnlyOnePhoto", true);
     intent.putExtra("path", path);
     intent.putExtra("lang", lang);

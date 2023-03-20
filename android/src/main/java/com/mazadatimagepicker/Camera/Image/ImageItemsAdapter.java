@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.mazadatimagepicker.Camera.CameraActivity;
+import com.mazadatimagepicker.Camera.PickerCameraActivity;
 import com.mazadatimagepicker.R;
 
 import java.util.LinkedList;
@@ -19,12 +19,12 @@ import java.util.LinkedList;
 public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.ViewHolder> {
 
   public LinkedList<ImageItem> images;
-  CameraActivity cameraActivity;
+  PickerCameraActivity pickerCameraActivity;
 
   // Pass in the contact array into the constructor
-  public ImageItemsAdapter(CameraActivity cameraActivity, LinkedList<ImageItem> images) {
+  public ImageItemsAdapter(PickerCameraActivity pickerCameraActivity, LinkedList<ImageItem> images) {
 
-    this.cameraActivity = cameraActivity;
+    this.pickerCameraActivity = pickerCameraActivity;
     this.images = images;
 
   }
@@ -39,7 +39,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-    LayoutInflater inflater = LayoutInflater.from(cameraActivity);
+    LayoutInflater inflater = LayoutInflater.from(pickerCameraActivity);
 
     View invitationView = inflater.inflate(R.layout.adapter_image_item, parent, false);
 
@@ -82,7 +82,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
         image.setImageDrawable(null);
       }
 
-      itemView.setOnClickListener(view -> cameraActivity.editOrCapturePhoto(position));
+      itemView.setOnClickListener(view -> pickerCameraActivity.editOrCapturePhoto(position));
     }
 
   }

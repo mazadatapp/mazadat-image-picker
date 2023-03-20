@@ -14,7 +14,7 @@
       android:name=".Camera.Gallery.Gallery"
       android:exported="false" />
     <activity
-      android:name=".Camera.CameraActivity"
+      android:name=".Camera.PickerCameraActivity"
       android:exported="false" />
   </application>
 
