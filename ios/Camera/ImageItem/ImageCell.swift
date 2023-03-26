@@ -13,6 +13,7 @@ class ImageCell: UICollectionViewCell {
     var editBtn:UIButton!
     var frameBlue:UIView!
     var hintL:UILabel!
+    var blackLayer:UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,11 +29,11 @@ class ImageCell: UICollectionViewCell {
         hintL.textColor = UIColor(white: 0, alpha: 0.26)
         addConstraints(currentView: hintL, MainView: frameBlue, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
-        image_=UIImageView(frame: CGRect(x: 2, y: 2, width: frameBlue.frame.width - 2, height: frameBlue.frame.height-2))
+        image_=UIImageView(frame: CGRect(x: 2, y: 2, width: frameBlue.frame.width - 4, height: frameBlue.frame.height-4))
         image_.cornerRadius = 8
         frameBlue.addSubview(image_)
         
-        let blackLayer=UIView(frame: CGRect(x: 2, y: 2, width: frameBlue.frame.width - 2, height: frameBlue.frame.height-2))
+        blackLayer=UIView(frame: CGRect(x: 2, y: 2, width: frameBlue.frame.width - 4, height: frameBlue.frame.height-4))
         blackLayer.cornerRadius = 8
         blackLayer.backgroundColor = UIColor(white: 0, alpha: 0.26)
         frameBlue.addSubview(blackLayer)

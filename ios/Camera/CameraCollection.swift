@@ -19,6 +19,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCell
         
         cell.editBtn.isHidden = imageItems[indexPath.row].image == nil
+        cell.blackLayer.isHidden = imageItems[indexPath.row].image == nil
         cell.editBtn.isEnabled=false
         cell.editBtn.setTitle(lang == "en" ? "Select to edit" : "إضغط للتعديل", for: .normal)
         cell.editBtn.sizeToFit()

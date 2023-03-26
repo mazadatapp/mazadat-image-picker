@@ -375,7 +375,7 @@ extension CameraController{
     @objc func donePressed(_ sender: AnyObject) {
         if(isIdVerification){
             if(imageItems[0].image == nil){
-                showToast(message: lang == "en" ? "Please add front ID" : "برجاء إضافة الوجه الأمامية")
+                showToast(message: lang == "en" ? "Please add front ID" : "برجاء إضافة الوجه الأمامي")
                 return
             }else if(imageItems[1].image == nil){
                 showToast(message: lang == "en" ? "Please add back ID" : "برجاء إضافة الوجه الخلفى")
