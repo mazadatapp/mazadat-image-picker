@@ -64,23 +64,43 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     RoundedImageView image;
+    RoundedImageView overlayIm;
     TextView selectToEdit;
+    TextView idTypeTv;
 
 
     public ViewHolder(View itemView) {
       super(itemView);
       image = itemView.findViewById(R.id.image);
+      overlayIm = itemView.findViewById(R.id.overlay_im);
       selectToEdit = itemView.findViewById(R.id.select_to_edit_tv);
+      idTypeTv = itemView.findViewById(R.id.id_type_tv);
 
     }
 
     public void onBind(ImageItem model, int position) {
       selectToEdit.setVisibility(model.getFile() != null ? View.VISIBLE : View.GONE);
+
       if (model.getFile() != null) {
         image.setImageURI(Uri.fromFile(model.getFile()));
+        overlayIm.setVisibility(View.VISIBLE);
       } else {
         image.setImageDrawable(null);
+        overlayIm.setVisibility(View.GONE);
       }
+
+      idTypeTv.setVisibility(pickerCameraActivity.isIdVerification() ? View.VISIBLE : View.GONE);
+
+      if(pickerCameraActivity.isIdVerification()){
+        if (position == 0){
+          idTypeTv.setText(pickerCameraActivity.getString(R.string.front_id));
+        }else{
+          idTypeTv.setText(pickerCameraActivity.getString(R.string.back_id));
+        }
+      }
+
+
+      itemView.setBackgroundResource(pickerCameraActivity.getSelectedPosition() == position ?R.drawable.custom_image_boarder:R.drawable.custom_image);
 
       itemView.setOnClickListener(view -> pickerCameraActivity.editOrCapturePhoto(position));
     }

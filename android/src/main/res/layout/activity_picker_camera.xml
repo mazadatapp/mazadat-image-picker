@@ -47,7 +47,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent" />
 
-    <com.jsibbold.zoomage.ZoomageView
+    <com.mazadatimagepicker.Camera.CustomViews.ZoomImage
       android:id="@+id/image_cropper"
       android:layout_width="match_parent"
       android:layout_height="match_parent"

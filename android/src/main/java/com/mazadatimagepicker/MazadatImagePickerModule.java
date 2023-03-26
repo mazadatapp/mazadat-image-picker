@@ -85,4 +85,20 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
     intentFilter.addAction(BuildConfig.BROADCAST_ACTION);
     getCurrentActivity().registerReceiver(receiver, intentFilter);
   }
+
+  @ReactMethod
+  public void openIdVerification(String lang, Promise promise) {
+    this.promise = promise;
+    setLocale(getCurrentActivity(), lang);
+    Intent intent = new Intent(getCurrentActivity(), PickerCameraActivity.class);
+    intent.putExtra("isIdVerification", true);
+    intent.putExtra("maxImagesSize", 2);
+    intent.putExtra("lang", lang);
+
+    Objects.requireNonNull(getCurrentActivity()).startActivity(intent);
+
+    IntentFilter intentFilter = new IntentFilter();
+    intentFilter.addAction(BuildConfig.BROADCAST_ACTION);
+    getCurrentActivity().registerReceiver(receiver, intentFilter);
+  }
 }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import com.jsibbold.zoomage.ZoomageView;
 import com.mazadatimagepicker.BuildConfig;
 import com.mazadatimagepicker.Camera.CloseDialog.CloseDialog;
 import com.mazadatimagepicker.Camera.CustomViews.RectangleHole;
+import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
 import com.mazadatimagepicker.Camera.DeleteDialog.DeleteDialog;
 import com.mazadatimagepicker.Camera.Gallery.Gallery;
 import com.mazadatimagepicker.Camera.Image.ImageItem;
@@ -58,7 +60,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   //edit views
   private ConstraintLayout editCl;
   private ImageView image;
-  private ZoomageView imageCropper;
+  private ZoomImage imageCropper;
   private Button cropBtn;
   private Button rotateBtn;
   private Button deleteBtn;
@@ -81,12 +83,14 @@ public class PickerCameraActivity extends AppCompatActivity {
   private int maxImagesSize;
   private int imageTurn = 0;
   private int selectedEditIndex = -1;
+  private int selectedPosition=0;
   private int editType = 0;
 
   private String lang;
 
   private boolean flashIsOn = false;
   private boolean isEditModeOn = false;
+  private boolean isIdVerification = false;
 
   private Drawable cropBlue;
   private Drawable cropWhite;
@@ -138,6 +142,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     maxImagesSize = getIntent().getIntExtra("maxImagesSize", 0);
     boolean editOnlyOnePhoto = getIntent().getBooleanExtra("editOnlyOnePhoto", false);
     lang = getIntent().getStringExtra("lang");
+    isIdVerification = getIntent().getBooleanExtra("isIdVerification", false);
 
     maxImagesTv.setText(String.format("%s %s", getString(R.string.max_number_selected_images_is), maxImagesSize));
 
@@ -161,6 +166,11 @@ public class PickerCameraActivity extends AppCompatActivity {
     confirmIm.setOnClickListener(view -> confirmPressed());
     declineIm.setOnClickListener(view -> resetPressed());
 
+    if(isIdVerification){
+      maxImagesTv.setVisibility(View.INVISIBLE);
+      captureHintTv.setText(R.string.id_verification_hint);
+    }
+
     if (editOnlyOnePhoto) {
       String editPhotoPath = getIntent().getStringExtra("path");
       imageItems.get(0).setFile(new File(editPhotoPath));
@@ -174,6 +184,10 @@ public class PickerCameraActivity extends AppCompatActivity {
       deleteBtn.setVisibility(View.GONE);
     }
 
+  }
+
+  public boolean isIdVerification() {
+    return isIdVerification;
   }
 
   public String getLang() {
@@ -209,6 +223,16 @@ public class PickerCameraActivity extends AppCompatActivity {
   private void donePressed() {
     if (editType > 0) {
       return;
+    }
+
+    if(isIdVerification){
+      if(imageItems.get(0).getFile()==null){
+        Toast.makeText(this, getString(R.string.please_add_front_id), Toast.LENGTH_SHORT).show();
+        return;
+      }else if(imageItems.get(1).getFile()==null){
+        Toast.makeText(this, getString(R.string.please_add_back_id), Toast.LENGTH_SHORT).show();
+        return;
+      }
     }
     StringBuilder output = new StringBuilder();
     for (int i = 0; i < imageItems.size(); i++) {
@@ -298,6 +322,9 @@ public class PickerCameraActivity extends AppCompatActivity {
     camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
   }
 
+  public int getSelectedPosition() {
+    return selectedPosition;
+  }
 
   private void addImageToList(File file) {
 
@@ -306,22 +333,27 @@ public class PickerCameraActivity extends AppCompatActivity {
     recycler.smoothScrollToPosition(imageTurn);
 
     imageTurn++;
+    selectedPosition = imageTurn;
     if (imageTurn < maxImagesSize) {
       doneBtn.setText(getString(R.string.done) + " (" + imageTurn + ")");
       imageItems.addLast(new ImageItem());
-      adapter.notifyItemInserted(imageTurn);
     } else {
       doneBtn.setText(getString(R.string.done) + " (" + (maxImagesSize) + ")");
       maxImagesTv.setTextColor(getResources().getColor(R.color.red));
       captureIm.setEnabled(false);
       captureIm.setAlpha(0.38f);
     }
+
+    adapter.notifyDataSetChanged();
   }
 
   public void editOrCapturePhoto(int position) {
+
     if (imageItems.get(position).getFile() != null) {
 
       selectedEditIndex = position;
+      selectedPosition = position;
+      adapter.notifyDataSetChanged();
 
       editCl.setVisibility(View.VISIBLE);
       confirmIm.setVisibility(View.VISIBLE);
@@ -343,6 +375,8 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     } else if (imageItems.get(position).getFile() == null && isEditModeOn && editType == 0) {
       resetAndOpenCamera();
+      selectedPosition = imageTurn;
+      adapter.notifyDataSetChanged();
     }
   }
 

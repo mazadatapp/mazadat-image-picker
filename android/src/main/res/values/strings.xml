@@ -7,6 +7,11 @@
   <string name="done">Done</string>
   <string name="max_number_selected_images_is">The maximum number of selected photos is</string>
   <string name="select_to_edit">Select to edit</string>
+  <string name="front_id">Front ID</string>
+  <string name="back_id">Back ID</string>
+  <string name="please_add_front_id">Please add front ID</string>
+  <string name="please_add_back_id">Please add back ID</string>
+  <string name="id_verification_hint">Capture your ID front and back\nEnsure that all data is visible and clear</string>
 
 
   //confirmation dialog

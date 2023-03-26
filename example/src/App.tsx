@@ -20,7 +20,7 @@ export default function App() {
               setResult(value)
             })}}></Button>
 
-      <Button title='ID verification' onPress={()=>{ openIdVerification("ar").then((value: string) => {
+      <Button title='ID verification' onPress={()=>{ openIdVerification("en").then((value: string) => {
                     console.log({value})
                     setResult(value)
                   })}}></Button>
