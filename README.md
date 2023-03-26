@@ -11,7 +11,7 @@ npm install mazadat-image-picker
 ## Usage
 
 ```js
-import { openCamera,editPhoto } from 'mazadat-image-picker';
+import { openCamera,editPhoto,openIdVerification } from 'mazadat-image-picker';
 
 // ...
 
@@ -21,6 +21,10 @@ openCamera(3,"en").then((value: string) => {
       })
 
 editPhoto(path/to/image,"en").then((value: string) => {
+              console.log({value})
+              setResult(value)
+            })
+openIdVerification("en").then((value: string) => {
               console.log({value})
               setResult(value)
             })
