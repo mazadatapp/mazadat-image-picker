@@ -64,7 +64,7 @@ public class RectangleHole extends ViewGroup {
       focusArea = new RectF(getWidth() / 2f - width / 2f, getHeight() * 0.2f, getWidth() / 2f + width / 2, getHeight() * 0.2f + height);
     }
     Paint black = new Paint();
-    black.setColor(getContext().getResources().getColor(R.color.black_70));
+    black.setColor(getContext().getResources().getColor(R.color.black_80));
     canvas.drawRect(0, 0, getWidth(), getHeight(), black);
 
     Paint eraser = new Paint();
