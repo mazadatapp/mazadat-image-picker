@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Button } from 'react-native';
-import { openCamera,editPhoto } from 'mazadat-image-picker';
+import { openCamera,editPhoto,openIdVerification } from 'mazadat-image-picker';
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
@@ -19,6 +19,11 @@ export default function App() {
               console.log({value})
               setResult(value)
             })}}></Button>
+
+      <Button title='ID verification' onPress={()=>{ openIdVerification("ar").then((value: string) => {
+                    console.log({value})
+                    setResult(value)
+                  })}}></Button>
     </View>
   );
 }

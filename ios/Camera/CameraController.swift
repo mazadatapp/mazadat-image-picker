@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate {
     var promise:RCTPromiseResolveBlock!
@@ -44,26 +45,39 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var editImageRotation:Double=0
     var editPhotoPath:String!
     
+    var gridVertical1:UIView!
+    var gridVertical2:UIView!
+    var gridHorizontal1:UIView!
+    var gridHorizontal2:UIView!
+    
     var isFlashOn=false
+    var selectedPosition = 0
+    
+    var isIdVerification = false
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraDelegate = self
         imageItems.append(ImageItem())
         drawUI()
-        
+    
         // Do any additional setup after loading the view.
     }
     
     func setData(length:Int,lang:String){
         self.lang = lang
         self.maxImagesSize = length
-        print(maxImagesSize)
+        
     }
     
     func setData(path:String,lang:String){
         self.lang = lang
         self.editPhotoPath = path
-        print(maxImagesSize)
+        
+    }
+    
+    func setIsIdVerification(isIdVerification:Bool){
+        self.isIdVerification = isIdVerification
+        
     }
     
     func setPromise(promise:@escaping RCTPromiseResolveBlock){
@@ -72,7 +86,6 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     
     func getCroppedImage(image:UIImage){
         imageItems[imageTurn].image=image
-        reloadCell(index: imageTurn)
         imageTurn += 1
         if(imageTurn==maxImagesSize){
             maxNoOfImagesL.textColor = Colors.redColor()
@@ -81,19 +94,19 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         }else{
             imageItems.append(ImageItem())
         }
+        selectedPosition = imageTurn
         imagesCollection.reloadData()
         doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
     }
     
     func swiftyCam(_ swiftyCam: SwiftyCamViewController, didTake photo: UIImage) {
+        print(photo.size)
         
-        print(photo.size.width)
-        let width=Double(photo.size.width) * 0.91
-        let height=width * CGFloat(aspectRatioY/aspectRatioX)
+        let width = Double(photo.size.width) * 0.91
+        let height = width * CGFloat(aspectRatioY/aspectRatioX)
         let croppedImage=photo.croppedImage(inRect: CGRect(x: Double(photo.size.width/2) - width / 2, y: Double(photo.size.height) * 0.2, width: width, height: height))
+        
         getCroppedImage(image: croppedImage)
-        // Called when takePhoto() is called or if a SwiftyCamButton initiates a tap gesture
-        // Returns a UIImage captured from the current session
     }
     
     func swiftyCam(_ swiftyCam: SwiftyCamViewController, didBeginRecordingVideo camera: SwiftyCamViewController.CameraSelection) {
@@ -127,6 +140,29 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         // Called when user switches between cameras
         // Returns current camera selection
     }
+    
+    func showToast(message : String) {
+      
+      let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height - 75, width: 150, height: 35))
+      toastLabel.backgroundColor = UIColor.white
+      toastLabel.textColor = UIColor.black
+      toastLabel.font = UIFont.init(name: "Montserrat-Medium", size: 14)
+      toastLabel.textAlignment = .center;
+      toastLabel.text = message
+      toastLabel.alpha = 1.0
+      toastLabel.layer.cornerRadius = 10;
+      toastLabel.clipsToBounds  =  true
+      self.view.addSubview(toastLabel)
+      UIView.animate(withDuration: 3.0, delay: 0.5, options: .curveEaseOut, animations: {
+        toastLabel.alpha = 0.0
+      }, completion: {(isCompleted) in
+        toastLabel.removeFromSuperview()
+      })
+    }
+    
+    
+
+    
     
     
     /*

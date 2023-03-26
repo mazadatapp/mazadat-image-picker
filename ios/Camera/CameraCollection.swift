@@ -28,16 +28,27 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         }else{
             cell.image_.image = nil
         }
+        cell.frameBlue.borderWidth = (selectedPosition == indexPath.row) ? 2 : 0
+        
+        if(isIdVerification){
+            if(imageTurn == 0){
+                cell.hintL.text = lang == "en" ? "Front ID" : "الوجه الأمامي"
+            }else{
+                cell.hintL.text = lang == "en" ? "Back ID" : "الوجه الخلفي"
+            }
+        }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         itemSelected(index: indexPath.row)
+        selectedPosition = indexPath.row
+        collectionView.reloadData()
     }
     
     func itemSelected(index:Int){
         if(editModeType == EditModeTypes.NOTHING && imageItems[index].image != nil){
-            print("yes")
             editView.isHidden=false
             editImage.image = imageItems[index].image
             showPreviewLayer(flag: false)

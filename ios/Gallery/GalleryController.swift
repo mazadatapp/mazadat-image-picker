@@ -31,6 +31,7 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
         imagePickerController.allowsEditing = false //If you want edit option set "true"
         imagePickerController.sourceType = .photoLibrary
         imagePickerController.delegate = self
+        imagePickerController.modalPresentationStyle = .fullScreen
         present(imagePickerController, animated: true, completion: nil)
         
         
@@ -62,9 +63,12 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+        print("cancel")
         dismiss(animated: false)
         
     }
+    
+
     
     func setCameraController(cameraController:CameraController){
         self.cameraController=cameraController

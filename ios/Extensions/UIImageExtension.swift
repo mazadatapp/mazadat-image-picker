@@ -91,4 +91,10 @@ extension UIImage {
             let result = UIImage(cgImage: imageRef, scale: scale, orientation: imageOrientation)
             return result
         }
+    
+    func imageResized(to size: CGSize) -> UIImage {
+            return UIGraphicsImageRenderer(size: size).image { _ in
+                draw(in: CGRect(origin: .zero, size: size))
+            }
+        }
 }

@@ -249,6 +249,8 @@ open class SwiftyCamViewController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         previewLayer = PreviewView(frame: view.frame, videoGravity: videoGravity)
+        //previewLayer.frame = CGRect(x: 0, y: 20, width: view.frame.width, height: 40)
+        //print(previewLayer.frame)
         previewLayer.center = view.center
         view.addSubview(previewLayer)
         view.sendSubviewToBack(previewLayer)
@@ -361,9 +363,9 @@ open class SwiftyCamViewController: UIViewController {
             switch self.setupResult {
             case .success:
                 // Begin Session
+                
                 self.session.startRunning()
                 self.isSessionRunning = self.session.isRunning
-
                 // Preview layer video orientation can be set only after the connection is created
                 DispatchQueue.main.async {
                     self.previewLayer.videoPreviewLayer.connection?.videoOrientation = self.orientation.getPreviewLayerOrientation()
@@ -462,7 +464,7 @@ open class SwiftyCamViewController: UIViewController {
 
         //Must be fetched before on main thread
         let previewOrientation = previewLayer.videoPreviewLayer.connection!.videoOrientation
-
+        
         sessionQueue.async { [unowned self] in
             if !movieFileOutput.isRecording {
                 if UIDevice.current.isMultitaskingSupported {
@@ -743,6 +745,7 @@ open class SwiftyCamViewController: UIViewController {
         // If camera is currently set to front camera, flip image
         let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: self.orientation.getImageOrientation(forCamera: self.currentCamera))
 
+        print("hello \(image.size)")
         return image
     }
 
