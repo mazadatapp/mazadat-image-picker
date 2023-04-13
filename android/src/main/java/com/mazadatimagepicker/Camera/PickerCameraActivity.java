@@ -76,6 +76,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private RectangleHole rectangleHole;
 
   private TextView maxImagesTv;
+  private TextView captureHintTv;
 
   private RecyclerView recycler;
   private ImageItemsAdapter adapter;
@@ -85,7 +86,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private int imageTurn = 0;
   private int selectedEditIndex = -1;
   private int selectedPosition=0;
-  private int editType = 0;
+  private EditModeTypes editType = EditModeTypes.NOTHING;
 
   private String lang;
 
@@ -119,7 +120,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     recycler = findViewById(R.id.recycler);
     rectangleHole = findViewById(R.id.rectangle_hole);
     maxImagesTv = findViewById(R.id.max_images_tv);
-    TextView captureHintTv = findViewById(R.id.capture_hint_tv);
+    captureHintTv = findViewById(R.id.capture_hint_tv);
     galleryBtn = findViewById(R.id.gallery_btn);
     ImageView closeIm = findViewById(R.id.close_im);
     doneBtn = findViewById(R.id.done_btn);
@@ -170,7 +171,6 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     if(isIdVerification){
       maxImagesTv.setVisibility(View.INVISIBLE);
-      captureHintTv.setText(R.string.id_verification_hint);
     }
 
     if (editOnlyOnePhoto) {
@@ -194,8 +194,19 @@ public class PickerCameraActivity extends AppCompatActivity {
       doneBtn.setText(getString(R.string.done) + " (0)");
     }
 
+    setHintText();
 
 
+  }
+
+  private void setHintText(){
+    if(editType == EditModeTypes.CROP){
+      captureHintTv.setText(getString(R.string.zoom_hint));
+    }else if(editType == EditModeTypes.ROTATE){
+      captureHintTv.setText(getString(R.string.rotate_hint));
+    }else{
+      captureHintTv.setText(isIdVerification ? getString(R.string.id_verification_hint) : getString(R.string.camera_capture_hint));
+    }
   }
 
   public boolean isIdVerification() {
@@ -244,7 +255,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       return;
     }
 
-    if (editType > 0) {
+    if (editType != EditModeTypes.NOTHING) {
       return;
     }
 
@@ -396,7 +407,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       rotateBtn.setAlpha(1.0f);
       deleteBtn.setAlpha(1.0f);
 
-    } else if (imageItems.get(position).getFile() == null && isEditModeOn && editType == 0) {
+    } else if (imageItems.get(position).getFile() == null && isEditModeOn && editType == EditModeTypes.NOTHING) {
       resetAndOpenCamera();
       selectedPosition = imageTurn;
       adapter.notifyDataSetChanged();
@@ -418,15 +429,16 @@ public class PickerCameraActivity extends AppCompatActivity {
     deleteBtn.setAlpha(0.38f);
 
     isEditModeOn = false;
-    editType = 0;
+    editType = EditModeTypes.NOTHING;
 
     declineIm.setVisibility(View.GONE);
     confirmIm.setVisibility(View.GONE);
   }
 
   private void cropPressed() {
-    if (isEditModeOn && editType == 0) {
-      editType = 1;
+    if (isEditModeOn && editType == EditModeTypes.NOTHING) {
+      editType = EditModeTypes.CROP;
+      setHintText();
       cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropBlue, null, null);
       imageCropper.setVisibility(View.VISIBLE);
       image.setVisibility(View.GONE);
@@ -438,15 +450,16 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void rotatePressed() {
-    if (isEditModeOn && editType == 0) {
-      editType = 2;
+    if (isEditModeOn && editType == EditModeTypes.NOTHING) {
+      editType = EditModeTypes.ROTATE;
+      setHintText();
       rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateBlue, null, null);
       originalBitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
       declineIm.setVisibility(View.VISIBLE);
       confirmIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
       rotateImage();
-    } else if (isEditModeOn && editType == 2) {
+    } else if (isEditModeOn && editType == EditModeTypes.ROTATE) {
       rotateImage();
     }
   }
@@ -467,7 +480,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   public void deleteConfirmed() {
-    editType = 3;
+    editType = EditModeTypes.DELETE;
     imageItems.remove(selectedEditIndex);
     if (imageTurn == maxImagesSize) {
       maxImagesTv.setTextColor(getResources().getColor(R.color.white_74));
@@ -481,15 +494,16 @@ public class PickerCameraActivity extends AppCompatActivity {
     resetPressed();
     resetAndOpenCamera();
     checkDoneButton();
+    setHintText();
   }
 
   private void confirmPressed() {
-    if (editType == 1) {
+    if (editType == EditModeTypes.CROP) {
       Bitmap croppedBitmap = getBitmapFromView(imageCropper);
       File file = ImageUtils.bitmapToFile(this, croppedBitmap);
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
-    } else if (editType == 2) {
+    } else if (editType == EditModeTypes.ROTATE) {
       File file = ImageUtils.bitmapToFile(this, rotationBitmap);
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
@@ -512,7 +526,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void resetPressed() {
-    if (editType == 2) {
+    if (editType == EditModeTypes.ROTATE) {
       image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
     }
     rotationAngle = 0;
@@ -520,9 +534,11 @@ public class PickerCameraActivity extends AppCompatActivity {
     image.setVisibility(View.VISIBLE);
     cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropWhite, null, null);
     rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateWhite, null, null);
-    editType = 0;
+    editType = EditModeTypes.NOTHING;
     declineIm.setVisibility(View.GONE);
     confirmIm.setVisibility(View.GONE);
+
+    setHintText();
   }
 
 

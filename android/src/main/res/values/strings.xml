@@ -12,6 +12,8 @@
   <string name="please_add_front_id">Please add front ID</string>
   <string name="please_add_back_id">Please add back ID</string>
   <string name="id_verification_hint">Capture your ID front and back\nEnsure that all data is visible and clear</string>
+  <string name="zoom_hint">Use 2 fingers to zoom</string>
+  <string name="rotate_hint">keep pressing to rotate the image</string>
 
 
   //confirmation dialog

@@ -13,6 +13,8 @@
   <string name="please_add_front_id">برجاء إضافة الوجه الأمامى</string>
   <string name="please_add_back_id">برجاء إضافة الوجه الخلفى</string>
   <string name="id_verification_hint">قم بتصوير البطاقة الخاصة بك من الأمام و الخلف\nتأكد من أن جميع البيانات الخاصة بك مرئية و واضحة</string>
+  <string name="zoom_hint">إستخدم إصبعين لتقريب الصورة</string>
+  <string name="rotate_hint">واصل الضغط للف الصورة</string>
 
   //confirmation dialog
   <string name="are_you_sure_you_want_to_close">هل أنت متأكد أنك تريد الإغلاق؟</string>
