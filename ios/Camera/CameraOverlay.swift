@@ -17,6 +17,8 @@ class CameraOverlay: UIView {
     var leftView:UIView!
     var rightView:UIView!
     
+    var cameraFlickerView:UIView!
+    
     var aspectRatioX:Float = 4.0
     var aspectRatioY:Float = 3.0
     override func draw(_ rect: CGRect) {
@@ -37,16 +39,29 @@ class CameraOverlay: UIView {
             rightView = UIView(frame: CGRect(x: cameraView.maxX, y: cameraView.minY, width: rect.width - cameraView.maxX, height: cameraView.height))
             rightView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.8)
             
+            cameraFlickerView = UIView(frame: cameraView)
+            cameraFlickerView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.26)
+            cameraFlickerView.isHidden=true
             
             addSubview(topView)
             addSubview(bottomView)
             addSubview(leftView)
             addSubview(rightView)
+            addSubview(cameraFlickerView)
             
             
         }
     }
     
+    func animateCameraFlickerView(){
+        UIView.transition(with: cameraFlickerView, duration: 0.15, options: .transitionCrossDissolve, animations: { [self] in
+            cameraFlickerView.isHidden = false
+        },completion: { [self]_ in
+               UIView.transition(with: cameraFlickerView, duration: 0.15, options: .transitionCrossDissolve, animations: { [self] in
+                   cameraFlickerView.isHidden = true
+                  })
+           })
+    }
     
     func setAspectRatio(aspect_ratio_x:Float,aspect_ratio_y:Float){
         self.aspectRatioX = aspect_ratio_x

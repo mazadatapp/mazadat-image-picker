@@ -50,10 +50,13 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var gridHorizontal1:UIView!
     var gridHorizontal2:UIView!
     
+    var cameraOverlay:CameraOverlay!
+    
     var isFlashOn=false
     var selectedPosition = 0
     
     var isIdVerification = false
+    var canPressDone = false
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraDelegate = self
@@ -97,6 +100,8 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         selectedPosition = imageTurn
         imagesCollection.reloadData()
         doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
+        
+        checkDoneButton()
     }
     
     func swiftyCam(_ swiftyCam: SwiftyCamViewController, didTake photo: UIImage) {

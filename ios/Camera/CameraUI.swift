@@ -22,7 +22,6 @@ extension CameraController{
             let window = UIApplication.shared.windows.first
             statusBarHeight = window!.safeAreaInsets.top
             bottomArea = window!.safeAreaInsets.bottom - 2
-            print("\(statusBarHeight) \(bottomArea)")
         }
         
         
@@ -34,8 +33,8 @@ extension CameraController{
         let UIviews=UIView(frame: CGRect(x: 0, y: statusBarHeight, width: view.frame.width, height: viewHeight))
         view.addSubview(UIviews)
         
-        let cameraOvelay=CameraOverlay(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: viewHeight))
-        UIviews.addSubview(cameraOvelay)
+        cameraOverlay=CameraOverlay(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: viewHeight))
+        UIviews.addSubview(cameraOverlay)
         
         //flash button
         
@@ -60,11 +59,9 @@ extension CameraController{
         
         
         //camera hint label
-        if(isIdVerification){
-            cameraHintL.text = lang == "en" ? "Capture your ID front and back\nEnsure that all data is visible and clear" : "قم بتصوير البطاقة الخاص بك من الأمام والخلف \n تأكد من أن جميع البيانات مرئية وواضحة"
-        }else{
-            cameraHintL.text = lang == "en" ? "Please, Show your product inside the below box. Be sure your photo be clear to get best results" : "من فضلك ، اعرض المنتج الخاص بك داخل المربع أدناه. تأكد من أن صورتك واضحة للحصول على أفضل النتائج"
-        }
+        
+        setCameraHintText()
+        
         cameraHintL.numberOfLines=0
         cameraHintL.textColor = UIColor.white
         cameraHintL.textAlignment = .center
@@ -118,7 +115,7 @@ extension CameraController{
         //done button
         
         UIviews.addSubview(doneBtn)
-        doneBtn.setTitle(lang == "en" ? "Done" : "تم", for: .normal)
+        doneBtn.setTitle(lang == "en" ? "Done (0)" : "(0) تم", for: .normal)
         doneBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         doneBtn.backgroundColor = Colors.blueColor()
         doneBtn.cornerRadius=15
@@ -192,7 +189,6 @@ extension CameraController{
         gridHorizontal2 = UIView()
         gridHorizontal2.backgroundColor = Colors.blueColor();
         
-        print(editView.frame.height)
         gridVertical1.frame = CGRect(x: (editViewWidth * 0.33) - 0.5, y: 0, width: 1, height: editViewHeight)
         gridVertical2.frame = CGRect(x: (editViewWidth * 0.66) - 0.5, y: 0, width: 1, height: editViewHeight)
         gridHorizontal1.frame = CGRect(x: 0, y: (editViewHeight * 0.33) - 0.5, width: editViewWidth, height: 1)
@@ -219,6 +215,11 @@ extension CameraController{
             captureBtn.isHidden=true
             flashBtn.isHidden=true
             deleteBtn.isHidden=true
+            doneBtn.backgroundColor = Colors.blueColor()
+            doneBtn.setTitle(lang == "en" ? "Done (1)" : "(1) تم", for: .normal)
+            canPressDone = true
+        }else{
+            checkDoneButton()
         }
         
         galleryBtn.addTarget(self, action: #selector(openGallery(_:)), for: .touchUpInside)
@@ -242,11 +243,12 @@ extension CameraController{
         }
         let controller=GalleryController()
         controller.setCameraController(cameraController: self)
-        controller.modalPresentationStyle = .fullScreen
+        controller.modalPresentationStyle = .overFullScreen
         present(controller, animated: true)
     }
     
     @objc func capturePressed(_ sender: AnyObject) {
+        cameraOverlay.animateCameraFlickerView()
         takePhoto()
     }
     
@@ -259,10 +261,11 @@ extension CameraController{
     @objc func cropPressed(_ sender: AnyObject) {
         if((editMode || editPhotoPath != nil) && editModeType == EditModeTypes.NOTHING){
             editModeType = EditModeTypes.CROP
+            setCameraHintText()
             let blueCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color: Colors.blueColor())
             cropBtn.setImage(blueCropImage, for: .normal)
             
-            confirmBtn.alpha=1.0
+            confirmBtn.isHidden=false
             declineBtn.isHidden=false
             
             imageCropper.isHidden = false
@@ -274,6 +277,59 @@ extension CameraController{
             gridHorizontal1.isHidden = false
             gridHorizontal2.isHidden = false
         }
+    }
+    
+    @objc func rotatePressed(_ sender: AnyObject) {
+        if(editMode && editModeType == EditModeTypes.NOTHING){
+            editModeType = EditModeTypes.ROTATE
+            setCameraHintText()
+            originalImage = imageItems[editSelectedIndex].image
+            let blueRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color: Colors.blueColor())
+            rotateBtn.setImage(blueRotateImage, for: .normal)
+            
+            confirmBtn.isHidden=false
+            declineBtn.isHidden=false
+            
+            editImageRotation -= .pi/2
+            editImage.image = originalImage.rotate(radians: editImageRotation)
+        }else if(editModeType == EditModeTypes.ROTATE){
+            editImageRotation -= .pi/2
+            editImage.image = originalImage.rotate(radians: editImageRotation)
+        }
+        
+        //editImage.image=imageItems[editSelectedIndex].image
+        
+    }
+    
+    @objc func deletePressed(_ sender: AnyObject) {
+        if(editMode){
+            let deleteController=DeleteDialog()
+            deleteController.modalPresentationStyle = .overFullScreen
+            deleteController.setData(controller: self, lang: lang)
+            present(deleteController, animated: true)
+        }
+    }
+    
+    func setCameraHintText(){
+        //TODO
+        if(editModeType == EditModeTypes.CROP){
+            cameraHintL.text = lang == "en" ? "use 2 fingers to zoom" : "إستخدم إصبعين لتقريب الصورة"
+        }else if(editModeType == EditModeTypes.ROTATE){
+            cameraHintL.text = lang == "en" ? "keep pressing to rotate the image" : "واصل الضغط للف الصورة"
+        }else{
+            if(isIdVerification){
+                cameraHintL.text = lang == "en" ? "Capture your ID front and back\nEnsure that all data is visible and clear" : "قم بتصوير البطاقة الخاص بك من الأمام والخلف \n تأكد من أن جميع البيانات مرئية وواضحة"
+            }else{
+                cameraHintL.text = lang == "en" ? "Please, Show your product inside the below box. Be sure your photo be clear to get best results" : "من فضلك ، اعرض المنتج الخاص بك داخل المربع أدناه. تأكد من أن صورتك واضحة للحصول على أفضل النتائج"
+            }
+        }
+    }
+    
+    func checkDoneButton(){
+        doneBtn.backgroundColor = imageTurn == 0 ? Colors.white38Color() : Colors.blueColor()
+        doneBtn.setTitleColor(imageTurn == 0 ? Colors.black26Color() : Colors.whiteColor(), for: .normal)
+        
+        canPressDone = imageTurn>0
     }
     
     func addCorners(cameraView:CGRect,parent:UIView){
@@ -310,36 +366,6 @@ extension CameraController{
         parent.addSubview(bottomRightLine)
     }
     
-    @objc func rotatePressed(_ sender: AnyObject) {
-        if(editMode && editModeType == EditModeTypes.NOTHING){
-            editModeType = EditModeTypes.ROTATE
-            originalImage = imageItems[editSelectedIndex].image
-            let blueRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color: Colors.blueColor())
-            rotateBtn.setImage(blueRotateImage, for: .normal)
-            
-            confirmBtn.alpha=1.0
-            declineBtn.isHidden=false
-            
-            editImageRotation -= .pi/2
-            editImage.image = originalImage.rotate(radians: editImageRotation)
-        }else if(editModeType == EditModeTypes.ROTATE){
-            editImageRotation -= .pi/2
-            editImage.image = originalImage.rotate(radians: editImageRotation)
-        }
-        
-        //editImage.image=imageItems[editSelectedIndex].image
-        
-    }
-    
-    @objc func deletePressed(_ sender: AnyObject) {
-        if(editMode){
-            let deleteController=DeleteDialog()
-            deleteController.modalPresentationStyle = .overFullScreen
-            deleteController.setData(controller: self, lang: lang)
-            present(deleteController, animated: true)
-        }
-    }
-    
     func deleteConfirm(){
         editModeType = EditModeTypes.DELETE
         imageItems.remove(at: editSelectedIndex)
@@ -359,6 +385,7 @@ extension CameraController{
         }
         resetUI()
         editMode=false
+        checkDoneButton()
     }
     
     @objc func closePressed(_ sender: AnyObject) {
@@ -373,6 +400,11 @@ extension CameraController{
     }
     
     @objc func donePressed(_ sender: AnyObject) {
+        
+        if(!canPressDone){
+            return
+        }
+        
         if(isIdVerification){
             if(imageItems[0].image == nil){
                 showToast(message: lang == "en" ? "Please add front ID" : "برجاء إضافة الوجه الأمامي")
@@ -400,6 +432,12 @@ extension CameraController{
     @objc func confirmPressed(_ sender: AnyObject) {
         if(editMode && editModeType != EditModeTypes.NOTHING){
             if(editModeType==EditModeTypes.CROP){
+                
+                gridVertical1.isHidden = true
+                gridVertical2.isHidden = true
+                gridHorizontal1.isHidden = true
+                gridHorizontal2.isHidden = true
+                
                 let image=editView.snapshot(of: editView.bounds)
                 imageItems[editSelectedIndex].image=image
                 reloadCell(index: editSelectedIndex)
@@ -415,9 +453,9 @@ extension CameraController{
                 let whiteRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color:.white)
                 rotateBtn.setImage(whiteRotateImage, for: .normal)
             }
-            editModeType = EditModeTypes.NOTHING
-            declinePressed(nil)
         }
+        
+        declinePressed(nil)
     }
     
     @objc func declinePressed(_ sender: AnyObject?) {
@@ -435,7 +473,7 @@ extension CameraController{
         editImage.isHidden=false
         editImage.image = imageItems[editSelectedIndex].image
         
-        confirmBtn.alpha=0.38
+        confirmBtn.isHidden=true
         declineBtn.isHidden=true
         
         editModeType = EditModeTypes.NOTHING
@@ -447,7 +485,7 @@ extension CameraController{
         gridHorizontal1.isHidden = true
         gridHorizontal2.isHidden = true
         
-        
+        setCameraHintText()
     }
     
     

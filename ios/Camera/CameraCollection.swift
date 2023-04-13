@@ -62,8 +62,6 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
             galleryBtn.isHidden=true
             flashBtn.isHidden=true
             
-            confirmBtn.isHidden = false
-            confirmBtn.alpha = 0.38
             captureBtn.isHidden=true
             editSelectedIndex=index
         }else if(editModeType == EditModeTypes.NOTHING){
@@ -85,6 +83,12 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         deleteBtn.alpha=0.38
         captureBtn.isHidden=false
         
+        let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
+        cropBtn.setImage(whiteCropImage, for: .normal)
+        
+        let whiteRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color:.white)
+        rotateBtn.setImage(whiteRotateImage, for: .normal)
+        
         confirmBtn.isHidden=true
         declineBtn.isHidden=true
         
@@ -92,6 +96,11 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         flashBtn.isHidden=false
         
         editModeType = EditModeTypes.NOTHING
+        
+        gridVertical1.isHidden = true
+        gridVertical2.isHidden = true
+        gridHorizontal1.isHidden = true
+        gridHorizontal2.isHidden = true
     }
     
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
