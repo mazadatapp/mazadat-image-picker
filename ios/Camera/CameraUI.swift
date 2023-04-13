@@ -313,9 +313,9 @@ extension CameraController{
     func setCameraHintText(){
         //TODO
         if(editModeType == EditModeTypes.CROP){
-            cameraHintL.text = lang == "en" ? "use 2 fingers to zoom" : "إستخدم إصبعين لتقريب الصورة"
+            cameraHintL.text = lang == "en" ? "Use 2 fingers to zoom" : "إستخدم إصبعين لتقريب الصورة"
         }else if(editModeType == EditModeTypes.ROTATE){
-            cameraHintL.text = lang == "en" ? "keep pressing to rotate the image" : "واصل الضغط للف الصورة"
+            cameraHintL.text = lang == "en" ? "Keep pressing to rotate the image" : "واصل الضغط للف الصورة"
         }else{
             if(isIdVerification){
                 cameraHintL.text = lang == "en" ? "Capture your ID front and back\nEnsure that all data is visible and clear" : "قم بتصوير البطاقة الخاص بك من الأمام والخلف \n تأكد من أن جميع البيانات مرئية وواضحة"
