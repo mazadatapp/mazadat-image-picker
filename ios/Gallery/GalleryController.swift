@@ -31,7 +31,7 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
         imagePickerController.allowsEditing = false //If you want edit option set "true"
         imagePickerController.sourceType = .photoLibrary
         imagePickerController.delegate = self
-        imagePickerController.modalPresentationStyle = .fullScreen
+        imagePickerController.modalPresentationStyle = .overFullScreen
         present(imagePickerController, animated: true, completion: nil)
         
         
@@ -51,14 +51,12 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        
-        cropView.isHidden = false
-        cropIm.isHidden=false
-        cropView.setImage(image: tempImage)
-        
-        picker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: {[self] in
+            let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+            cropView.isHidden = false
+            cropIm.isHidden=false
+            cropView.setImage(image: tempImage)
+        })
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
