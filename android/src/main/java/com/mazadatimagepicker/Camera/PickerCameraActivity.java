@@ -2,6 +2,7 @@ package com.mazadatimagepicker.Camera;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -105,7 +106,8 @@ public class PickerCameraActivity extends AppCompatActivity {
   private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
   private Camera camera;
   private boolean cameraPermissionEnabled = false;
-
+  private boolean canPressDone=false;
+  @SuppressLint("SetTextI18n")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -182,7 +184,17 @@ public class PickerCameraActivity extends AppCompatActivity {
       galleryBtn.setVisibility(View.GONE);
       flashIm.setVisibility(View.GONE);
       deleteBtn.setVisibility(View.GONE);
+
+      doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
+      doneBtn.setTextColor(getResources().getColor(R.color.white));
+      canPressDone = true;
+      doneBtn.setText(getString(R.string.done) + " (1)");
+    }else{
+      checkDoneButton();
+      doneBtn.setText(getString(R.string.done) + " (0)");
     }
+
+
 
   }
 
@@ -209,6 +221,12 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   }
 
+  private void checkDoneButton(){
+    doneBtn.setBackgroundResource(imageTurn == 0 ? R.drawable.custom_gray_round_15 : R.drawable.custom_blue_round_15);
+    doneBtn.setTextColor(getResources().getColor(imageTurn == 0 ? R.color.black_26 : R.color.white));
+    canPressDone = (imageTurn > 0);
+  }
+
   private void openClosConfirmationDialog() {
     if (imageItems.size() > 1 || (imageItems.size() == 1 && imageItems.get(0).getFile() != null)) {
       CloseDialog dialog = new CloseDialog();
@@ -221,6 +239,11 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void donePressed() {
+
+    if (!canPressDone) {
+      return;
+    }
+
     if (editType > 0) {
       return;
     }
@@ -254,6 +277,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (!cameraPermissionEnabled) {
       return;
     }
+    rectangleHole.animateFrame();
     Bitmap scaledBitmap = previewView.getBitmap();
     assert scaledBitmap != null;
     float width = (0.91f * scaledBitmap.getWidth());
@@ -344,6 +368,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       captureIm.setAlpha(0.38f);
     }
 
+    checkDoneButton();
     adapter.notifyDataSetChanged();
   }
 
@@ -356,14 +381,12 @@ public class PickerCameraActivity extends AppCompatActivity {
       adapter.notifyDataSetChanged();
 
       editCl.setVisibility(View.VISIBLE);
-      confirmIm.setVisibility(View.VISIBLE);
+      confirmIm.setVisibility(View.GONE);
 
       galleryBtn.setVisibility(View.GONE);
       flashIm.setVisibility(View.GONE);
       previewView.setVisibility(View.GONE);
       captureIm.setVisibility(View.GONE);
-
-      confirmIm.setAlpha(0.38f);
 
       image.setImageURI(Uri.fromFile(imageItems.get(position).getFile()));
       isEditModeOn = true;
@@ -409,6 +432,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       image.setVisibility(View.GONE);
       imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
       declineIm.setVisibility(View.VISIBLE);
+      confirmIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
     }
   }
@@ -419,6 +443,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateBlue, null, null);
       originalBitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
       declineIm.setVisibility(View.VISIBLE);
+      confirmIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
       rotateImage();
     } else if (isEditModeOn && editType == 2) {
@@ -452,13 +477,10 @@ public class PickerCameraActivity extends AppCompatActivity {
     }
     adapter.notifyDataSetChanged();
     imageTurn--;
-    if (imageTurn > 0) {
-      doneBtn.setText(getString(R.string.done) + " (" + (imageTurn) + ")");
-    } else {
-      doneBtn.setText(getString(R.string.done));
-    }
+    doneBtn.setText(getString(R.string.done) + " (" + (imageTurn) + ")");
     resetPressed();
     resetAndOpenCamera();
+    checkDoneButton();
   }
 
   private void confirmPressed() {
@@ -500,7 +522,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateWhite, null, null);
     editType = 0;
     declineIm.setVisibility(View.GONE);
-    confirmIm.setAlpha(0.38f);
+    confirmIm.setVisibility(View.GONE);
   }
 
 

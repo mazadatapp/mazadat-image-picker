@@ -1,5 +1,6 @@
 package com.mazadatimagepicker.Camera.CustomViews;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -8,6 +9,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 
 import com.mazadatimagepicker.R;
 
@@ -17,8 +19,11 @@ public class RectangleHole extends ViewGroup {
   int aspectRatioX = 4;
   int aspectRatioY = 3;
   RectF focusArea;
-  Paint blue;
+  Paint frameColor;
+  Paint blackFramePaint;
 
+  boolean showBlackFrame=false;
+  ValueAnimator animator;
   public RectangleHole(Context context) {
     super(context);
     init(context);
@@ -36,9 +41,25 @@ public class RectangleHole extends ViewGroup {
 
   public void init(Context context) {
     dp = context.getResources().getDisplayMetrics().density;
-    blue = new Paint();
-    blue.setColor(getResources().getColor(R.color.turquoise_blue));
-    blue.setStrokeWidth(3 * dp);
+    frameColor = new Paint();
+    frameColor.setColor(getResources().getColor(R.color.turquoise_blue));
+    frameColor.setStrokeWidth(3 * dp);
+
+    blackFramePaint = new Paint();
+    blackFramePaint.setColor(getResources().getColor(R.color.black_60));
+    blackFramePaint.setStyle(Paint.Style.FILL);
+  }
+
+  public void animateFrame(){
+    animator = ValueAnimator.ofFloat(0,3);
+    animator.setInterpolator(new LinearInterpolator());
+    animator.setDuration(300);
+    animator.addUpdateListener(valueAnimator -> {
+      int value = (int)(float)valueAnimator.getAnimatedValue();
+      showBlackFrame = (value == 2);
+      invalidate();
+    });
+    animator.start();
   }
 
   @Override
@@ -71,13 +92,17 @@ public class RectangleHole extends ViewGroup {
     eraser.setAntiAlias(true);
     eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
-    canvas.drawRect(getWidth() / 2f - width / 2f - 2 * dp, getHeight() * 0.2f - 2 * dp, getWidth() / 2f - width / 2f + 30 * dp, getHeight() * 0.2f + 30 * dp, blue);
-    canvas.drawRect(getWidth() / 2f + width / 2f - 30 * dp, getHeight() * 0.2f - 2 * dp, getWidth() / 2f + width / 2f + 2 * dp, getHeight() * 0.2f + 30 * dp, blue);
+    canvas.drawRect(getWidth() / 2f - width / 2f - 2 * dp, getHeight() * 0.2f - 2 * dp, getWidth() / 2f - width / 2f + 30 * dp, getHeight() * 0.2f + 30 * dp, frameColor);
+    canvas.drawRect(getWidth() / 2f + width / 2f - 30 * dp, getHeight() * 0.2f - 2 * dp, getWidth() / 2f + width / 2f + 2 * dp, getHeight() * 0.2f + 30 * dp, frameColor);
 
-    canvas.drawRect(getWidth() / 2f - width / 2f - 2 * dp, getHeight() * 0.2f + height - 30 * dp, getWidth() / 2f - width / 2f + 30 * dp, getHeight() * 0.2f + height + 2 * dp, blue);
-    canvas.drawRect(getWidth() / 2f + width / 2f - 30 * dp, getHeight() * 0.2f + height - 32 * dp, getWidth() / 2f + width / 2f + 2 * dp, getHeight() * 0.2f + height + 2 * dp, blue);
+    canvas.drawRect(getWidth() / 2f - width / 2f - 2 * dp, getHeight() * 0.2f + height - 30 * dp, getWidth() / 2f - width / 2f + 30 * dp, getHeight() * 0.2f + height + 2 * dp, frameColor);
+    canvas.drawRect(getWidth() / 2f + width / 2f - 30 * dp, getHeight() * 0.2f + height - 32 * dp, getWidth() / 2f + width / 2f + 2 * dp, getHeight() * 0.2f + height + 2 * dp, frameColor);
 
     canvas.drawRect(focusArea, eraser);
+
+    if(showBlackFrame){
+      canvas.drawRect(focusArea, blackFramePaint);
+    }
 
 
   }
