@@ -159,7 +159,7 @@ open class SwiftyCamViewController: UIViewController {
 
     /// Sets whether or not video recordings will record audio
     /// Setting to true will prompt user for access to microphone on View Controller launch.
-    public var audioEnabled                   = true
+    public var audioEnabled                   = false
 
     /// Sets whether or not app should display prompt to app settings if audio/video permission is denied
     /// If set to false, delegate function will be called to handle exception
