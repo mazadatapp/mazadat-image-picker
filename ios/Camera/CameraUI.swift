@@ -31,6 +31,9 @@ extension CameraController{
         view.addSubview(statusBarView)
         
         let UIviews=UIView(frame: CGRect(x: 0, y: statusBarHeight, width: view.frame.width, height: viewHeight))
+        if(editPhotoPath != nil){
+            UIviews.backgroundColor = .black
+        }
         view.addSubview(UIviews)
         
         cameraOverlay=CameraOverlay(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: viewHeight))
@@ -260,6 +263,7 @@ extension CameraController{
     
     @objc func cropPressed(_ sender: AnyObject) {
         if((editMode || editPhotoPath != nil) && editModeType == EditModeTypes.NOTHING){
+            disableDoneBtn()
             editModeType = EditModeTypes.CROP
             setCameraHintText()
             let blueCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color: Colors.blueColor())
@@ -281,6 +285,7 @@ extension CameraController{
     
     @objc func rotatePressed(_ sender: AnyObject) {
         if(editMode && editModeType == EditModeTypes.NOTHING){
+            disableDoneBtn()
             editModeType = EditModeTypes.ROTATE
             setCameraHintText()
             originalImage = imageItems[editSelectedIndex].image
@@ -293,6 +298,7 @@ extension CameraController{
             editImageRotation -= .pi/2
             editImage.image = originalImage.rotate(radians: editImageRotation)
         }else if(editModeType == EditModeTypes.ROTATE){
+            disableDoneBtn()
             editImageRotation -= .pi/2
             editImage.image = originalImage.rotate(radians: editImageRotation)
         }
@@ -330,6 +336,18 @@ extension CameraController{
         doneBtn.setTitleColor(imageTurn == 0 ? Colors.black26Color() : Colors.whiteColor(), for: .normal)
         
         canPressDone = imageTurn>0
+    }
+    
+    func disableDoneBtn(){
+        doneBtn.backgroundColor = Colors.white38Color()
+        doneBtn.setTitleColor(Colors.black26Color(), for: .normal)
+        canPressDone = false
+    }
+    
+    func enableDoneBtn(){
+        doneBtn.backgroundColor = Colors.blueColor()
+        doneBtn.setTitleColor(Colors.whiteColor(), for: .normal)
+        canPressDone = true
     }
     
     func addCorners(cameraView:CGRect,parent:UIView){
@@ -459,7 +477,7 @@ extension CameraController{
     }
     
     @objc func declinePressed(_ sender: AnyObject?) {
-        if(editModeType==EditModeTypes.ROTATE){
+        if(editModeType==EditModeTypes.ROTATE && sender != nil){
             imageItems[editSelectedIndex].image = originalImage
         }
         let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
@@ -486,6 +504,7 @@ extension CameraController{
         gridHorizontal2.isHidden = true
         
         setCameraHintText()
+        enableDoneBtn()
     }
     
     
