@@ -238,6 +238,18 @@ public class PickerCameraActivity extends AppCompatActivity {
     canPressDone = (imageTurn > 0);
   }
 
+  private void enableDoneBtn(){
+    doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
+    doneBtn.setTextColor(getResources().getColor(R.color.white));
+    canPressDone = true;
+  }
+
+  private void disableDoneBtn(){
+    doneBtn.setBackgroundResource(R.drawable.custom_gray_round_15);
+    doneBtn.setTextColor(getResources().getColor(R.color.black_26));
+    canPressDone = false;
+  }
+
   private void openClosConfirmationDialog() {
     if (imageItems.size() > 1 || (imageItems.size() == 1 && imageItems.get(0).getFile() != null)) {
       CloseDialog dialog = new CloseDialog();
@@ -446,6 +458,8 @@ public class PickerCameraActivity extends AppCompatActivity {
       declineIm.setVisibility(View.VISIBLE);
       confirmIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
+
+      disableDoneBtn();
     }
   }
 
@@ -459,8 +473,10 @@ public class PickerCameraActivity extends AppCompatActivity {
       confirmIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
       rotateImage();
+      disableDoneBtn();
     } else if (isEditModeOn && editType == EditModeTypes.ROTATE) {
       rotateImage();
+      disableDoneBtn();
     }
   }
 
@@ -515,18 +531,6 @@ public class PickerCameraActivity extends AppCompatActivity {
     resetPressed();
   }
 
-  private Bitmap getBitmapFromView(View view) {
-    Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-    Canvas canvas = new Canvas(returnedBitmap);
-    Drawable bgDrawable = view.getBackground();
-    if (bgDrawable != null)
-      bgDrawable.draw(canvas);
-    else
-      canvas.drawColor(Color.TRANSPARENT);
-    view.draw(canvas);
-    return returnedBitmap;
-  }
-
   private void resetPressed() {
     if (editType == EditModeTypes.ROTATE) {
       image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
@@ -541,8 +545,20 @@ public class PickerCameraActivity extends AppCompatActivity {
     confirmIm.setVisibility(View.GONE);
 
     setHintText();
+    enableDoneBtn();
   }
 
+  private Bitmap getBitmapFromView(View view) {
+    Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(returnedBitmap);
+    Drawable bgDrawable = view.getBackground();
+    if (bgDrawable != null)
+      bgDrawable.draw(canvas);
+    else
+      canvas.drawColor(Color.TRANSPARENT);
+    view.draw(canvas);
+    return returnedBitmap;
+  }
 
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
