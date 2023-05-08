@@ -12,10 +12,12 @@
     android:supportsRtl="true">
     <activity
       android:name=".Camera.Gallery.Gallery"
-      android:exported="false" />
+      android:exported="false"
+      android:theme="@style/FullScreen"/>
     <activity
       android:name=".Camera.PickerCameraActivity"
-      android:exported="false" />
+      android:exported="false"
+      android:theme="@style/FullScreen"/>
   </application>
 
 </manifest>

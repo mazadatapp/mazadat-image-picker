@@ -499,7 +499,9 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void confirmPressed() {
     if (editType == EditModeTypes.CROP) {
+      imageCropper.setShowGrid(false);
       Bitmap croppedBitmap = getBitmapFromView(imageCropper);
+      imageCropper.setShowGrid(true);
       File file = ImageUtils.bitmapToFile(this, croppedBitmap);
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);

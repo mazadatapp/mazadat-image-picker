@@ -14,6 +14,7 @@ import com.mazadatimagepicker.R;
 public class ZoomImage extends ZoomageView {
 
   Paint mainColor;
+  boolean showGrid = true;
   public ZoomImage(Context context) {
     super(context);
     init();
@@ -30,14 +31,21 @@ public class ZoomImage extends ZoomageView {
     mainColor.setColor(getResources().getColor(R.color.turquoise_blue));
   }
 
+  public void setShowGrid(boolean showGrid) {
+    this.showGrid = showGrid;
+    invalidate();
+  }
+
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
 
-    RectF cropView = new RectF(0,0, getWidth(), getHeight());
-    canvas.drawRect(cropView.left, cropView.top + cropView.height() * 0.33f - 2, cropView.right, cropView.top + cropView.height() * 0.33f + 2, mainColor);
-    canvas.drawRect(cropView.left, cropView.top + cropView.height() * 0.66f - 2, cropView.right, cropView.top + cropView.height() * 0.66f + 2, mainColor);
-    canvas.drawRect(cropView.left + cropView.width() * 0.33f - 2, cropView.top, cropView.left + cropView.width() * 0.33f + 2, cropView.bottom, mainColor);
-    canvas.drawRect(cropView.left + cropView.width() * 0.66f - 2, cropView.top, cropView.left + cropView.width() * 0.66f + 2, cropView.bottom, mainColor);
+    if(showGrid) {
+      RectF cropView = new RectF(0, 0, getWidth(), getHeight());
+      canvas.drawRect(cropView.left, cropView.top + cropView.height() * 0.33f - 2, cropView.right, cropView.top + cropView.height() * 0.33f + 2, mainColor);
+      canvas.drawRect(cropView.left, cropView.top + cropView.height() * 0.66f - 2, cropView.right, cropView.top + cropView.height() * 0.66f + 2, mainColor);
+      canvas.drawRect(cropView.left + cropView.width() * 0.33f - 2, cropView.top, cropView.left + cropView.width() * 0.33f + 2, cropView.bottom, mainColor);
+      canvas.drawRect(cropView.left + cropView.width() * 0.66f - 2, cropView.top, cropView.left + cropView.width() * 0.66f + 2, cropView.bottom, mainColor);
+    }
   }
 }
