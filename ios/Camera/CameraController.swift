@@ -88,16 +88,18 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     }
     
     func getCroppedImage(image:UIImage){
-        imageItems[imageTurn].image=image
-        imageTurn += 1
-        if(imageTurn==maxImagesSize){
-            maxNoOfImagesL.textColor = Colors.redColor()
-            captureBtn.alpha=0.38
-            captureBtn.isEnabled=false
-        }else{
-            imageItems.append(ImageItem())
+        if(imageTurn < maxImagesSize){
+            imageItems[imageTurn].image=image
+            imageTurn += 1
+            if(imageTurn==maxImagesSize){
+                maxNoOfImagesL.textColor = Colors.redColor()
+                captureBtn.alpha=0.38
+                captureBtn.isEnabled=false
+            }else{
+                imageItems.append(ImageItem())
+            }
+            selectedPosition = imageTurn
         }
-        selectedPosition = imageTurn
         imagesCollection.reloadData()
         doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
         
