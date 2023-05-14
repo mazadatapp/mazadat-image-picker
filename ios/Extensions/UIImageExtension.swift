@@ -56,7 +56,7 @@ extension UIImage {
     
     func saveImage(name:String)->URL{
       var fileName = getDocumentsDirectory().appendingPathComponent(name)
-        if let data = jpegData(compressionQuality: 0.5) {
+        if let data = jpegData(compressionQuality: 1.0) {
         try? data.write(to: fileName)
       }
       return fileName
