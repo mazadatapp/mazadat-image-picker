@@ -2,7 +2,9 @@ buildscript {
   repositories {
     google()
     mavenCentral()
+    maven { url 'https://maven.google.com' }
     maven { url 'https://jitpack.io' }
+
   }
 
   dependencies {
@@ -59,7 +61,7 @@ android {
 repositories {
   mavenCentral()
   google()
-
+  maven { url 'https://jitpack.io' }
   def found = false
   def defaultDir = null
   def androidSourcesName = 'React Native sources'
@@ -158,6 +160,8 @@ dependencies {
 
   //zoom
   implementation 'com.jsibbold:zoomage:1.3.1'
+  //picasso
+  implementation 'com.squareup.picasso:picasso:2.71828'
 // From node_modules
 }
 

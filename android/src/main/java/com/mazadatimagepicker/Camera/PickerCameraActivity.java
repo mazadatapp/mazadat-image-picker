@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.jsibbold.zoomage.ZoomageView;
 import com.mazadatimagepicker.BuildConfig;
 import com.mazadatimagepicker.Camera.CloseDialog.CloseDialog;
 import com.mazadatimagepicker.Camera.CustomViews.RectangleHole;
@@ -46,6 +46,8 @@ import com.mazadatimagepicker.Camera.Image.ImageItem;
 import com.mazadatimagepicker.Camera.Image.ImageItemsAdapter;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -62,6 +64,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private ConstraintLayout editCl;
   private ImageView image;
   private ZoomImage imageCropper;
+  private ProgressBar downloadPb;
   private Button cropBtn;
   private Button rotateBtn;
   private Button deleteBtn;
@@ -85,7 +88,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private int maxImagesSize;
   private int imageTurn = 0;
   private int selectedEditIndex = -1;
-  private int selectedPosition=0;
+  private int selectedPosition = 0;
   private EditModeTypes editType = EditModeTypes.NOTHING;
 
   private String lang;
@@ -107,7 +110,8 @@ public class PickerCameraActivity extends AppCompatActivity {
   private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
   private Camera camera;
   private boolean cameraPermissionEnabled = false;
-  private boolean canPressDone=false;
+  private boolean canPressDone = false;
+
   @SuppressLint("SetTextI18n")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +131,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     //edit views
     editCl = findViewById(R.id.edit_cl);
     imageCropper = findViewById(R.id.image_cropper);
+    downloadPb = findViewById(R.id.download_pb);
     image = findViewById(R.id.image);
     cropBtn = findViewById(R.id.crop_btn);
     rotateBtn = findViewById(R.id.rotate_btn);
@@ -169,14 +174,31 @@ public class PickerCameraActivity extends AppCompatActivity {
     confirmIm.setOnClickListener(view -> confirmPressed());
     declineIm.setOnClickListener(view -> resetPressed());
 
-    if(isIdVerification){
+    if (isIdVerification) {
       maxImagesTv.setVisibility(View.INVISIBLE);
     }
 
     if (editOnlyOnePhoto) {
       String editPhotoPath = getIntent().getStringExtra("path");
-      imageItems.get(0).setFile(new File(editPhotoPath));
-      editOrCapturePhoto(0);
+      if (editPhotoPath.contains("https://") || editPhotoPath.contains("http://")) {
+
+        downloadPb.setVisibility(View.VISIBLE);
+        adapter.notifyItemChanged(0);
+        previewView.setVisibility(View.GONE);
+        editCl.setVisibility(View.VISIBLE);
+
+        doneBtn.setBackgroundResource(R.drawable.custom_gray_round_15);
+        doneBtn.setTextColor(getResources().getColor(R.color.black_26));
+        canPressDone = false;
+        doneBtn.setText(getString(R.string.done) + " (1)");
+        downloadImage(editPhotoPath);
+      } else {
+        imageItems.get(0).setFile(new File(editPhotoPath));
+        doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
+        doneBtn.setTextColor(getResources().getColor(R.color.white));
+        canPressDone = true;
+        doneBtn.setText(getString(R.string.done) + " (1)");
+      }
       recycler.setVisibility(View.GONE);
       captureHintTv.setVisibility(View.GONE);
       maxImagesTv.setVisibility(View.GONE);
@@ -185,11 +207,8 @@ public class PickerCameraActivity extends AppCompatActivity {
       flashIm.setVisibility(View.GONE);
       deleteBtn.setVisibility(View.GONE);
 
-      doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
-      doneBtn.setTextColor(getResources().getColor(R.color.white));
-      canPressDone = true;
-      doneBtn.setText(getString(R.string.done) + " (1)");
-    }else{
+
+    } else {
       checkDoneButton();
       doneBtn.setText(getString(R.string.done) + " (0)");
     }
@@ -199,12 +218,38 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   }
 
-  private void setHintText(){
-    if(editType == EditModeTypes.CROP){
+  private void downloadImage(String url) {
+    Picasso.get().load(url).into(new Target() {
+      @Override
+      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+        File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap);
+        imageItems.get(0).setFile(file);
+        downloadPb.setVisibility(View.GONE);
+        canPressDone = true;
+        editOrCapturePhoto(0);
+
+
+      }
+
+      @Override
+      public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+        e.printStackTrace();
+      }
+
+      @Override
+      public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+      }
+    });
+
+  }
+
+  private void setHintText() {
+    if (editType == EditModeTypes.CROP) {
       captureHintTv.setText(getString(R.string.zoom_hint));
-    }else if(editType == EditModeTypes.ROTATE){
+    } else if (editType == EditModeTypes.ROTATE) {
       captureHintTv.setText(getString(R.string.rotate_hint));
-    }else{
+    } else {
       captureHintTv.setText(isIdVerification ? getString(R.string.id_verification_hint) : getString(R.string.camera_capture_hint));
     }
   }
@@ -232,19 +277,19 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   }
 
-  private void checkDoneButton(){
+  private void checkDoneButton() {
     doneBtn.setBackgroundResource(imageTurn == 0 ? R.drawable.custom_gray_round_15 : R.drawable.custom_blue_round_15);
     doneBtn.setTextColor(getResources().getColor(imageTurn == 0 ? R.color.black_26 : R.color.white));
     canPressDone = (imageTurn > 0);
   }
 
-  private void enableDoneBtn(){
+  private void enableDoneBtn() {
     doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
     doneBtn.setTextColor(getResources().getColor(R.color.white));
     canPressDone = true;
   }
 
-  private void disableDoneBtn(){
+  private void disableDoneBtn() {
     doneBtn.setBackgroundResource(R.drawable.custom_gray_round_15);
     doneBtn.setTextColor(getResources().getColor(R.color.black_26));
     canPressDone = false;
@@ -271,11 +316,11 @@ public class PickerCameraActivity extends AppCompatActivity {
       return;
     }
 
-    if(isIdVerification){
-      if(imageItems.get(0).getFile()==null){
+    if (isIdVerification) {
+      if (imageItems.get(0).getFile() == null) {
         Toast.makeText(this, getString(R.string.please_add_front_id), Toast.LENGTH_SHORT).show();
         return;
-      }else if(imageItems.get(1).getFile()==null){
+      } else if (imageItems.get(1).getFile() == null) {
         Toast.makeText(this, getString(R.string.please_add_back_id), Toast.LENGTH_SHORT).show();
         return;
       }
@@ -410,7 +455,6 @@ public class PickerCameraActivity extends AppCompatActivity {
       flashIm.setVisibility(View.GONE);
       previewView.setVisibility(View.GONE);
       captureIm.setVisibility(View.GONE);
-
       image.setImageURI(Uri.fromFile(imageItems.get(position).getFile()));
       isEditModeOn = true;
       resetPressed();

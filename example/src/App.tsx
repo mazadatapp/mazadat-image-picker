@@ -6,7 +6,7 @@ import { openCamera,editPhoto,openIdVerification } from 'mazadat-image-picker';
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
 
-  const androidPath='/data/user/0/com.mazadatimagepickerexample/cache/1674639725834.jpg'
+  const androidPath='https://www.aussietreesolutions.com.au/wp-content/uploads/2018/08/facts-about-trees-1037x675.jpg'
   const iosPath='/Users/Karim.Saad/Library/Developer/CoreSimulator/Devices/1E6C7C7A-6D8F-4A17-BBBF-D8FCD57D3001/data/Containers/Data/Application/FBAD79CE-CC78-4D97-B94C-B7E12079F80F/Documents/1675093435.jpg'
   return (
     <View style={styles.container}>

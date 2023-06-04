@@ -36,6 +36,7 @@
     android:layout_width="0dp"
     android:layout_height="0dp"
     android:visibility="gone"
+    android:background="@color/black"
     app:layout_constraintDimensionRatio="H,4:3"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -45,13 +46,25 @@
     <ImageView
       android:id="@+id/image"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="match_parent"/>
 
     <com.mazadatimagepicker.Camera.CustomViews.ZoomImage
       android:id="@+id/image_cropper"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:adjustViewBounds="true"/>
+      android:adjustViewBounds="true"
+      android:visibility="gone"/>
+
+    <ProgressBar
+      android:id="@+id/download_pb"
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:visibility="gone"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <ImageView

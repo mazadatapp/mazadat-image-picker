@@ -15,11 +15,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.UUID;
 
 public class ImageUtils {
 
   public static File bitmapToFile(Context context, Bitmap bitmap) {
-    File file = new File(context.getCacheDir(), new Date().getTime() + ".jpg");
+    File file = new File(context.getCacheDir(), UUID.randomUUID().toString() + ".jpg");
     try {
       file.createNewFile();
     } catch (IOException e) {
