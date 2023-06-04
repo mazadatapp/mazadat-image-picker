@@ -15,7 +15,7 @@ export default function App() {
         setResult(value)
       })}}></Button>
 
-      <Button title='edit Photo' onPress={()=>{ editPhoto(iosPath,"en").then((value: string) => {
+      <Button title='edit Photo' onPress={()=>{ editPhoto(androidPath,"en").then((value: string) => {
               console.log({value})
               setResult(value)
             })}}></Button>

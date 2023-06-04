@@ -499,6 +499,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       imageCropper.setVisibility(View.VISIBLE);
       image.setVisibility(View.GONE);
       imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
+      imageCropper.reset();
       declineIm.setVisibility(View.VISIBLE);
       confirmIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
