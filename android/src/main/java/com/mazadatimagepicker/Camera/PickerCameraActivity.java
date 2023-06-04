@@ -198,6 +198,7 @@ public class PickerCameraActivity extends AppCompatActivity {
         doneBtn.setTextColor(getResources().getColor(R.color.white));
         canPressDone = true;
         doneBtn.setText(getString(R.string.done) + " (1)");
+        editOrCapturePhoto(0);
       }
       recycler.setVisibility(View.GONE);
       captureHintTv.setVisibility(View.GONE);
