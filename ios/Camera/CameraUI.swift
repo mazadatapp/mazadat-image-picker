@@ -177,8 +177,21 @@ extension CameraController{
         editView.addSubview(imageCropper)
         addConstraints(currentView: imageCropper, MainView: editView, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0, bottom: true, bottomValue: 0, leading: true, leadingValue: 0, trailing: true, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
+        editView.addSubview(indicator)
+        addConstraints(currentView: indicator, MainView: editView, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+        indicator.color = Colors.blueColor()
+        indicator.startAnimating()
+        if #available(iOS 13.0, *) {
+            indicator.style = .large
+        }else{
+            indicator.style = .whiteLarge
+        }
+        
+
+        
         editView.isHidden=true
         imageCropper.isHidden=true
+        indicator.isHidden=true
         
         gridVertical1=UIView()
         gridVertical1.backgroundColor = Colors.blueColor();
@@ -208,9 +221,21 @@ extension CameraController{
         editView.addSubview(gridHorizontal2)
         
         if(editPhotoPath != nil){
-            imageItems[0].image = UIImage(contentsOfFile: editPhotoPath!)
+            if(editPhotoPath.contains("https://") || editPhotoPath.contains("http://")){
+                showPreviewLayer(flag: false)
+                editView.isHidden=false
+                doneBtn.backgroundColor = Colors.white38Color()
+                doneBtn.setTitleColor(Colors.black26Color(), for: .normal)
+                canPressDone = false
+                indicator.isHidden=false
+                downloadImage(url: editPhotoPath)
+            }else{
+                imageItems[0].image = UIImage(contentsOfFile: editPhotoPath!)
+                itemSelected(index: 0)
+                doneBtn.backgroundColor = Colors.blueColor()
+                canPressDone = true
+            }
             
-            itemSelected(index: 0)
             galleryBtn.isHidden=true
             imagesCollection.isHidden=true
             cameraHintL.isHidden=true
@@ -218,9 +243,9 @@ extension CameraController{
             captureBtn.isHidden=true
             flashBtn.isHidden=true
             deleteBtn.isHidden=true
-            doneBtn.backgroundColor = Colors.blueColor()
+            
             doneBtn.setTitle(lang == "en" ? "Done (1)" : "(1) تم", for: .normal)
-            canPressDone = true
+            
         }else{
             checkDoneButton()
         }
@@ -238,6 +263,24 @@ extension CameraController{
         doneBtn.addTarget(self, action: #selector(donePressed(_:)), for: .touchUpInside)
         
         flashBtn.addTarget(self, action: #selector(flashPressed(_:)), for: .touchUpInside)
+    }
+    func downloadImage(url: String) {
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        let request = NSMutableURLRequest(url: URL(string: url)!)
+        request.httpMethod = "GET"
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { [self] data,_,_ in
+            DispatchQueue.main.async { [self] in
+                imageItems[0].image = UIImage(data: data!)
+                itemSelected(index: 0)
+                doneBtn.backgroundColor = Colors.blueColor()
+                doneBtn.setTitleColor(Colors.whiteColor(), for: .normal)
+                canPressDone = true
+                indicator.isHidden=true
+            }
+            
+        })
+        task.resume()
     }
     
     @objc func openGallery(_ sender: AnyObject) {

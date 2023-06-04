@@ -74,7 +74,7 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - mazadat-image-picker (1.6.0):
+  - mazadat-image-picker (1.8.0):
     - React-Core
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -536,7 +536,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  mazadat-image-picker: 5f01dae7d4e809f2ce02750e4c96c16d9e343db6
+  mazadat-image-picker: 3db5eef5fab5bf13bd5680030c620504cd935202
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: fd4d923b964658aa0c4091a32c8b2004c6d9e3a6
@@ -569,6 +569,6 @@ SPEC CHECKSUMS:
   Yoga: 921eb014669cf9c718ada68b08d362517d564e0c
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 6ceca761e3ac3c13086e60f137aa1855849f7ae7
+PODFILE CHECKSUM: 2e571e9f2d1a6100d0db5c15140205989f16a5c6
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
