@@ -59,8 +59,14 @@ public class ImageUtils {
       bitmap = Bitmap.createScaledBitmap(capturedBitmap, (int) ((float) returnedBitmap.getHeight() / (float) capturedBitmap.getHeight() * capturedBitmap.getWidth()), returnedBitmap.getHeight(), false);
       canvas.drawBitmap(bitmap, returnedBitmap.getWidth() / 2f - bitmap.getWidth() / 2f, 0, new Paint());
     } else {
-      bitmap = Bitmap.createScaledBitmap(capturedBitmap, returnedBitmap.getWidth(), (int) ((float) returnedBitmap.getWidth() / (float) capturedBitmap.getWidth() * capturedBitmap.getHeight()), false);
-      canvas.drawBitmap(bitmap, 0, returnedBitmap.getHeight() / 2f - bitmap.getHeight() / 2f, new Paint());
+      if(height< capturedBitmap.getHeight()){
+        bitmap = Bitmap.createScaledBitmap(capturedBitmap, (int) (((float) returnedBitmap.getHeight() / (float) capturedBitmap.getHeight()) * capturedBitmap.getWidth()), height, false);
+        canvas.drawBitmap(bitmap, returnedBitmap.getWidth() / 2f - bitmap.getWidth() / 2f,0, new Paint());
+      }else {
+        bitmap = Bitmap.createScaledBitmap(capturedBitmap, returnedBitmap.getWidth(), (int) ((float) returnedBitmap.getWidth() / (float) capturedBitmap.getWidth() * capturedBitmap.getHeight()), false);
+        canvas.drawBitmap(bitmap, 0, returnedBitmap.getHeight() / 2f - bitmap.getHeight() / 2f, new Paint());
+      }
+
     }
     return returnedBitmap;
 

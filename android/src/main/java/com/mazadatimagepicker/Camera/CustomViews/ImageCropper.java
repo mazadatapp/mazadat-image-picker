@@ -129,7 +129,6 @@ public class ImageCropper extends AppCompatImageView {
 
         bm = ((BitmapDrawable) getDrawable()).getBitmap();
 
-
       }
       cropView = new RectF(x, y, x + width, y + height);
 
@@ -196,37 +195,41 @@ public class ImageCropper extends AppCompatImageView {
       case MotionEvent.ACTION_MOVE:
         float diff_x = raw_x - start_x;
         float diff_y = raw_y - start_y;
-        if (area == 1 && old_width - diff_x > min_width
-          && old_height - diff_y > min_width &&
-          (old_y + diff_y) > 0 &&
-          old_x + diff_x > 0) {
-          x = old_x + diff_x;
-          y = old_y + diff_y;
-          width = old_width - diff_x;
-          height = old_height - diff_y;
+        if (area == 1 ) {
+          if(old_width - diff_x > min_width && old_x + diff_x > 0) {
+            x = old_x + diff_x;
+            width = old_width - diff_x;
+          }
+          if(old_height - diff_y > min_width && (old_y + diff_y) > 0) {
+            y = old_y + diff_y;
+            height = old_height - diff_y;
+          }
           invalidate();
-        } else if (area == 2 && old_width + diff_x > min_width &&
-          old_height - diff_y > min_width &&
-          old_y + diff_y  > 0
-          && cropView.left + old_width + diff_x < getWidth()) {
-          y = old_y + diff_y;
-          width = old_width + diff_x;
-          height = old_height - diff_y;
+        } else if (area == 2) {
+          if(old_width + diff_x > min_width && cropView.left + old_width + diff_x < getWidth()) {
+            width = old_width + diff_x;
+          }
+          if(old_height - diff_y > min_width && old_y + diff_y  > 0) {
+            height = old_height - diff_y;
+            y = old_y + diff_y;
+          }
           invalidate();
-        } else if (area == 3 && old_width - diff_x > min_width &&
-          old_height + diff_y > min_width &&
-          (cropView.top + old_height + diff_y ) < getHeight() &&
-          old_x + diff_x > 0) {
-          x = old_x + diff_x;
-          width = old_width - diff_x;
-          height = old_height + diff_y;
+        } else if (area == 3) {
+          if(old_width - diff_x > min_width && old_x + diff_x > 0) {
+            x = old_x + diff_x;
+            width = old_width - diff_x;
+          }
+          if(old_height + diff_y > min_width && (cropView.top + old_height + diff_y ) < getHeight()) {
+            height = old_height + diff_y;
+          }
           invalidate();
-        } else if (area == 4 && old_width + diff_x > min_width &&
-          old_height + diff_y > min_width &&
-          (cropView.top + old_height + diff_y) < getHeight() &&
-          cropView.left + old_width + diff_x < getWidth()) {
-          width = old_width + diff_x;
-          height = old_height + diff_y;
+        } else if (area == 4 ) {
+          if(old_width + diff_x > min_width && cropView.left + old_width + diff_x < getWidth()) {
+            width = old_width + diff_x;
+          }
+          if(old_height + diff_y > min_width && (cropView.top + old_height + diff_y) < getHeight()) {
+            height = old_height + diff_y;
+          }
           invalidate();
         } else if (area == 5 && old_height - diff_y > min_width &&
           (old_y + diff_y) > 0) {
