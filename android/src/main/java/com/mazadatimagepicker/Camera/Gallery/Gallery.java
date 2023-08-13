@@ -41,7 +41,6 @@ public class Gallery extends AppCompatActivity {
 
   private void cropImagePressed() {
     Bitmap croppedBitmap = imageCropper.crop();
-    Log.i("datadata",croppedBitmap.getWidth()+" " +croppedBitmap.getHeight());
     croppedBitmap = ImageUtils.createBitmap(imageCropper.getWidth(), (int)(imageCropper.getWidth() * 3f / 4f), croppedBitmap);
     File file = ImageUtils.bitmapToFile(this, croppedBitmap);
     Intent intent = new Intent();

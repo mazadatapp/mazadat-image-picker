@@ -14,7 +14,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.UUID;
 
 public class ImageUtils {
@@ -58,16 +57,15 @@ public class ImageUtils {
     if (capturedBitmap.getHeight() > capturedBitmap.getWidth()) {
       bitmap = Bitmap.createScaledBitmap(capturedBitmap, (int) ((float) returnedBitmap.getHeight() / (float) capturedBitmap.getHeight() * capturedBitmap.getWidth()), returnedBitmap.getHeight(), false);
       canvas.drawBitmap(bitmap, returnedBitmap.getWidth() / 2f - bitmap.getWidth() / 2f, 0, new Paint());
+    } else if (height < capturedBitmap.getHeight()) {
+      bitmap = Bitmap.createScaledBitmap(capturedBitmap, (int) (((float) returnedBitmap.getHeight() / (float) capturedBitmap.getHeight()) * capturedBitmap.getWidth()), height, false);
+      canvas.drawBitmap(bitmap, returnedBitmap.getWidth() / 2f - bitmap.getWidth() / 2f, 0, new Paint());
     } else {
-      if(height< capturedBitmap.getHeight()){
-        bitmap = Bitmap.createScaledBitmap(capturedBitmap, (int) (((float) returnedBitmap.getHeight() / (float) capturedBitmap.getHeight()) * capturedBitmap.getWidth()), height, false);
-        canvas.drawBitmap(bitmap, returnedBitmap.getWidth() / 2f - bitmap.getWidth() / 2f,0, new Paint());
-      }else {
-        bitmap = Bitmap.createScaledBitmap(capturedBitmap, returnedBitmap.getWidth(), (int) ((float) returnedBitmap.getWidth() / (float) capturedBitmap.getWidth() * capturedBitmap.getHeight()), false);
-        canvas.drawBitmap(bitmap, 0, returnedBitmap.getHeight() / 2f - bitmap.getHeight() / 2f, new Paint());
-      }
-
+      bitmap = Bitmap.createScaledBitmap(capturedBitmap, returnedBitmap.getWidth(), (int) ((float) returnedBitmap.getWidth() / (float) capturedBitmap.getWidth() * capturedBitmap.getHeight()), false);
+      canvas.drawBitmap(bitmap, 0, returnedBitmap.getHeight() / 2f - bitmap.getHeight() / 2f, new Paint());
     }
+
+
     return returnedBitmap;
 
   }
