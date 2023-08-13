@@ -320,39 +320,43 @@ class CropperView: UIView {
         let area_6_expression = oldY - x/2 + (oldWidth + x)
         let area_8_expression = oldY + x/2 + (oldWidth - x)
         
-        if(area == 1 && oldWidth-x > minWidth &&
-           oldHeight - y > minWidth &&
-           oldY+y > minY &&
-           oldX+x > minX){
-            cropArea.origin.x=oldX+x
-            cropArea.origin.y=oldY+y
-            cropArea.size.width=oldWidth-x
-            cropArea.size.height = oldHeight-y
+        if(area == 1){
+            if(oldWidth-x > minWidth && oldX+x > minX){
+                cropArea.origin.x=oldX+x
+                cropArea.size.width=oldWidth-x
+            }
+            if(oldHeight - y > minWidth && oldY+y > minY){
+                cropArea.origin.y=oldY+y
+                cropArea.size.height = oldHeight-y
+            }
             setNeedsDisplay()
             
-        }else if(area == 2 && oldWidth+x > minWidth &&
-                 oldHeight - y > minWidth &&
-                 oldY+y > minY &&
-                 cropArea.minX + oldWidth + x < maxX){
-            cropArea.origin.y=oldY+y
-            cropArea.size.width=oldWidth+x
-            cropArea.size.height = oldHeight - y
-            setNeedsDisplay()
-        }else if(area == 3 && oldWidth-x > minWidth &&
-                 oldHeight + y > minWidth &&
-                 cropArea.minY + oldHeight + y < maxY &&
-                 oldX + x > minX){
-            cropArea.origin.x=oldX+x
-            cropArea.size.width=oldWidth-x
-            cropArea.size.height = oldHeight + y
-            setNeedsDisplay()
-        }else if(area == 4 && oldWidth+x > minWidth &&
-                 oldHeight + y > minWidth &&
-                 cropArea.minY + oldHeight + y < maxY &&
-                 cropArea.minX + oldWidth + x < maxX){
-            cropArea.size.width=oldWidth+x
-            cropArea.size.height = oldHeight+y
+        }else if(area == 2){
             
+            if(oldWidth+x > minWidth && cropArea.minX + oldWidth + x < maxX){
+                cropArea.size.width=oldWidth+x
+            }
+            if(oldHeight - y > minWidth && oldY+y > minY){
+                cropArea.origin.y=oldY+y
+                cropArea.size.height = oldHeight - y
+            }
+            setNeedsDisplay()
+        }else if(area == 3){
+            if(oldWidth-x > minWidth && oldX + x > minX){
+                cropArea.origin.x=oldX+x
+                cropArea.size.width=oldWidth-x
+            }
+            if(oldHeight + y > minWidth && cropArea.minY + oldHeight + y < maxY){
+                cropArea.size.height = oldHeight + y
+            }
+            setNeedsDisplay()
+        }else if(area == 4){
+            if(oldWidth+x > minWidth && cropArea.minX + oldWidth + x < maxX){
+                cropArea.size.width=oldWidth+x
+            }
+            if(oldHeight + y > minWidth && cropArea.minY + oldHeight + y < maxY){
+                cropArea.size.height = oldHeight+y
+            }
             setNeedsDisplay()
         }else if(area == 5 && oldHeight-y > minWidth &&
                  oldY + y > minY){
