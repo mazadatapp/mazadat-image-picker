@@ -38,7 +38,7 @@ class CloseDialog: UIViewController {
         addConstraints(currentView: titleL, MainView: frame, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 100, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: true, trailingValue: -16, width: false, widthValue: 0, height: false, heightValue: 0)
         
         let closeHintL=UILabel()
-        closeHintL.text = lang == "en" ? "All images and edits you did will be delete" : "سيتم حذف جميع الصور والتعديلات التي قمت بها"
+        closeHintL.text = lang == "en" ? "All images and edits you did will be delete." : "سيتم حذف جميع الصور والتعديلات التي قمت بها."
         closeHintL.numberOfLines=0
         closeHintL.textColor = UIColor.init(white: 0, alpha: 0.6)
         closeHintL.textAlignment = .center
@@ -58,7 +58,7 @@ class CloseDialog: UIViewController {
         
         let closeBtn=UIButton()
         frame.addSubview(closeBtn)
-        closeBtn.setTitle(lang == "en" ? "Yes, Close" : "نعم، إغلق", for: .normal)
+        closeBtn.setTitle(lang == "en" ? "Yes, Close" : "تأكيد", for: .normal)
         closeBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         closeBtn.backgroundColor = Colors.blueColor()
         addConstraints(currentView: closeBtn, MainView: frame, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: false, topValue: 0, bottom: true, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: 0, width: true, widthValue: frameWidth*0.5, height: true, heightValue: 54)
