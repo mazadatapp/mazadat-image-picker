@@ -470,10 +470,10 @@ extension CameraController{
         
         if(isIdVerification){
             if(imageItems[0].image == nil){
-                showToast(message: lang == "en" ? "Add front ID image" : "برجاء إضافة الوجه الأمامى")
+                showToast(message: lang == "en" ? "Add front ID image" : "أضف الوجه الأمامي للبطاقة الشخصية")
                 return
             }else if(imageItems[1].image == nil){
-                showToast(message: lang == "en" ? "Add back ID image" : "برجاء إضافة الوجه الخلفى")
+                showToast(message: lang == "en" ? "Add back ID image" : "أضف الوجه الخلفي للبطاقة الشخصية")
                 return
             }
         }

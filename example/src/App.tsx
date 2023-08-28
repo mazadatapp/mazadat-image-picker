@@ -25,7 +25,7 @@ export default function App() {
       }}></Button>
 
       <Button title='ID verification' onPress={() => {
-        openIdVerification("en").then((value: string) => {
+        openIdVerification("ar").then((value: string) => {
           console.log({ value })
           setResult(value)
         })
