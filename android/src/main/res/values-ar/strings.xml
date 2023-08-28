@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="gallery">المكتبة</string>
-  <string name="camera_capture_hint">من فضلك ، اعرض المنتج الخاص بك داخل المربع أدناه. تأكد من أن صورتك واضحة للحصول على أفضل النتائج</string>
+  <string name="gallery">معرض الصور</string>
+  <string name="camera_capture_hint">تأكد من أن الصورة واضحة حتى تحصل على أفضل النتائج.</string>
   <string name="crop">قص</string>
-  <string name="rotate">استدارة</string>
-  <string name="delete">مسح</string>
+  <string name="rotate">تدوير</string>
+  <string name="delete">حذف</string>
   <string name="done">تم</string>
   <string name="max_number_selected_images_is">الحد الأقصى لعدد الصور المختارة هو</string>
-  <string name="select_to_edit">تعديل</string>
+  <string name="select_to_edit">اختر للتعديل</string>
   <string name="front_id">الوجه الأمامى</string>
   <string name="back_id">الوجه الخلفى</string>
-  <string name="please_add_front_id">برجاء إضافة الوجه الأمامى</string>
-  <string name="please_add_back_id">برجاء إضافة الوجه الخلفى</string>
-  <string name="id_verification_hint">قم بتصوير البطاقة الخاصة بك من الأمام و الخلف\nتأكد من أن جميع البيانات الخاصة بك مرئية و واضحة</string>
-  <string name="zoom_hint">إستخدم إصبعين لتقريب الصورة</string>
-  <string name="rotate_hint">واصل الضغط للف الصورة</string>
+  <string name="please_add_front_id">أضف الوجه الأمامي للبطاقة الشخصية.</string>
+  <string name="please_add_back_id">أضف الوجه الخلفي للبطاقة الشخصية.</string>
+  <string name="id_verification_hint">قم بتصوير بطاقتك الشخصية من الأمام و الخلف.\nتأكد من أن جميع البيانات الخاصة بك مرئية و واضحة.</string>
+  <string name="zoom_hint">استخدم إصبعين لتقريب الصورة.</string>
+  <string name="rotate_hint">استمر بالضغط حتى تدور الصورة.</string>
 
   //confirmation dialog
   <string name="are_you_sure_you_want_to_close">هل أنت متأكد أنك تريد الإغلاق؟</string>
-  <string name="cancel">لا</string>
-  <string name="yes_close">إغلاق</string>
+  <string name="cancel">إلغاء</string>
+  <string name="yes_close">تأكيد</string>
   <string name="all_images_and_edits_you_did_will_be_delete">سيتم حذف جميع الصور والتعديلات التي قمت بها</string>
 
   //confirmation dialog
   <string name="are_you_sure_to_delete">هل انت متأكد من الحذف؟</string>
-  <string name="yes_delete">نعم, إحذف</string>
+  <string name="yes_delete">تأكيد</string>
 </resources>

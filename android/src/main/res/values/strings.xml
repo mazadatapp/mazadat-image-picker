@@ -9,20 +9,20 @@
   <string name="select_to_edit">Select to edit</string>
   <string name="front_id">Front ID</string>
   <string name="back_id">Back ID</string>
-  <string name="please_add_front_id">Please add front ID</string>
-  <string name="please_add_back_id">Please add back ID</string>
-  <string name="id_verification_hint">Capture your ID front and back\nEnsure that all data is visible and clear</string>
-  <string name="zoom_hint">Use 2 fingers to zoom</string>
-  <string name="rotate_hint">keep pressing to rotate the image</string>
+  <string name="please_add_front_id">Add front ID image</string>
+  <string name="please_add_back_id">Add back ID image</string>
+  <string name="id_verification_hint">Capture your ID front and back and  make sure that all data is visible and clear.</string>
+  <string name="zoom_hint">Use 2 fingers to zoom.</string>
+  <string name="rotate_hint">keep pressing to rotate the image.</string>
 
 
   //confirmation dialog
   <string name="are_you_sure_you_want_to_close">Are you sure you want to close?</string>
   <string name="cancel">Cancel</string>
-  <string name="yes_close">Yes, Close</string>
-  <string name="all_images_and_edits_you_did_will_be_delete">All images and edits you did will be delete</string>
+  <string name="yes_close">Yes, close</string>
+  <string name="all_images_and_edits_you_did_will_be_delete">All uploaded images and edits will be deleted.</string>
 
   //confirmation dialog
-  <string name="are_you_sure_to_delete">Are you sure to delete?</string>
+  <string name="are_you_sure_to_delete">Are you sure you want to delete this?</string>
   <string name="yes_delete">Yes, Delete</string>
 </resources>
