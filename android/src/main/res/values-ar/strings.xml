@@ -10,8 +10,8 @@
   <string name="select_to_edit">اختر للتعديل</string>
   <string name="front_id">الوجه الأمامى</string>
   <string name="back_id">الوجه الخلفى</string>
-  <string name="please_add_front_id">أضف الوجه الأمامي للبطاقة الشخصية.</string>
-  <string name="please_add_back_id">أضف الوجه الخلفي للبطاقة الشخصية.</string>
+  <string name="please_add_front_id">أضف الوجه الأمامي للبطاقة الشخصية</string>
+  <string name="please_add_back_id">أضف الوجه الخلفي للبطاقة الشخصية</string>
   <string name="id_verification_hint">قم بتصوير بطاقتك الشخصية من الأمام و الخلف.\nتأكد من أن جميع البيانات الخاصة بك مرئية و واضحة.</string>
   <string name="zoom_hint">استخدم إصبعين لتقريب الصورة.</string>
   <string name="rotate_hint">استمر بالضغط حتى تدور الصورة.</string>
