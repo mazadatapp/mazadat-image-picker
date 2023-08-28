@@ -102,12 +102,14 @@ extension CameraController{
         layout.scrollDirection = .horizontal
         imagesCollection.collectionViewLayout = layout
         imagesCollection.isScrollEnabled=true
+        imagesCollection.showsHorizontalScrollIndicator = false
+        imagesCollection.showsVerticalScrollIndicator = false
         UIviews.addSubview(imagesCollection)
         addConstraints(currentView: imagesCollection, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.74*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 8, trailing: true, trailingValue: -16, width: false, widthValue: 0, height: true, heightValue: 76)
         
         //max number of images
         if(!isIdVerification){
-            maxNoOfImagesL.text = (lang == "en" ? "The maximum number of selected photos is " : "الحد الأقصى لعدد الصور المختارة هو") + String(maxImagesSize)
+            maxNoOfImagesL.text = (lang == "en" ? "The maximum number of selected photos is " : "الحد الأقصى لعدد الصور المختارة هو ") + String(maxImagesSize)
             maxNoOfImagesL.numberOfLines=0
             maxNoOfImagesL.textColor = UIColor.white
             maxNoOfImagesL.font = UIFont(name: "Montserrat-Regular", size: 12)
@@ -137,7 +139,7 @@ extension CameraController{
         
         //crop button
         rotateBtn.setImage(UIImage(named: "ic_picker_rotate")?.maskWithColor(color: UIColor.white), for: .normal)
-        rotateBtn.setTitle(lang == "en" ? "Rotate" : "لف", for: .normal)
+        rotateBtn.setTitle(lang == "en" ? "Rotate" : "تدوير", for: .normal)
         rotateBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 11)
         rotateBtn.sizeToFit()
         UIviews.addSubview(rotateBtn)
@@ -147,7 +149,7 @@ extension CameraController{
         
         //delete button
         deleteBtn.setImage(UIImage(named: "ic_picker_trash")?.maskWithColor(color: UIColor.white), for: .normal)
-        deleteBtn.setTitle(lang == "en" ? "Delete" : "مسح", for: .normal)
+        deleteBtn.setTitle(lang == "en" ? "Delete" : "حذف", for: .normal)
         deleteBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 11)
         //deleteBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 27, bottom: 38, right: 4)
         UIviews.addSubview(deleteBtn)
@@ -362,14 +364,14 @@ extension CameraController{
     func setCameraHintText(){
         //TODO
         if(editModeType == EditModeTypes.CROP){
-            cameraHintL.text = lang == "en" ? "Use 2 fingers to zoom" : "إستخدم إصبعين لتقريب الصورة"
+            cameraHintL.text = lang == "en" ? "Use 2 fingners to zoom." : "استخدم إصبعين لتقريب الصورة."
         }else if(editModeType == EditModeTypes.ROTATE){
-            cameraHintL.text = lang == "en" ? "Keep pressing to rotate the image" : "واصل الضغط للف الصورة"
+            cameraHintL.text = lang == "en" ? "Keep pressing to rotate the image." : "استمر بالضغط حتى تدور الصورة."
         }else{
             if(isIdVerification){
-                cameraHintL.text = lang == "en" ? "Capture your ID front and back\nEnsure that all data is visible and clear" : "قم بتصوير البطاقة الخاص بك من الأمام والخلف \n تأكد من أن جميع البيانات مرئية وواضحة"
+                cameraHintL.text = lang == "en" ? "Capture your ID front and back\nand  make sure that all data is visible and clear." : "قم بتصوير بطاقتك الشخصية من الأمام و الخلف.\nتأكد من أن جميع البيانات الخاصة بك مرئية و واضحة."
             }else{
-                cameraHintL.text = lang == "en" ? "Please, Show your product inside the below box. Be sure your photo be clear to get best results" : "من فضلك ، اعرض المنتج الخاص بك داخل المربع أدناه. تأكد من أن صورتك واضحة للحصول على أفضل النتائج"
+                cameraHintL.text = lang == "en" ? "Please, Show your product inside the below box. Be sure your photo be clear to get best results." : "تأكد من أن الصورة واضحة حتى تحصل على أفضل النتائج."
             }
         }
     }
@@ -468,10 +470,10 @@ extension CameraController{
         
         if(isIdVerification){
             if(imageItems[0].image == nil){
-                showToast(message: lang == "en" ? "Please add front ID" : "برجاء إضافة الوجه الأمامي")
+                showToast(message: lang == "en" ? "Add front ID image" : "برجاء إضافة الوجه الأمامى")
                 return
             }else if(imageItems[1].image == nil){
-                showToast(message: lang == "en" ? "Please add back ID" : "برجاء إضافة الوجه الخلفى")
+                showToast(message: lang == "en" ? "Add back ID image" : "برجاء إضافة الوجه الخلفى")
                 return
             }
         }
