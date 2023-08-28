@@ -11,7 +11,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Button title='open Camera' onPress={() => {
-        openCamera(10, "ar").then((value: string) => {
+        openCamera(10, "en").then((value: string) => {
           console.log({ value })
           setResult(value)
         })

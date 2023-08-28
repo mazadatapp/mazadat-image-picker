@@ -104,7 +104,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="20dp"
     android:background="@android:color/transparent"
-    android:drawableStart="@drawable/ic_gallery"
+    android:drawableStart="@drawable/ic_image_picker_gallery"
     android:drawablePadding="6dp"
     android:fontFamily="@font/montserrat_semibold"
     android:gravity="center"
