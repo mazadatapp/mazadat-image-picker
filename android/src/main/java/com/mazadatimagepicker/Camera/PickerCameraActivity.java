@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -267,12 +268,17 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (imageTurn == maxImagesSize) {
       return;
     }
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+    boolean permissionFlag=true;
+    if (Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 30) {
+      permissionFlag = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+    if (permissionFlag) {
       startActivityForResult(new Intent(this, Gallery.class), GALLERY_REQUEST_CODE);
     } else {
+      String[] permissions=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
       int READ_WRITE_REQUEST_PERMISSION = 20;
       ActivityCompat.requestPermissions(this,
-        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+        permissions,
         READ_WRITE_REQUEST_PERMISSION);
     }
 
