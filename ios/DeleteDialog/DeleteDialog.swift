@@ -40,7 +40,7 @@ class DeleteDialog: UIViewController {
         
         let cancelBtn=UIButton()
         frame.addSubview(cancelBtn)
-        cancelBtn.setTitle(lang == "en" ? "Cancel" : "إلغاء", for: .normal)
+        cancelBtn.setTitle(lang == "en" ? "Cancel" : "إغلاق", for: .normal)
         cancelBtn.titleLabel?.textColor = UIColor.white
         cancelBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         cancelBtn.backgroundColor = Colors.tealishColor()
@@ -48,7 +48,7 @@ class DeleteDialog: UIViewController {
         
         let deleteBtn=UIButton()
         frame.addSubview(deleteBtn)
-        deleteBtn.setTitle(lang == "en" ? "Yes, Delete" : "تأكيد", for: .normal)
+        deleteBtn.setTitle(lang == "en" ? "Yes, Delete" : "نعم، احذف", for: .normal)
         deleteBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         deleteBtn.backgroundColor = Colors.blueColor()
         addConstraints(currentView: deleteBtn, MainView: frame, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: false, topValue: 0, bottom: true, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: 0, width: true, widthValue: frameWidth*0.5, height: true, heightValue: 54)
