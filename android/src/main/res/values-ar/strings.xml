@@ -18,7 +18,7 @@
 
   //confirmation dialog
   <string name="are_you_sure_you_want_to_close">هل أنت متأكد أنك تريد الإغلاق؟</string>
-  <string name="cancel">إغلاق</string>
+  <string name="cancel">إلغاء</string>
   <string name="yes_close">تأكيد</string>
   <string name="all_images_and_edits_you_did_will_be_delete">سيتم إلغاء جميع التعديلات التي قمت بها</string>
 

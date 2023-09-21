@@ -40,7 +40,7 @@ class DeleteDialog: UIViewController {
         
         let cancelBtn=UIButton()
         frame.addSubview(cancelBtn)
-        cancelBtn.setTitle(lang == "en" ? "Cancel" : "إغلاق", for: .normal)
+        cancelBtn.setTitle(lang == "en" ? "Cancel" : "إلغاء", for: .normal)
         cancelBtn.titleLabel?.textColor = UIColor.white
         cancelBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         cancelBtn.backgroundColor = Colors.tealishColor()

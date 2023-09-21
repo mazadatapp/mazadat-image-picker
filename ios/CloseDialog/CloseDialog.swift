@@ -51,7 +51,7 @@ class CloseDialog: UIViewController {
         
         let cancelBtn=UIButton()
         frame.addSubview(cancelBtn)
-        cancelBtn.setTitle(lang == "en" ? "Cancel" : "إغلاق", for: .normal)
+        cancelBtn.setTitle(lang == "en" ? "Cancel" : "إلغاء", for: .normal)
         cancelBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         cancelBtn.backgroundColor = Colors.tealishColor()
         addConstraints(currentView: cancelBtn, MainView: frame, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: false, topValue: 0, bottom: true, bottomValue: 0, leading: true, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: frameWidth*0.5, height: true, heightValue: 54)
