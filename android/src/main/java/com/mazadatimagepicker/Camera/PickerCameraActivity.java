@@ -268,14 +268,14 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (imageTurn == maxImagesSize) {
       return;
     }
-    boolean permissionFlag=true;
+    boolean permissionFlag = true;
     if (Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 30) {
       permissionFlag = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
     if (permissionFlag) {
       startActivityForResult(new Intent(this, Gallery.class), GALLERY_REQUEST_CODE);
     } else {
-      String[] permissions=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+      String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
       int READ_WRITE_REQUEST_PERMISSION = 20;
       ActivityCompat.requestPermissions(this,
         permissions,
@@ -429,13 +429,14 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     imageItems.get(imageTurn).setFile(file);
     adapter.notifyItemChanged(imageTurn);
-    recycler.smoothScrollToPosition(imageTurn);
+
 
     imageTurn++;
     selectedPosition = imageTurn;
     if (imageTurn < maxImagesSize) {
       doneBtn.setText(getString(R.string.done) + " (" + imageTurn + ")");
       imageItems.addLast(new ImageItem());
+      recycler.smoothScrollToPosition(imageTurn);
     } else {
       doneBtn.setText(getString(R.string.done) + " (" + (maxImagesSize) + ")");
       maxImagesTv.setTextColor(getResources().getColor(R.color.red));
@@ -496,6 +497,10 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     declineIm.setVisibility(View.GONE);
     confirmIm.setVisibility(View.GONE);
+
+    recycler.smoothScrollToPosition(imageItems.size() - 1);
+    selectedPosition = imageItems.size() - 1;
+    adapter.notifyDataSetChanged();
   }
 
   private void cropPressed() {
