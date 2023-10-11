@@ -438,8 +438,11 @@ extension CameraController{
             captureBtn.alpha=1.0
             captureBtn.isEnabled=true
         }
+        selectedPosition = imageItems.count - 1
         imagesCollection.reloadData()
+        scrollToCell(index: selectedPosition - 1)
         imageTurn -= 1
+        
         
         if(imageTurn>0){
             doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)

@@ -76,6 +76,10 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         imagesCollection.reloadItems(at: [IndexPath(item: index, section: 0)])
     }
     
+    func scrollToCell(index:Int){
+        imagesCollection.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: true)
+    }
+    
     func resetUI(){
         editMode = false
         editView.isHidden=true

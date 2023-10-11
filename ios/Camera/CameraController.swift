@@ -103,7 +103,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         }
         imagesCollection.reloadData()
         doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
-        
+        scrollToCell(index: imageItems.count-1)
         checkDoneButton()
     }
     
