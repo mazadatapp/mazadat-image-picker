@@ -25,4 +25,7 @@
   //confirmation dialog
   <string name="are_you_sure_to_delete">Are you sure you want to delete this?</string>
   <string name="yes_delete">Yes, Delete</string>
+
+  //error
+  <string name="cannot_fetch_image">Cannot fetch image</string>
 </resources>

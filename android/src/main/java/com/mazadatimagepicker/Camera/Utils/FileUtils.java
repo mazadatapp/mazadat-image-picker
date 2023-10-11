@@ -80,22 +80,6 @@ public class FileUtils {
       }
     }
 
-    if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-      if (isGooglePhotosUri(uri)) {
-        return uri.getLastPathSegment();
-      }
-      if (isGoogleDriveUri(uri)) {
-        return getDriveFilePath(uri);
-      }
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        return copyFileToInternalStorage(uri, "userfiles");
-      } else {
-        return getDataColumn(context, uri, null, null);
-      }
-
-    }
-
     // MediaProvider
     if (isMediaDocument(uri)) {
       final String docId = DocumentsContract.getDocumentId(uri);
@@ -116,6 +100,22 @@ public class FileUtils {
 
       return getDataColumn(context, contentUri, selection,
         selectionArgs);
+    }
+
+    if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+      if (isGooglePhotosUri(uri)) {
+        return uri.getLastPathSegment();
+      }
+      if (isGoogleDriveUri(uri)) {
+        return getDriveFilePath(uri);
+      }
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        return copyFileToInternalStorage(uri, "userfiles");
+      } else {
+        return getDataColumn(context, uri, null, null);
+      }
+
     }
 
     if (isGoogleDriveUri(uri)) {

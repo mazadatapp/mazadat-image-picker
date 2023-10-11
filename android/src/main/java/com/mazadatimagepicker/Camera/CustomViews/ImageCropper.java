@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 
@@ -74,6 +75,10 @@ public class ImageCropper extends AppCompatImageView {
 
   }
 
+  public RectF getCropView() {
+    return cropView;
+  }
+
   public Bitmap crop() {
     bm = ((BitmapDrawable) getDrawable()).getBitmap();
     bm = Bitmap.createScaledBitmap(bm, getWidth(), getHeight(), true);
@@ -82,6 +87,20 @@ public class ImageCropper extends AppCompatImageView {
       width += getWidth() - ((int) (cropView.left) + width);
     }
     return Bitmap.createBitmap(bm, (int) (cropView.left), (int) (cropView.top), width, (int) cropView.height());
+  }
+
+  @Override
+  public void setImageBitmap(Bitmap bm) {
+    super.setImageBitmap(bm);
+    if (frame_width > 0) {
+      ViewGroup.LayoutParams params = getLayoutParams();
+      params.height = frame_height;
+      params.width = frame_width;
+      setLayoutParams(params);
+    }
+
+    once = true;
+    invalidate();
   }
 
   @Override
@@ -167,6 +186,9 @@ public class ImageCropper extends AppCompatImageView {
     float raw_y = event.getY();
     switch (event.getAction()) {
       case MotionEvent.ACTION_DOWN:
+        if(cropView==null){
+          break;
+        }
         start_x = raw_x;
         start_y = raw_y;
         if (new RectF(cropView.left - offset, cropView.top - offset, cropView.left + offset, cropView.top + offset).contains(start_x, start_y)) {

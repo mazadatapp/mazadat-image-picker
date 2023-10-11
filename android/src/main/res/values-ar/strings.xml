@@ -25,4 +25,7 @@
   //confirmation dialog
   <string name="are_you_sure_to_delete">هل انت متأكد من الحذف؟</string>
   <string name="yes_delete">نعم، احذف</string>
+
+  //error
+  <string name="cannot_fetch_image">لا يمكن قرأت الصورة</string>
 </resources>
