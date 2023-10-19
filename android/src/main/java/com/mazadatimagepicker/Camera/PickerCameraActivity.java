@@ -36,6 +36,9 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.DownloadListener;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.mazadatimagepicker.BuildConfig;
 import com.mazadatimagepicker.Camera.CloseDialog.CloseDialog;
@@ -47,8 +50,6 @@ import com.mazadatimagepicker.Camera.Image.ImageItem;
 import com.mazadatimagepicker.Camera.Image.ImageItemsAdapter;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -66,6 +67,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private ImageView image;
   private ZoomImage imageCropper;
   private ProgressBar downloadPb;
+  private TextView downloadTv;
   private Button cropBtn;
   private Button rotateBtn;
   private Button deleteBtn;
@@ -133,6 +135,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     editCl = findViewById(R.id.edit_cl);
     imageCropper = findViewById(R.id.image_cropper);
     downloadPb = findViewById(R.id.download_pb);
+    downloadTv = findViewById(R.id.download_tv);
     image = findViewById(R.id.image);
     cropBtn = findViewById(R.id.crop_btn);
     rotateBtn = findViewById(R.id.rotate_btn);
@@ -183,6 +186,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       String editPhotoPath = getIntent().getStringExtra("path");
       if (editPhotoPath.contains("https://") || editPhotoPath.contains("http://")) {
 
+        downloadTv.setVisibility(View.VISIBLE);
         downloadPb.setVisibility(View.VISIBLE);
         adapter.notifyItemChanged(0);
         previewView.setVisibility(View.GONE);
@@ -221,26 +225,30 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void downloadImage(String url) {
-    Picasso.get().load(url).into(new Target() {
+
+    String name = url.split("/")[url.split("/").length - 1];
+    if (!name.toLowerCase().endsWith(".png") && !name.toLowerCase().endsWith(".jpeg") && !name.toLowerCase().endsWith(".jpg")
+      && !name.toLowerCase().endsWith(".svg") && !name.toLowerCase().endsWith(".webp")) {
+      name += ".jpg";
+    }
+    String finalName = name;
+    AndroidNetworking.download(url, getCacheDir().getPath(), name).build().setDownloadProgressListener((l, l1) -> {
+      int percentage = (int) ((double) l * 100.0 / (double) l1);
+      downloadTv.setText(percentage + "%");
+    }).startDownload(new DownloadListener() {
       @Override
-      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-        File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap);
+      public void onDownloadComplete() {
+        File file = new File(getCacheDir().getPath(), finalName);
         imageItems.get(0).setFile(file);
         downloadPb.setVisibility(View.GONE);
+        downloadTv.setVisibility(View.GONE);
         canPressDone = true;
         editOrCapturePhoto(0);
-
-
       }
 
       @Override
-      public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-        e.printStackTrace();
-      }
-
-      @Override
-      public void onPrepareLoad(Drawable placeHolderDrawable) {
-
+      public void onError(ANError anError) {
+        anError.printStackTrace();
       }
     });
 
@@ -387,24 +395,21 @@ public class PickerCameraActivity extends AppCompatActivity {
   private void cameraHandler() {
 
     cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-    cameraProviderFuture.addListener(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+    cameraProviderFuture.addListener(() -> {
+      try {
+        ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
-          if (ContextCompat.checkSelfPermission(PickerCameraActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            cameraPermissionEnabled = true;
-            startCameraX(cameraProvider);
-          } else {
-            ActivityCompat.requestPermissions(PickerCameraActivity.this,
-              new String[]{Manifest.permission.CAMERA},
-              CAMERA_PERMISSION);
-          }
-
-        } catch (Exception e) {
-          e.printStackTrace();
+        if (ContextCompat.checkSelfPermission(PickerCameraActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+          cameraPermissionEnabled = true;
+          startCameraX(cameraProvider);
+        } else {
+          ActivityCompat.requestPermissions(PickerCameraActivity.this,
+            new String[]{Manifest.permission.CAMERA},
+            CAMERA_PERMISSION);
         }
+
+      } catch (Exception e) {
+        e.printStackTrace();
       }
     }, ContextCompat.getMainExecutor(this));
 

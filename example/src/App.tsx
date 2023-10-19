@@ -18,7 +18,7 @@ export default function App() {
       }}></Button>
 
       <Button title='edit Photo' onPress={() => {
-        editPhoto(result, "en").then((value: string) => {
+        editPhoto("https://www.hostinger.com/tutorials/wp-content/uploads/sites/2/2022/02/webp-image-wordpress.webp", "en").then((value: string) => {
           console.log({ value })
           setResult(value)
         })
