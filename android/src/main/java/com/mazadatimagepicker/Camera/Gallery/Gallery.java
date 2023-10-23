@@ -6,7 +6,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -62,7 +61,6 @@ public class Gallery extends AppCompatActivity {
       Uri selectedImageUri = data.getData();
       try {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-        Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight());
         String path = fileUtils.getPath(selectedImageUri);
         Matrix matrix = new Matrix();
         int rotation = 0;
@@ -76,16 +74,14 @@ public class Gallery extends AppCompatActivity {
           e.printStackTrace();
         }
         if (bitmap.getWidth() * bitmap.getHeight() > 23040000) {
-          int width;
-          int height;
+          float scale;
           if (bitmap.getWidth() > bitmap.getHeight()) {
-            width = 4800;
-            height = (int) (((double) width / (double) bitmap.getWidth()) * bitmap.getHeight());
+            scale = 4800.0f / (float) bitmap.getWidth();
           } else {
-            height = 4800;
-            width = (int) (((double) height / (double) bitmap.getHeight()) * bitmap.getWidth());
+            scale = 4800.0f / (float) bitmap.getHeight();
           }
-          bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+          matrix.postScale(scale, scale);
+          bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         } else if (rotation != 0) {
           bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
