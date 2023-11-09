@@ -28,4 +28,7 @@
 
   //error
   <string name="cannot_fetch_image">Cannot fetch image</string>
+  <string name="please_crop_all_the_images">Please make sure all images are cropped</string>
+  <string name="max_images_are">Max images number is</string>
+
 </resources>

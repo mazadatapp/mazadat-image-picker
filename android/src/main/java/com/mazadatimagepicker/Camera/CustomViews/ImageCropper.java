@@ -9,8 +9,8 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -45,6 +45,7 @@ public class ImageCropper extends AppCompatImageView {
   Bitmap bm;
   RectF matrix = new RectF();
   Boolean getDimensionsOnce = true;
+  boolean cropViewUpdated = false;
   int frame_width, frame_height;
 
   public ImageCropper(Context context) {
@@ -79,12 +80,30 @@ public class ImageCropper extends AppCompatImageView {
     return cropView;
   }
 
+  public void setCropView(RectF cropView) {
+    this.cropView = cropView;
+    x = this.cropView.left;
+    y = this.cropView.top;
+    width = this.cropView.width();
+    height = this.cropView.height();
+    cropViewUpdated = true;
+  }
+
   public Bitmap crop() {
     bm = ((BitmapDrawable) getDrawable()).getBitmap();
     bm = Bitmap.createScaledBitmap(bm, getWidth(), getHeight(), true);
     int width = (int) cropView.width();
     if ((int) (cropView.left) + width > getWidth()) {
       width += getWidth() - ((int) (cropView.left) + width);
+    }
+    return Bitmap.createBitmap(bm, (int) (cropView.left), (int) (cropView.top), width, (int) cropView.height());
+  }
+
+  public Bitmap crop(RectF cropView, Bitmap bm, View view) {
+    bm = Bitmap.createScaledBitmap(bm, view.getWidth(), view.getHeight(), true);
+    int width = (int) cropView.width();
+    if ((int) (cropView.left) + width > view.getWidth()) {
+      width += view.getWidth() - ((int) (cropView.left) + width);
     }
     return Bitmap.createBitmap(bm, (int) (cropView.left), (int) (cropView.top), width, (int) cropView.height());
   }
@@ -139,19 +158,21 @@ public class ImageCropper extends AppCompatImageView {
         params.width = new_width;
         setLayoutParams(params);
 
-        if (new_height > new_width) {
-          width = new_width * 0.7f;
-          height = width * aspectRatioY / aspectRatioX;
-        } else {
-          height = new_height * 0.7f;
-          width = height * aspectRatioX / aspectRatioY;
+        if (!cropViewUpdated) {
+          if (new_height > new_width) {
+            width = new_width * 0.7f;
+            height = width * aspectRatioY / aspectRatioX;
+          } else {
+            height = new_height * 0.7f;
+            width = height * aspectRatioX / aspectRatioY;
+          }
+          x = new_width * 0.1f;
+          y = new_height / 2f - height / 2f;
         }
-        x = new_width * 0.1f;
-        y = new_height / 2f - height / 2f;
-
+        cropViewUpdated = false;
         bm = ((BitmapDrawable) getDrawable()).getBitmap();
-
       }
+      
       cropView = new RectF(x, y, x + width, y + height);
 
       canvas.drawRect(0, 0, getWidth(), cropView.top, black_layer);
@@ -186,7 +207,7 @@ public class ImageCropper extends AppCompatImageView {
     float raw_y = event.getY();
     switch (event.getAction()) {
       case MotionEvent.ACTION_DOWN:
-        if(cropView==null){
+        if (cropView == null) {
           break;
         }
         start_x = raw_x;

@@ -28,4 +28,6 @@
 
   //error
   <string name="cannot_fetch_image">لا يمكن قرأت الصورة</string>
+  <string name="please_crop_all_the_images">برجاء التأكد من ان جميع الصور تم تعديلها</string>
+  <string name="max_images_are">عدد الصور الأقصي هو</string>
 </resources>

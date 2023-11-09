@@ -52,6 +52,7 @@ import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class PickerCameraActivity extends AppCompatActivity {
@@ -281,7 +282,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       permissionFlag = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
     if (permissionFlag) {
-      startActivityForResult(new Intent(this, Gallery.class), GALLERY_REQUEST_CODE);
+      startActivityForResult(new Intent(this, Gallery.class).putExtra("maxImagesNumber",maxImagesSize-imageTurn), GALLERY_REQUEST_CODE);
     } else {
       String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
       int READ_WRITE_REQUEST_PERMISSION = 20;
@@ -626,8 +627,10 @@ public class PickerCameraActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
 
     if (resultCode == RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
-      String path = data.getStringExtra("path");
-      addImageToList(new File(path));
+      ArrayList<String> paths = data.getStringArrayListExtra("paths");
+      for(int i=0;i<paths.size();i++) {
+        addImageToList(new File(paths.get(i)));
+      }
     }
   }
 
