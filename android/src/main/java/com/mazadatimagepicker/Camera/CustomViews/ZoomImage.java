@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.jsibbold.zoomage.ZoomageView;
 import com.mazadatimagepicker.R;
@@ -15,6 +16,8 @@ public class ZoomImage extends ZoomageView {
 
   Paint mainColor;
   boolean showGrid = true;
+
+  private ZoomListener zoomListener;
   public ZoomImage(Context context) {
     super(context);
     init();
@@ -26,9 +29,15 @@ public class ZoomImage extends ZoomageView {
   }
 
   private void init(){
+    setDoubleTapToZoom(false);
     mainColor = new Paint();
     mainColor.setAntiAlias(true);
     mainColor.setColor(getResources().getColor(R.color.turquoise_blue));
+    setScaleRange(0.6f,150);
+  }
+
+  public void setZoomListener(ZoomListener zoomListener){
+    this.zoomListener = zoomListener;
   }
 
   public void setShowGrid(boolean showGrid) {
@@ -47,5 +56,12 @@ public class ZoomImage extends ZoomageView {
       canvas.drawRect(cropView.left + cropView.width() * 0.33f - 2, cropView.top, cropView.left + cropView.width() * 0.33f + 2, cropView.bottom, mainColor);
       canvas.drawRect(cropView.left + cropView.width() * 0.66f - 2, cropView.top, cropView.left + cropView.width() * 0.66f + 2, cropView.bottom, mainColor);
     }
+    if(zoomListener!=null){
+      zoomListener.onZoomChangeScale(getCurrentScaleFactor());
+    }
+  }
+
+  public interface ZoomListener{
+    void onZoomChangeScale(float zoomScale);
   }
 }

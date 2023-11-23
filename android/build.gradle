@@ -169,6 +169,7 @@ dependencies {
   //recyclerview
   implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
+  implementation "commons-io:commons-io:2.7"
 // From node_modules
 }
 

@@ -4,9 +4,11 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/black"
   tools:context=".Camera.Gallery.Gallery">
-
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000"/>
   <com.mazadatimagepicker.Camera.CustomViews.ImageCropper
     android:id="@+id/image_cropper"
     android:layout_width="match_parent"
@@ -22,6 +24,7 @@
     android:layout_height="40dp"
     android:layout_marginBottom="16dp"
     android:src="@drawable/ic_crop"
+    android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@+id/recycler"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent" />
@@ -30,19 +33,30 @@
     android:id="@+id/recycler"
     android:layout_width="wrap_content"
     android:layout_height="80dp"
+    android:layout_marginBottom="16dp"
+    android:visibility="gone"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:layout_marginBottom="16dp"/>
+    app:layout_constraintStart_toStartOf="parent" />
 
   <Button
     android:id="@+id/done_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@android:color/transparent"
     android:text="@string/done"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <ProgressBar
+    android:id="@+id/progress"
+    android:layout_width="87dp"
+    android:layout_height="87dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:layout_margin="8dp"
-    android:background="@android:color/transparent"/>
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

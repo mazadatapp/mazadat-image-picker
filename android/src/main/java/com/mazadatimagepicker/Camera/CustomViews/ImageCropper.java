@@ -98,16 +98,6 @@ public class ImageCropper extends AppCompatImageView {
     }
     return Bitmap.createBitmap(bm, (int) (cropView.left), (int) (cropView.top), width, (int) cropView.height());
   }
-
-  public Bitmap crop(RectF cropView, Bitmap bm, View view) {
-    bm = Bitmap.createScaledBitmap(bm, view.getWidth(), view.getHeight(), true);
-    int width = (int) cropView.width();
-    if ((int) (cropView.left) + width > view.getWidth()) {
-      width += view.getWidth() - ((int) (cropView.left) + width);
-    }
-    return Bitmap.createBitmap(bm, (int) (cropView.left), (int) (cropView.top), width, (int) cropView.height());
-  }
-
   @Override
   public void setImageBitmap(Bitmap bm) {
     super.setImageBitmap(bm);
@@ -172,7 +162,7 @@ public class ImageCropper extends AppCompatImageView {
         cropViewUpdated = false;
         bm = ((BitmapDrawable) getDrawable()).getBitmap();
       }
-      
+
       cropView = new RectF(x, y, x + width, y + height);
 
       canvas.drawRect(0, 0, getWidth(), cropView.top, black_layer);

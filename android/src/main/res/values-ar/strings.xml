@@ -16,6 +16,9 @@
   <string name="zoom_hint">استخدم إصبعين لتقريب الصورة.</string>
   <string name="rotate_hint">واصل الضغط للف الصورة</string>
 
+  //gallery
+  <string name="proccessing_images">معالجة الصور</string>
+
   //confirmation dialog
   <string name="are_you_sure_you_want_to_close">هل أنت متأكد أنك تريد الإغلاق؟</string>
   <string name="cancel">إلغاء</string>

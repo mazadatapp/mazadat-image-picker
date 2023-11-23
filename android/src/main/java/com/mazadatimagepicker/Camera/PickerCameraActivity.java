@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -115,6 +116,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private Camera camera;
   private boolean cameraPermissionEnabled = false;
   private boolean canPressDone = false;
+  private float oldZoomScale=0;
 
   @SuppressLint("SetTextI18n")
   @Override
@@ -222,7 +224,17 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     setHintText();
 
+    imageCropper.setZoomListener(zoomScale -> {
+      if(zoomScale != oldZoomScale){
+        confirmIm.setAlpha(1.0f);
+        declineIm.setAlpha(1.0f);
 
+        confirmIm.setEnabled(true);
+        declineIm.setEnabled(true);
+        editType = EditModeTypes.CROP;
+        disableDoneBtn();
+      }
+    });
   }
 
   private void downloadImage(String url) {
@@ -456,7 +468,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   public void editOrCapturePhoto(int position) {
 
-    if (imageItems.get(position).getFile() != null) {
+    if (imageItems.get(position).getFile() != null && editType == EditModeTypes.NOTHING) {
 
       selectedEditIndex = position;
       selectedPosition = position;
@@ -476,6 +488,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       cropBtn.setAlpha(1.0f);
       rotateBtn.setAlpha(1.0f);
       deleteBtn.setAlpha(1.0f);
+      cropPressed();
 
     } else if (imageItems.get(position).getFile() == null && isEditModeOn && editType == EditModeTypes.NOTHING) {
       resetAndOpenCamera();
@@ -511,23 +524,29 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void cropPressed() {
     if (isEditModeOn && editType == EditModeTypes.NOTHING) {
-      editType = EditModeTypes.CROP;
       setHintText();
       cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropBlue, null, null);
       imageCropper.setVisibility(View.VISIBLE);
-      image.setVisibility(View.GONE);
+      image.setVisibility(View.INVISIBLE);
       imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
       imageCropper.reset();
       declineIm.setVisibility(View.VISIBLE);
       confirmIm.setVisibility(View.VISIBLE);
-      confirmIm.setAlpha(1.0f);
+      confirmIm.setAlpha(0.5f);
+      declineIm.setAlpha(0.5f);
 
-      disableDoneBtn();
+      confirmIm.setEnabled(false);
+      declineIm.setEnabled(false);
+
+      oldZoomScale = imageCropper.getCurrentScaleFactor();
     }
   }
 
   private void rotatePressed() {
-    if (isEditModeOn && editType == EditModeTypes.NOTHING) {
+    if (isEditModeOn && (editType == EditModeTypes.NOTHING || imageCropper.getCurrentScaleFactor() == oldZoomScale)) {
+      if(imageCropper.getCurrentScaleFactor() == oldZoomScale){
+        resetPressed();
+      }
       editType = EditModeTypes.ROTATE;
       setHintText();
       rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateBlue, null, null);
@@ -535,6 +554,10 @@ public class PickerCameraActivity extends AppCompatActivity {
       declineIm.setVisibility(View.VISIBLE);
       confirmIm.setVisibility(View.VISIBLE);
       confirmIm.setAlpha(1.0f);
+      declineIm.setAlpha(1.0f);
+
+      confirmIm.setEnabled(true);
+      declineIm.setEnabled(true);
       rotateImage();
       disableDoneBtn();
     } else if (isEditModeOn && editType == EditModeTypes.ROTATE) {

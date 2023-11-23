@@ -1,18 +1,23 @@
 package com.mazadatimagepicker.Camera.Gallery;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,12 +28,14 @@ import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Gallery extends AppCompatActivity {
+public class Gallery extends Activity {
   final int SELECT_PICTURE = 20;
   FileUtils fileUtils;
+  ProgressBar Progress;
   ImageCropper imageCropper;
   RecyclerView galleryRecycler;
   ImageView cropIm;
@@ -43,8 +50,9 @@ public class Gallery extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_gallery);
     imageCropper = findViewById(R.id.image_cropper);
+    Progress = findViewById(R.id.progress);
     galleryRecycler = findViewById(R.id.recycler);
-    maxNumberOfImages = getIntent().getIntExtra("maxImagesNumber",1);
+    maxNumberOfImages = getIntent().getIntExtra("maxImagesNumber", 1);
     cropIm = findViewById(R.id.cropIm);
     doneBtn = findViewById(R.id.done_btn);
     fileUtils = new FileUtils(this);
@@ -56,7 +64,7 @@ public class Gallery extends AppCompatActivity {
     Intent chooseIntent = new Intent();
     chooseIntent.setType("image/*");
     chooseIntent.setAction(Intent.ACTION_GET_CONTENT);
-    chooseIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, maxNumberOfImages>1);
+    chooseIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, maxNumberOfImages > 1);
     startActivityForResult(Intent.createChooser(chooseIntent, "Select Picture"), SELECT_PICTURE);
 
     cropIm.setOnClickListener(view -> cropImagePressed());
@@ -64,24 +72,26 @@ public class Gallery extends AppCompatActivity {
   }
 
   private void donePressed() {
-    boolean allCropped = true;
-    for (int i = 0; i < galleryItemModels.size(); i++) {
-      if (!galleryItemModels.get(i).isCropped()) {
-        allCropped = false;
-      }
-    }
-    if (allCropped) {
+    doneBtn.setVisibility(View.GONE);
+    Progress.setVisibility(View.VISIBLE);
+    AsyncTask.execute(() -> {
       ArrayList<String> paths = new ArrayList<>();
       for (int i = 0; i < galleryItemModels.size(); i++) {
-        paths.add(galleryItemModels.get(i).getCroppedFile().getPath());
+        if (galleryItemModels.get(i).isCropped()) {
+          paths.add(galleryItemModels.get(i).getCroppedFile().getPath());
+        } else {
+          int width = getResources().getDisplayMetrics().widthPixels;
+          Bitmap fullBitmap = ImageUtils.createBitmap(width, (int) (width * 3f / 4f), galleryItemModels.get(i).getBitmap());
+          File file = ImageUtils.bitmapToFile(this, fullBitmap);
+          paths.add(file.getPath());
+        }
       }
       Intent intent = new Intent();
       intent.putStringArrayListExtra("paths", paths);
       setResult(RESULT_OK, intent);
       finish();
-    } else {
-      Toast.makeText(this, getString(R.string.please_crop_all_the_images), Toast.LENGTH_SHORT).show();
-    }
+    });
+
   }
 
   private void cropImagePressed() {
@@ -102,7 +112,7 @@ public class Gallery extends AppCompatActivity {
         intent.putStringArrayListExtra("paths", paths);
         setResult(RESULT_OK, intent);
         finish();
-      }else if(adapter.selectedPosition<galleryItemModels.size()-1 && !galleryItemModels.get(adapter.selectedPosition+1).isCropped()){
+      } else if (adapter.selectedPosition < galleryItemModels.size() - 1 && !galleryItemModels.get(adapter.selectedPosition + 1).isCropped()) {
         switchImage(adapter.selectedPosition + 1);
       }
 
@@ -127,46 +137,65 @@ public class Gallery extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
 
     if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
-      if (data.getClipData() != null) {
-        ClipData mClipData = data.getClipData();
+      Progress.setVisibility(View.VISIBLE);
+      AsyncTask.execute(() -> {
+        if (data.getClipData() != null) {
+          ClipData mClipData = data.getClipData();
 
-        int max = Math.min(mClipData.getItemCount(), maxNumberOfImages);
-        if (mClipData.getItemCount() > maxNumberOfImages) {
-          Toast.makeText(this, getString(R.string.max_images_are)+" "+maxNumberOfImages, Toast.LENGTH_SHORT).show();
-        }
-        for (int i = 0; i < max; i++) {
-          ClipData.Item item = mClipData.getItemAt(i);
-          GalleryItemModel model = uriToGalleryModel(item.getUri());
-          if (model != null) {
-            galleryItemModels.addLast(model);
+
+          for (int i = 0; i < mClipData.getItemCount(); i++) {
+            ClipData.Item item = mClipData.getItemAt(i);
+            GalleryItemModel model = uriToGalleryModel(item.getUri());
+            if (model != null) {
+              galleryItemModels.addLast(model);
+            }
           }
-        }
-        if (galleryItemModels.size() > 1) {
-          galleryRecycler.setVisibility(View.VISIBLE);
-          imageCropper.setImageBitmap(galleryItemModels.getFirst().getBitmap());
-          adapter.notifyDataSetChanged();
-        } else if (galleryItemModels.size() == 1) {
-          galleryRecycler.setVisibility(View.GONE);
-          doneBtn.setVisibility(View.GONE);
-          imageCropper.setImageBitmap(galleryItemModels.getFirst().getBitmap());
-        } else {
-          Toast.makeText(this, getString(R.string.cannot_fetch_image), Toast.LENGTH_SHORT).show();
-          finish();
-        }
-      } else if (data.getData() != null) {
-        Uri imageUri = data.getData();
-        GalleryItemModel model = uriToGalleryModel(imageUri);
-        galleryItemModels.addLast(model);
-        if (model == null) {
-          Toast.makeText(this, getString(R.string.cannot_fetch_image), Toast.LENGTH_SHORT).show();
-          finish();
-        } else {
-          galleryRecycler.setVisibility(View.GONE);
-          doneBtn.setVisibility(View.GONE);
-          imageCropper.setImageBitmap(model.getBitmap());
-        }
-      }
 
+          if (galleryItemModels.size() > maxNumberOfImages) {
+            runOnUiThread(() -> {
+              Toast.makeText(this, getString(R.string.max_images_are) + " " + maxNumberOfImages, Toast.LENGTH_SHORT).show();
+            });
+            int diff = galleryItemModels.size() - maxNumberOfImages;
+            for (int i = 0; i < diff; i++) {
+              galleryItemModels.removeLast();
+            }
+          }
+          runOnUiThread(() -> {
+            if (galleryItemModels.size() > 0) {
+//              galleryRecycler.setVisibility(View.VISIBLE);
+//              imageCropper.setImageBitmap(galleryItemModels.getFirst().getBitmap());
+//              adapter.notifyDataSetChanged();
+//            } else if (galleryItemModels.size() == 1) {
+//              galleryRecycler.setVisibility(View.GONE);
+//              doneBtn.setVisibility(View.GONE);
+//              imageCropper.setImageBitmap(galleryItemModels.getFirst().getBitmap());
+              donePressed();
+            } else {
+              Toast.makeText(this, getString(R.string.cannot_fetch_image), Toast.LENGTH_SHORT).show();
+              finish();
+            }
+//            processingCl.setVisibility(View.GONE);
+          });
+
+        } else if (data.getData() != null) {
+          Uri imageUri = data.getData();
+          GalleryItemModel model = uriToGalleryModel(imageUri);
+          galleryItemModels.addLast(model);
+          runOnUiThread(() -> {
+            if (model == null) {
+              Toast.makeText(this, getString(R.string.cannot_fetch_image), Toast.LENGTH_SHORT).show();
+              finish();
+            } else {
+              donePressed();
+//              galleryRecycler.setVisibility(View.GONE);
+//              doneBtn.setVisibility(View.GONE);
+//              imageCropper.setImageBitmap(model.getBitmap());
+            }
+            //processingCl.setVisibility(View.GONE);
+          });
+
+        }
+      });
     } else {
       finish();
     }
@@ -174,8 +203,10 @@ public class Gallery extends AppCompatActivity {
 
   private GalleryItemModel uriToGalleryModel(Uri selectedImageUri) {
     try {
+      File temp=createTmpFileFromUri(selectedImageUri,"test.png");
       Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
       String path = fileUtils.getPath(selectedImageUri);
+      Log.i("datadata",bitmap.getWidth()+" "+bitmap.getHeight()+" "+createTmpFileFromUri(selectedImageUri,"test.png").length()+"");
       Matrix matrix = new Matrix();
       int rotation = 0;
       try {
@@ -198,11 +229,28 @@ public class Gallery extends AppCompatActivity {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
       } else if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        Log.i("datadata",bitmap.getWidth()+" "+bitmap.getHeight());
+
       }
       return new GalleryItemModel(bitmap);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     }
+
+
   }
+
+  private File createTmpFileFromUri(Uri uri, String fileName) {
+    File file = null;
+    try {
+      InputStream stream = getContentResolver().openInputStream(uri);
+      file = File.createTempFile(fileName, "", getCacheDir());
+      org.apache.commons.io.FileUtils.copyInputStreamToFile(stream,file);
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+    return file;
+  }
+
 }

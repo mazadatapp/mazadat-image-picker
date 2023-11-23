@@ -18,7 +18,7 @@
     <activity
       android:name=".Camera.Gallery.Gallery"
       android:exported="false"
-      android:theme="@style/FullScreen"/>
+      android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
     <activity
       android:name=".Camera.PickerCameraActivity"
       android:exported="false"
