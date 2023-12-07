@@ -71,12 +71,12 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void editPhoto(String path, String lang, Promise promise) {
+  public void editPhoto(String[] paths, String lang, Promise promise) {
     this.promise = promise;
     setLocale(getCurrentActivity(), lang);
     Intent intent = new Intent(getCurrentActivity(), PickerCameraActivity.class);
     intent.putExtra("editOnlyOnePhoto", true);
-    intent.putExtra("path", path);
+    intent.putExtra("paths", paths);
     intent.putExtra("lang", lang);
 
     Objects.requireNonNull(getCurrentActivity()).startActivity(intent);

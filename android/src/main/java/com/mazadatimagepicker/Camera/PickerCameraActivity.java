@@ -76,8 +76,8 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private Button doneBtn;
 
-  private ImageView confirmIm;
-  private ImageView declineIm;
+  private TextView confirmIm;
+  private TextView declineIm;
 
   private Button galleryBtn;
 
@@ -186,28 +186,29 @@ public class PickerCameraActivity extends AppCompatActivity {
     }
 
     if (editOnlyOnePhoto) {
-      String editPhotoPath = getIntent().getStringExtra("path");
-      if (editPhotoPath.contains("https://") || editPhotoPath.contains("http://")) {
-
-        downloadTv.setVisibility(View.VISIBLE);
-        downloadPb.setVisibility(View.VISIBLE);
-        adapter.notifyItemChanged(0);
-        previewView.setVisibility(View.GONE);
-        editCl.setVisibility(View.VISIBLE);
-
-        doneBtn.setBackgroundResource(R.drawable.custom_gray_round_15);
-        doneBtn.setTextColor(getResources().getColor(R.color.black_26));
-        canPressDone = false;
-        doneBtn.setText(getString(R.string.done) + " (1)");
-        downloadImage(editPhotoPath);
-      } else {
-        imageItems.get(0).setFile(new File(editPhotoPath));
-        doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
-        doneBtn.setTextColor(getResources().getColor(R.color.white));
-        canPressDone = true;
-        doneBtn.setText(getString(R.string.done) + " (1)");
-        editOrCapturePhoto(0);
-      }
+      String[] editPhotoPath = getIntent().getStringArrayExtra("paths");
+//      for(int i=0;i<editPhotoPath.length;i++)
+//      if (editPhotoPath.contains("https://") || editPhotoPath.contains("http://")) {
+//
+//        downloadTv.setVisibility(View.VISIBLE);
+//        downloadPb.setVisibility(View.VISIBLE);
+//        adapter.notifyItemChanged(0);
+//        previewView.setVisibility(View.GONE);
+//        editCl.setVisibility(View.VISIBLE);
+//
+//        doneBtn.setBackgroundResource(R.drawable.custom_gray_round_15);
+//        doneBtn.setTextColor(getResources().getColor(R.color.black_26));
+//        canPressDone = false;
+//        doneBtn.setText(getString(R.string.done) + " (1)");
+//        downloadImage(editPhotoPath);
+//      } else {
+//        imageItems.get(0).setFile(new File(editPhotoPath));
+//        doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
+//        doneBtn.setTextColor(getResources().getColor(R.color.white));
+//        canPressDone = true;
+//        doneBtn.setText(getString(R.string.done) + " (1)");
+//        editOrCapturePhoto(0);
+//      }
       recycler.setVisibility(View.GONE);
       captureHintTv.setVisibility(View.GONE);
       maxImagesTv.setVisibility(View.GONE);

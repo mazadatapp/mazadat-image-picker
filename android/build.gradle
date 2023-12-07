@@ -170,6 +170,8 @@ dependencies {
   implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
   implementation "commons-io:commons-io:2.7"
+
+  implementation 'com.github.yuriy-budiyev:circular-progress-bar:1.2.3'
 // From node_modules
 }
 

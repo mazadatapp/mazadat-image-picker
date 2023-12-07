@@ -6,6 +6,8 @@
   <string name="rotate">استدارة</string>
   <string name="delete">مسح</string>
   <string name="done">تم</string>
+  <string name="apply">تأكيد</string>
+  <string name="restore">استرجع</string>
   <string name="max_number_selected_images_is">الحد الأقصى لعدد الصور المختارة هو</string>
   <string name="select_to_edit">تعديل</string>
   <string name="front_id">الوجه الأمامى</string>

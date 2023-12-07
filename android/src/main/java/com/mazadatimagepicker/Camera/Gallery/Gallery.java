@@ -13,15 +13,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.budiyev.android.circularprogressbar.CircularProgressBar;
 import com.mazadatimagepicker.Camera.CustomViews.ImageCropper;
 import com.mazadatimagepicker.Camera.Utils.FileUtils;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
@@ -35,7 +33,7 @@ import java.util.LinkedList;
 public class Gallery extends Activity {
   final int SELECT_PICTURE = 20;
   FileUtils fileUtils;
-  ProgressBar Progress;
+  CircularProgressBar progress;
   ImageCropper imageCropper;
   RecyclerView galleryRecycler;
   ImageView cropIm;
@@ -50,7 +48,7 @@ public class Gallery extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_gallery);
     imageCropper = findViewById(R.id.image_cropper);
-    Progress = findViewById(R.id.progress);
+    progress = findViewById(R.id.progress);
     galleryRecycler = findViewById(R.id.recycler);
     maxNumberOfImages = getIntent().getIntExtra("maxImagesNumber", 1);
     cropIm = findViewById(R.id.cropIm);
@@ -69,11 +67,14 @@ public class Gallery extends Activity {
 
     cropIm.setOnClickListener(view -> cropImagePressed());
     doneBtn.setOnClickListener(view -> donePressed());
+
+    progress.setIndeterminate(true);
+
   }
 
   private void donePressed() {
     doneBtn.setVisibility(View.GONE);
-    Progress.setVisibility(View.VISIBLE);
+    progress.setVisibility(View.VISIBLE);
     AsyncTask.execute(() -> {
       ArrayList<String> paths = new ArrayList<>();
       for (int i = 0; i < galleryItemModels.size(); i++) {
@@ -137,7 +138,7 @@ public class Gallery extends Activity {
     super.onActivityResult(requestCode, resultCode, data);
 
     if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
-      Progress.setVisibility(View.VISIBLE);
+      progress.setVisibility(View.VISIBLE);
       AsyncTask.execute(() -> {
         if (data.getClipData() != null) {
           ClipData mClipData = data.getClipData();
@@ -203,10 +204,10 @@ public class Gallery extends Activity {
 
   private GalleryItemModel uriToGalleryModel(Uri selectedImageUri) {
     try {
-      File temp=createTmpFileFromUri(selectedImageUri,"test.png");
+      File temp = createTmpFileFromUri(selectedImageUri, "test.png");
       Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
       String path = fileUtils.getPath(selectedImageUri);
-      Log.i("datadata",bitmap.getWidth()+" "+bitmap.getHeight()+" "+createTmpFileFromUri(selectedImageUri,"test.png").length()+"");
+      Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight() + " " + createTmpFileFromUri(selectedImageUri, "test.png").length() + "");
       Matrix matrix = new Matrix();
       int rotation = 0;
       try {
@@ -229,7 +230,7 @@ public class Gallery extends Activity {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
       } else if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        Log.i("datadata",bitmap.getWidth()+" "+bitmap.getHeight());
+        Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight());
 
       }
       return new GalleryItemModel(bitmap);
@@ -246,8 +247,8 @@ public class Gallery extends Activity {
     try {
       InputStream stream = getContentResolver().openInputStream(uri);
       file = File.createTempFile(fileName, "", getCacheDir());
-      org.apache.commons.io.FileUtils.copyInputStreamToFile(stream,file);
-    } catch (Exception e){
+      org.apache.commons.io.FileUtils.copyInputStreamToFile(stream, file);
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return file;
