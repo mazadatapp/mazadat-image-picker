@@ -8,7 +8,8 @@
 
 import Foundation
 import UIKit
-extension CameraController{
+extension CameraController:ImageScrollViewDelegate{
+    
     func drawUI(){
         
         var statusBarHeight=getStatusBarHeight()
@@ -177,6 +178,7 @@ extension CameraController{
         addConstraints(currentView: editImage, MainView: editView, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0, bottom: true, bottomValue: 0, leading: true, leadingValue: 0, trailing: true, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
         editView.addSubview(imageCropper)
+        imageCropper.imageScrollViewDelegate=self
         addConstraints(currentView: imageCropper, MainView: editView, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0, bottom: true, bottomValue: 0, leading: true, leadingValue: 0, trailing: true, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
         editView.addSubview(indicator)
@@ -289,10 +291,21 @@ extension CameraController{
         if(imageTurn==maxImagesSize || editMode){
             return
         }
-        let controller=GalleryController()
-        controller.setCameraController(cameraController: self)
-        controller.modalPresentationStyle = .overFullScreen
-        present(controller, animated: true)
+        
+        if #available(iOS 14.0, *) {
+            let controller=GallerMultiSelectController()
+            controller.setCameraController(cameraController: self, maxImages: maxImagesSize - imageItems.count)
+            controller.modalPresentationStyle = .overFullScreen
+            present(controller, animated: true)
+        } else {
+            let controller=GalleryController()
+            controller.setCameraController(cameraController: self)
+            controller.modalPresentationStyle = .overFullScreen
+            present(controller, animated: true)
+        }
+        
+        
+        
     }
     
     @objc func capturePressed(_ sender: AnyObject) {
@@ -308,14 +321,20 @@ extension CameraController{
     
     @objc func cropPressed(_ sender: AnyObject) {
         if((editMode || editPhotoPath != nil) && editModeType == EditModeTypes.NOTHING){
-            disableDoneBtn()
-            editModeType = EditModeTypes.CROP
+            scrollingBegin = false
+            
             setCameraHintText()
             let blueCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color: Colors.blueColor())
             cropBtn.setImage(blueCropImage, for: .normal)
             
             confirmBtn.isHidden=false
             declineBtn.isHidden=false
+            
+            confirmBtn.alpha = 0.5
+            declineBtn.alpha = 0.5
+            
+            confirmBtn.isEnabled = false
+            declineBtn.isEnabled = false
             
             imageCropper.isHidden = false
             imageCropper.display(image: imageItems[editSelectedIndex].image)
@@ -329,7 +348,10 @@ extension CameraController{
     }
     
     @objc func rotatePressed(_ sender: AnyObject) {
-        if(editMode && editModeType == EditModeTypes.NOTHING){
+        if(editMode && (editModeType == EditModeTypes.NOTHING || !scrollingBegin)){
+            if(!scrollingBegin){
+                cancelCrop()
+            }
             disableDoneBtn()
             editModeType = EditModeTypes.ROTATE
             setCameraHintText()
@@ -542,6 +564,12 @@ extension CameraController{
         confirmBtn.isHidden=true
         declineBtn.isHidden=true
         
+        confirmBtn.alpha = 1.0
+        declineBtn.alpha = 1.0
+        
+        confirmBtn.isEnabled = true
+        declineBtn.isEnabled = true
+        
         editModeType = EditModeTypes.NOTHING
         
         editImageRotation = 0
@@ -555,5 +583,42 @@ extension CameraController{
         enableDoneBtn()
     }
     
+    func cancelCrop() {
+        let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
+        cropBtn.setImage(whiteCropImage, for: .normal)
+        
+        imageCropper.isHidden=true
+        editImage.isHidden=false
+        confirmBtn.isHidden=true
+        declineBtn.isHidden=true
+        
+        confirmBtn.alpha = 1.0
+        declineBtn.alpha = 1.0
+        
+        confirmBtn.isEnabled = true
+        declineBtn.isEnabled = true
+        
+        gridVertical1.isHidden = true
+        gridVertical2.isHidden = true
+        gridHorizontal1.isHidden = true
+        gridHorizontal2.isHidden = true
+    }
+    
+    func imageScrollViewDidChangeOrientation(imageScrollView: ImageScrollView) {
+    
+    }
+    
+    func zoomBegin() {
+        confirmBtn.alpha = 1.0
+        declineBtn.alpha = 1.0
+        
+        confirmBtn.isEnabled = true
+        declineBtn.isEnabled = true
+        
+        scrollingBegin = true
+        
+        disableDoneBtn()
+        editModeType = EditModeTypes.CROP
+    }
     
 }

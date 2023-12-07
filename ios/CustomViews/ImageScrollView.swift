@@ -10,6 +10,7 @@ import UIKit
 
 @objc public protocol ImageScrollViewDelegate: UIScrollViewDelegate {
     func imageScrollViewDidChangeOrientation(imageScrollView: ImageScrollView)
+    func zoomBegin()
 }
 
 open class ImageScrollView: UIScrollView {
@@ -237,8 +238,8 @@ open class ImageScrollView: UIScrollView {
         }
         
         
-        let maxScale = maxScaleFromMinScale*minScale
-        
+        var maxScale = maxScaleFromMinScale*minScale
+        maxScale = 150
         // don't let minScale exceed maxScale. (If the image is smaller than the screen, we don't want to force it to be zoomed.)
         if minScale > maxScale {
             minScale = maxScale
@@ -326,6 +327,7 @@ extension ImageScrollView: UIScrollViewDelegate {
     
     public func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         imageScrollViewDelegate?.scrollViewWillBeginZooming?(scrollView, with: view)
+        self.imageScrollViewDelegate?.zoomBegin()
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {

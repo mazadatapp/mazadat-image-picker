@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		50ACB347298BBC7F00E8D8ED /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ACB346298BBC7F00E8D8ED /* ImageScrollView.swift */; };
+		50C0DB702B0F985D006BDC90 /* GallerMultiSelectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C0DB6F2B0F985D006BDC90 /* GallerMultiSelectController.swift */; };
 		50CEEED429868730006C3166 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEED329868730006C3166 /* CameraController.swift */; };
 		50CEEED629868B8C006C3166 /* SwiftyCamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEED529868B8C006C3166 /* SwiftyCamViewController.swift */; };
 		50CEEED829868BA2006C3166 /* SwiftyCamViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEED729868BA2006C3166 /* SwiftyCamViewControllerDelegate.swift */; };
@@ -48,6 +49,7 @@
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libMazadatImagePicker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMazadatImagePicker.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ACB346298BBC7F00E8D8ED /* ImageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
+		50C0DB6F2B0F985D006BDC90 /* GallerMultiSelectController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GallerMultiSelectController.swift; sourceTree = "<group>"; };
 		50CEEED329868730006C3166 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		50CEEED529868B8C006C3166 /* SwiftyCamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyCamViewController.swift; sourceTree = "<group>"; };
 		50CEEED729868BA2006C3166 /* SwiftyCamViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyCamViewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				50CEEF072987BFD3006C3166 /* GalleryController.swift */,
+				50C0DB6F2B0F985D006BDC90 /* GallerMultiSelectController.swift */,
 			);
 			path = Gallery;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				50CEEF0C2987E772006C3166 /* EditModeTypes.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* MazadatImagePicker.swift in Sources */,
 				50CEEEEB2986A177006C3166 /* CameraCollection.swift in Sources */,
+				50C0DB702B0F985D006BDC90 /* GallerMultiSelectController.swift in Sources */,
 				50CEEEEE2986A1E0006C3166 /* ImageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

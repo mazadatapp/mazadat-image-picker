@@ -97,6 +97,11 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         
         confirmBtn.isHidden=true
         declineBtn.isHidden=true
+        confirmBtn.alpha = 1.0
+        declineBtn.alpha = 1.0
+        
+        confirmBtn.isEnabled = true
+        declineBtn.isEnabled = true
         
         galleryBtn.isHidden=false
         flashBtn.isHidden=false
