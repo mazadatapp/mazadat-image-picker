@@ -47,6 +47,22 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    android:visibility="gone"/>
+
+  <com.budiyev.android.circularprogressbar.CircularProgressBar
+    android:id="@+id/progress"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:backgroundStrokeColor="#00000000"
+    app:foregroundStrokeColor="#D0E9EB"
+    app:indeterminate="true"
+    android:visibility="gone"
+    app:backgroundStrokeWidth="2dp"
+    app:foregroundStrokeWidth="2dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

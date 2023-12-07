@@ -14,7 +14,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -116,7 +115,9 @@ public class PickerCameraActivity extends AppCompatActivity {
   private Camera camera;
   private boolean cameraPermissionEnabled = false;
   private boolean canPressDone = false;
-  private float oldZoomScale=0;
+  private float oldZoomScale = 0;
+
+  private int editIndex = -1;
 
   @SuppressLint("SetTextI18n")
   @Override
@@ -152,21 +153,13 @@ public class PickerCameraActivity extends AppCompatActivity {
     rotateBlue = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_rotate_blue, getTheme());
     rotateWhite = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_rotate, getTheme());
 
-    cameraHandler();
-
     maxImagesSize = getIntent().getIntExtra("maxImagesSize", 0);
-    boolean editOnlyOnePhoto = getIntent().getBooleanExtra("editOnlyOnePhoto", false);
+    boolean editPhotosMode = getIntent().getBooleanExtra("editPhotosMode", false);
     lang = getIntent().getStringExtra("lang");
     isIdVerification = getIntent().getBooleanExtra("isIdVerification", false);
 
     maxImagesTv.setText(String.format("%s %s", getString(R.string.max_number_selected_images_is), maxImagesSize));
 
-    imageItems = new LinkedList<>();
-    imageItems.addLast(new ImageItem());
-
-    adapter = new ImageItemsAdapter(this, imageItems);
-    recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-    recycler.setAdapter(adapter);
 
     captureIm.setOnClickListener(view -> capturePressed());
     flashIm.setOnClickListener(view -> flashPressed());
@@ -184,32 +177,24 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (isIdVerification) {
       maxImagesTv.setVisibility(View.INVISIBLE);
     }
-
-    if (editOnlyOnePhoto) {
+    imageItems = new LinkedList<>();
+    if (editPhotosMode) {
+      editIndex = getIntent().getIntExtra("index", -1);
       String[] editPhotoPath = getIntent().getStringArrayExtra("paths");
-//      for(int i=0;i<editPhotoPath.length;i++)
-//      if (editPhotoPath.contains("https://") || editPhotoPath.contains("http://")) {
-//
-//        downloadTv.setVisibility(View.VISIBLE);
-//        downloadPb.setVisibility(View.VISIBLE);
-//        adapter.notifyItemChanged(0);
-//        previewView.setVisibility(View.GONE);
-//        editCl.setVisibility(View.VISIBLE);
-//
-//        doneBtn.setBackgroundResource(R.drawable.custom_gray_round_15);
-//        doneBtn.setTextColor(getResources().getColor(R.color.black_26));
-//        canPressDone = false;
-//        doneBtn.setText(getString(R.string.done) + " (1)");
-//        downloadImage(editPhotoPath);
-//      } else {
-//        imageItems.get(0).setFile(new File(editPhotoPath));
-//        doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
-//        doneBtn.setTextColor(getResources().getColor(R.color.white));
-//        canPressDone = true;
-//        doneBtn.setText(getString(R.string.done) + " (1)");
-//        editOrCapturePhoto(0);
-//      }
-      recycler.setVisibility(View.GONE);
+      for (int i = 0; i < editPhotoPath.length; i++) {
+        if (editPhotoPath[i].contains("https://") || editPhotoPath[i].contains("http://")) {
+          imageItems.addLast(new ImageItem(editPhotoPath[i]));
+        } else {
+          imageItems.addLast(new ImageItem(new File(editPhotoPath[i])));
+        }
+        doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
+        doneBtn.setTextColor(getResources().getColor(R.color.white));
+        canPressDone = true;
+        doneBtn.setText(getString(R.string.done) + " (" + imageItems.size() + ")");
+        editOrCapturePhoto(0);
+      }
+
+      //recycler.setVisibility(View.GONE);
       captureHintTv.setVisibility(View.GONE);
       maxImagesTv.setVisibility(View.GONE);
       captureIm.setVisibility(View.GONE);
@@ -219,14 +204,19 @@ public class PickerCameraActivity extends AppCompatActivity {
 
 
     } else {
+      cameraHandler();
+      imageItems.addLast(new ImageItem());
       checkDoneButton();
       doneBtn.setText(getString(R.string.done) + " (0)");
     }
+    adapter = new ImageItemsAdapter(this, imageItems);
+    recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+    recycler.setAdapter(adapter);
 
     setHintText();
 
     imageCropper.setZoomListener(zoomScale -> {
-      if(zoomScale != oldZoomScale){
+      if (zoomScale != oldZoomScale) {
         confirmIm.setAlpha(1.0f);
         declineIm.setAlpha(1.0f);
 
@@ -295,7 +285,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       permissionFlag = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
     if (permissionFlag) {
-      startActivityForResult(new Intent(this, Gallery.class).putExtra("maxImagesNumber",maxImagesSize-imageTurn), GALLERY_REQUEST_CODE);
+      startActivityForResult(new Intent(this, Gallery.class).putExtra("maxImagesNumber", maxImagesSize - imageTurn), GALLERY_REQUEST_CODE);
     } else {
       String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
       int READ_WRITE_REQUEST_PERMISSION = 20;
@@ -336,8 +326,13 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void donePressed() {
-
-    if (!canPressDone) {
+    boolean imagesAreReady = true;
+    for (int i = 0; i < imageItems.size(); i++) {
+      if (imageItems.get(i).getUrl() != null) {
+        imagesAreReady = false;
+      }
+    }
+    if (!canPressDone || !imagesAreReady) {
       return;
     }
 
@@ -545,7 +540,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void rotatePressed() {
     if (isEditModeOn && (editType == EditModeTypes.NOTHING || imageCropper.getCurrentScaleFactor() == oldZoomScale)) {
-      if(imageCropper.getCurrentScaleFactor() == oldZoomScale){
+      if (imageCropper.getCurrentScaleFactor() == oldZoomScale) {
         resetPressed();
       }
       editType = EditModeTypes.ROTATE;
@@ -600,6 +595,17 @@ public class PickerCameraActivity extends AppCompatActivity {
     setHintText();
   }
 
+  public void reloadItem(int index) {
+    runOnUiThread(() -> {
+      recycler.post(() -> adapter.notifyItemChanged(index));
+      if (editIndex == index) {
+        editOrCapturePhoto(editIndex);
+      }
+    });
+
+
+  }
+
   private void confirmPressed() {
     if (editType == EditModeTypes.CROP) {
       imageCropper.setShowGrid(false);
@@ -652,7 +658,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     if (resultCode == RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
       ArrayList<String> paths = data.getStringArrayListExtra("paths");
-      for(int i=0;i<paths.size();i++) {
+      for (int i = 0; i < paths.size(); i++) {
         addImageToList(new File(paths.get(i)));
       }
     }

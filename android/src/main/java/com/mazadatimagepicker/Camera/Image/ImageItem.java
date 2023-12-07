@@ -8,6 +8,14 @@ public class ImageItem {
   public ImageItem() {
   }
 
+  public ImageItem(File file) {
+    this.file = file;
+  }
+
+  public ImageItem(String url) {
+    this.url = url;
+  }
+
   public File getFile() {
     return file;
   }

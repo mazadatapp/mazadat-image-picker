@@ -21,8 +21,8 @@ export function openCamera(length: number,lang: String): Promise<number> {
   return MazadatImagePicker.openCamera(length, lang);
 }
 
-export function editPhoto(path: String,lang: String): Promise<number> {
-  return MazadatImagePicker.editPhoto(path, lang);
+export function editPhoto(path: String,index: number,lang: String): Promise<number> {
+  return MazadatImagePicker.editPhoto(path,index, lang);
 }
 
 export function openIdVerification(lang: String): Promise<number> {
