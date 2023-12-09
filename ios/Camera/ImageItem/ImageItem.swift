@@ -10,8 +10,15 @@ import Foundation
 import UIKit
 class ImageItem {
     var image:UIImage!
-    
+    var path:String!
     init(){
         
+    }
+    init(path:String){
+        self.path=path
+    }
+    
+    init(image:UIImage){
+        self.image=image
     }
 }

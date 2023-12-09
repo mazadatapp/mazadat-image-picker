@@ -18,7 +18,6 @@ extension CameraController:ImageScrollViewDelegate{
         let viewHeight=view.frame.height - statusBarHeight
         
         var bottomArea:CGFloat=0
-        print(statusBarHeight)
         if #available(iOS 13.0, *) {
             let window = UIApplication.shared.windows.first
             statusBarHeight = window!.safeAreaInsets.top
@@ -81,13 +80,21 @@ extension CameraController:ImageScrollViewDelegate{
         //confirm button
         UIviews.addSubview(confirmBtn)
         confirmBtn.setImage(UIImage(named: "ic_picker_confirm"), for: .normal)
+        confirmBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 12)
+        confirmBtn.setTitle(lang == "en" ? "Apply" : "تأكيد", for: .normal)
         addConstraints(currentView: confirmBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.62*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 32, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+        confirmBtn.sizeToFit()
+        confirmBtn.centerVertically(padding: 1, lang: lang)
         confirmBtn.isHidden=true
         
         //decline button
         UIviews.addSubview(declineBtn)
         declineBtn.setImage(UIImage(named: "ic_picker_decline"), for: .normal)
+        declineBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 12)
+        declineBtn.setTitle(lang == "en" ? "Restore" : "استرجع", for: .normal)
         addConstraints(currentView: declineBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.62*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -32, width: false, widthValue: 0, height: false, heightValue: 0)
+        declineBtn.sizeToFit()
+        declineBtn.centerVertically(padding: 1, lang: lang)
         declineBtn.isHidden=true
         
         //collection view
@@ -191,6 +198,10 @@ extension CameraController:ImageScrollViewDelegate{
             indicator.style = .whiteLarge
         }
         
+        editView.addSubview(zoomIndicatior)
+        addConstraints(currentView: zoomIndicatior, MainView: editView, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+        zoomIndicatior.image = UIImage(named: "ic_picker_zoom")
+        zoomIndicatior.isHidden = true
 
         
         editView.isHidden=true
@@ -225,32 +236,45 @@ extension CameraController:ImageScrollViewDelegate{
         editView.addSubview(gridHorizontal2)
         
         if(editPhotoPath != nil){
-            if(editPhotoPath.contains("https://") || editPhotoPath.contains("http://")){
-                showPreviewLayer(flag: false)
-                editView.isHidden=false
-                doneBtn.backgroundColor = Colors.white38Color()
-                doneBtn.setTitleColor(Colors.black26Color(), for: .normal)
-                canPressDone = false
-                indicator.isHidden=false
-                downloadImage(url: editPhotoPath)
-            }else{
-                imageItems[0].image = UIImage(contentsOfFile: editPhotoPath!)
-                itemSelected(index: 0)
-                doneBtn.backgroundColor = Colors.blueColor()
-                canPressDone = true
+            var index=0
+            for path in editPhotoPath{
+                if(path.contains("https://") || path.contains("http://")){
+                    let localImage = checkImageExist(fileName: URL(string: path)!.lastPathComponent)
+                    if(localImage == nil){
+                        imageItems.append(ImageItem(path: path))
+                        downloadImage(url: path, index: index)
+                    }else{
+                        imageItems.append(ImageItem(image: localImage!))
+                        //imagesCollection.reloadItems(at: [IndexPath(row: index, section: 0)])
+                        if(selectedIndex == index){
+                            itemSelected(index: selectedIndex)
+                        }
+                    }
+                   
+                }else{
+                    imageItems.append(ImageItem(image: UIImage(contentsOfFile: path)!))
+                }
+                index+=1
             }
             
+            //itemSelected(index: 0)
+            doneBtn.backgroundColor = Colors.blueColor()
+            canPressDone = true
+            
+            
             galleryBtn.isHidden=true
-            imagesCollection.isHidden=true
+            //imagesCollection.isHidden=true
             cameraHintL.isHidden=true
             maxNoOfImagesL.isHidden=true
             captureBtn.isHidden=true
             flashBtn.isHidden=true
             deleteBtn.isHidden=true
             
-            doneBtn.setTitle(lang == "en" ? "Done (1)" : "(1) تم", for: .normal)
+            doneBtn.setTitle(lang == "en" ? "Done (\(imageItems.count))" : "(\(imageItems.count)) تم", for: .normal)
             
         }else{
+            selectedPosition=0
+            imageItems.append(ImageItem())
             checkDoneButton()
         }
         
@@ -268,23 +292,59 @@ extension CameraController:ImageScrollViewDelegate{
         
         flashBtn.addTarget(self, action: #selector(flashPressed(_:)), for: .touchUpInside)
     }
-    func downloadImage(url: String) {
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        let request = NSMutableURLRequest(url: URL(string: url)!)
-        request.httpMethod = "GET"
-        let task = session.dataTask(with: request as URLRequest, completionHandler: { [self] data,_,_ in
-            DispatchQueue.main.async { [self] in
-                imageItems[0].image = UIImage(data: data!)
-                itemSelected(index: 0)
-                doneBtn.backgroundColor = Colors.blueColor()
-                doneBtn.setTitleColor(Colors.whiteColor(), for: .normal)
-                canPressDone = true
-                indicator.isHidden=true
+    func downloadImage(url: String,index:Int) {
+        
+        let localImage = checkImageExist(fileName: URL(string: url)!.lastPathComponent)
+        if(localImage == nil){
+            let sessionConfig = URLSessionConfiguration.default
+            let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+            let request = NSMutableURLRequest(url: URL(string: url)!)
+            request.httpMethod = "GET"
+            let task = session.dataTask(with: request as URLRequest, completionHandler: { [self] data,_,_ in
+                DispatchQueue.main.async { [self] in
+                    imageItems[index].path = nil
+                    imageItems[index].image = UIImage(data: data!)
+                    if(selectedIndex == index){
+                        itemSelected(index: selectedIndex)
+                    }
+                    reloadCell(index: index)
+                    let isSaved = saveImage(image: UIImage(data: data!)!, fileName: URL(string: url)!.lastPathComponent)
+                }
+                
+            })
+            task.resume()
+        }
+    }
+    
+    func saveImage(image: UIImage,fileName:String) -> Bool {
+        let data = image.jpegData(compressionQuality: 1)
+        guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
+            return false
+        }
+        do {
+            try data!.write(to: directory.appendingPathComponent(fileName)!)
+            return true
+        } catch {
+            print(error.localizedDescription)
+            return false
+        }
+    }
+    
+    func checkImageExist(fileName:String) -> UIImage? {
+        
+        guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
+            return nil
+        }
+        let url = directory.appendingPathComponent(fileName)!
+        do{
+            let data = try Data(contentsOf: url)
+            if let image = UIImage(data: data){
+                return image
             }
-            
-        })
-        task.resume()
+        }catch let error{
+            return nil
+        }
+        return nil
     }
     
     @objc func openGallery(_ sender: AnyObject) {
@@ -319,7 +379,7 @@ extension CameraController:ImageScrollViewDelegate{
         flashBtn.setImage(isFlashOn ? UIImage(named: "ic_picker_flash_on") : UIImage(named: "ic_picker_flash_off"), for: .normal)
     }
     
-    @objc func cropPressed(_ sender: AnyObject) {
+    @objc func cropPressed(_ sender: Any?) {
         if((editMode || editPhotoPath != nil) && editModeType == EditModeTypes.NOTHING){
             scrollingBegin = false
             
@@ -344,6 +404,16 @@ extension CameraController:ImageScrollViewDelegate{
             gridVertical2.isHidden = false
             gridHorizontal1.isHidden = false
             gridHorizontal2.isHidden = false
+            
+            if(zoomFirstTimeOnly){
+                zoomFirstTimeOnly=false
+                zoomIndicatior.isHidden = false
+                UIView.animate(withDuration: 0.6, delay: 0.6, animations: { [self] in
+                    zoomIndicatior.alpha = 0
+                },completion: { [self]_ in
+                    zoomIndicatior.isHidden = true
+                })
+            }
         }
     }
     

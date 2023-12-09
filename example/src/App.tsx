@@ -18,8 +18,8 @@ export default function App() {
       }}></Button>
 
       <Button title='edit Photo' onPress={() => {
-        let paths='https://c8.alamy.com/comp/S1YB3E/natural-picture-S1YB3E.jpg,https://images.ctfassets.net/hrltx12pl8hq/6bi6wKIM5DDM5U1PtGVFcP/1c7fce6de33bb6575548a646ff9b03aa/nature-photography-pictures.jpg?fit=fill&w=600&h=400,https://c8.alamy.com/comp/R6F16B/beautiful-natural-picture-R6F16B.jpg'
-        editPhoto(paths,1, "en").then((value: string) => {
+        let paths = 'https://img.freepik.com/premium-photo/mountains-during-flowers-blossom-sunrise-flowers-mountain-hills-beautiful-natural-landscape-summer-time-mountainimage_647656-1502.jpg,https://images.ctfassets.net/hrltx12pl8hq/6bi6wKIM5DDM5U1PtGVFcP/1c7fce6de33bb6575548a646ff9b03aa/nature-photography-pictures.jpg?fit=fill&w=600&h=400,https://c8.alamy.com/comp/R6F16B/beautiful-natural-picture-R6F16B.jpg'
+        editPhoto(paths, 1, "en").then((value: string) => {
           console.log({ value })
           setResult(value)
         })

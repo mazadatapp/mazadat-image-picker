@@ -19,6 +19,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCell
         
         cell.editBtn.isHidden = imageItems[indexPath.row].image == nil
+        cell.loading.isHidden = imageItems[indexPath.row].path == nil
         cell.blackLayer.isHidden = imageItems[indexPath.row].image == nil
         cell.editBtn.isEnabled=false
         cell.editBtn.setTitle(lang == "en" ? "Select to edit" : "إضغط للتعديل", for: .normal)
@@ -26,6 +27,10 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.editBtn.centerVertically(padding: 2, lang: lang)
         if(imageItems[indexPath.row].image != nil){
             cell.image_.image = imageItems[indexPath.row].image
+        }else if(imageItems[indexPath.row].path != nil){
+            //cell.image_.image = imageItems[indexPath.row].image
+           // print("yes")
+           // cell.loading.isHidden = false
         }else{
             cell.image_.image = nil
         }
@@ -43,9 +48,10 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if(editModeType == EditModeTypes.NOTHING){
+        if(editModeType == EditModeTypes.NOTHING && imageItems[indexPath.row].path == nil){
             itemSelected(index: indexPath.row)
             selectedPosition = indexPath.row
+            
             collectionView.reloadData()
         }
     }
@@ -66,6 +72,11 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
             
             captureBtn.isHidden=true
             editSelectedIndex=index
+            selectedPosition = index
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: { [self] in
+                cropPressed(nil)
+            })
+            
         }else if(editModeType == EditModeTypes.NOTHING){
             resetUI()
             editMode = false

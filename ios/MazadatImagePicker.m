@@ -6,12 +6,11 @@ RCT_EXTERN_METHOD(openCamera:(int)length lang:(NSString *)lang
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(editPhoto:(NSString *)path lang:(NSString *)lang
+RCT_EXTERN_METHOD(editPhoto:(NSString *)path selectedIndex:(int *)selectedIndex lang:(NSString *)lang
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(openIdVerification:(NSString *)lang
-                 resolve:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(openIdVerification:(NSString *)lang resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject)
 
 + (BOOL)requiresMainQueueSetup

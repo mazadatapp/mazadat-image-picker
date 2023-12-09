@@ -31,6 +31,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     let editView=UIView()
     let editImage=UIImageView()
     let indicator=UIActivityIndicatorView()
+    let zoomIndicatior=UIImageView()
     let imageCropper=ImageScrollView()
     
     var scrollingBegin=false
@@ -46,7 +47,8 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var editSelectedIndex = -1
     var originalImage:UIImage!
     var editImageRotation:Double=0
-    var editPhotoPath:String!
+    var editPhotoPath:[String]!
+    var selectedIndex:Int!
     
     var gridVertical1:UIView!
     var gridVertical2:UIView!
@@ -56,14 +58,15 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var cameraOverlay:CameraOverlay!
     
     var isFlashOn=false
-    var selectedPosition = 0
+    var selectedPosition:Int!
     
     var isIdVerification = false
     var canPressDone = false
+    var zoomFirstTimeOnly=true
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraDelegate = self
-        imageItems.append(ImageItem())
+        
         drawUI()
     
         // Do any additional setup after loading the view.
@@ -75,9 +78,10 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         
     }
     
-    func setData(path:String,lang:String){
+    func setData(path:[String],selectedIndex:Int,lang:String){
         self.lang = lang
         self.editPhotoPath = path
+        self.selectedIndex = selectedIndex
         
     }
     
@@ -131,8 +135,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     }
     
     func swiftyCam(_ swiftyCam: SwiftyCamViewController, didTake photo: UIImage) {
-        print(photo.size)
-        
+    
         let width = Double(photo.size.width) * 0.91
         let height = width * CGFloat(aspectRatioY/aspectRatioX)
         let croppedImage=photo.croppedImage(inRect: CGRect(x: Double(photo.size.width/2) - width / 2, y: Double(photo.size.height) * 0.2, width: width, height: height))

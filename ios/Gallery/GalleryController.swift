@@ -61,7 +61,6 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
-        print("cancel")
         dismiss(animated: false)
         
     }
