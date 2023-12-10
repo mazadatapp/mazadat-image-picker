@@ -64,9 +64,13 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var canPressDone = false
     var zoomFirstTimeOnly=true
     override func viewDidLoad() {
-        super.viewDidLoad()
-        cameraDelegate = self
         
+        if(editPhotoPath==nil){
+            cameraDelegate = self
+        }else{
+            askForPermission = false
+        }
+        super.viewDidLoad()
         drawUI()
     
         // Do any additional setup after loading the view.

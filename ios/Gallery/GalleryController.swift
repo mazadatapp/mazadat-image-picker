@@ -53,14 +53,18 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: {[self] in
-            let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+            
 //            cropView.isHidden = false
 //            cropIm.isHidden=false
 //            cropView.setImage(image: tempImage)
+            addUI()
+            DispatchQueue.main.async { [self] in
+                let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+                list.append(getCroppedImage(newImage: tempImage))
+                cameraController.getCroppedImages(images: list)
+                dismiss(animated: false)
+            }
             
-            list.append(getCroppedImage(newImage: tempImage))
-            cameraController.getCroppedImages(images: list)
-            dismiss(animated: false)
             
         })
     }
@@ -86,6 +90,22 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
         image.image = newImage
         container.addSubview(image)
         return container.snapshot(of: container.bounds)
+        
+    }
+    
+    func addUI(){
+        view.backgroundColor=UIColor(white: 0, alpha: 0.6)
+        
+        let loadingImage=UIImageView()
+        view.addSubview(loadingImage)
+        addConstraints(currentView: loadingImage, MainView: view, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: 100, height: true, heightValue: 100)
+        loadingImage.rotate360Degrees(duration: 2)
+        loadingImage.image = UIImage(named: "ic_picker_loading")
+        
+        let uploadingImage=UIImageView()
+        view.addSubview(uploadingImage)
+        addConstraints(currentView: uploadingImage, MainView: view, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: 48, height: true, heightValue: 48)
+        uploadingImage.image = UIImage(named: "ic_picker_uploading")
         
     }
     

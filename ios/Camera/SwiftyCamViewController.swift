@@ -243,7 +243,7 @@ open class SwiftyCamViewController: UIViewController {
     /// Sets output video codec
     
     public var videoCodecType: AVVideoCodecType? = nil
-
+    public var askForPermission=true
     // MARK: ViewDidLoad
     /// ViewDidLoad Implementation
     override open func viewDidLoad() {
@@ -259,30 +259,31 @@ open class SwiftyCamViewController: UIViewController {
         addGestureRecognizers()
 
         previewLayer.session = session
-
-        // Test authorization status for Camera and Micophone
-        switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
-        case .authorized:
-
-            // already authorized
-            break
-        case .notDetermined:
-
-            // not yet determined
-            sessionQueue.suspend()
-            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { [unowned self] granted in
-                if !granted {
-                    self.setupResult = .notAuthorized
-                }
-                self.sessionQueue.resume()
-            })
-        default:
-
-            // already been asked. Denied access
-            setupResult = .notAuthorized
-        }
-        sessionQueue.async { [unowned self] in
-            self.configureSession()
+        if(askForPermission){
+            // Test authorization status for Camera and Micophone
+            switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
+            case .authorized:
+                
+                // already authorized
+                break
+            case .notDetermined:
+                
+                // not yet determined
+                sessionQueue.suspend()
+                AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { [unowned self] granted in
+                    if !granted {
+                        self.setupResult = .notAuthorized
+                    }
+                    self.sessionQueue.resume()
+                })
+            default:
+                
+                // already been asked. Denied access
+                setupResult = .notAuthorized
+            }
+            sessionQueue.async { [unowned self] in
+                self.configureSession()
+            }
         }
     }
 

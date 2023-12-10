@@ -10,7 +10,7 @@ import UIKit
 
 class ImageCell: UICollectionViewCell {
     var image_:UIImageView!
-    var loading:UIActivityIndicatorView!
+    var loading:UIImageView!
     var editBtn:UIButton!
     var frameBlue:UIView!
     var hintL:UILabel!
@@ -31,6 +31,7 @@ class ImageCell: UICollectionViewCell {
         addConstraints(currentView: hintL, MainView: frameBlue, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
         image_=UIImageView(frame: CGRect(x: 2, y: 2, width: frameBlue.frame.width - 4, height: frameBlue.frame.height-4))
+        image_.contentMode = .scaleAspectFit
         image_.cornerRadius = 8
         frameBlue.addSubview(image_)
         
@@ -40,16 +41,16 @@ class ImageCell: UICollectionViewCell {
         frameBlue.addSubview(blackLayer)
         
         editBtn = UIButton()
-        editBtn.setImage(UIImage(named: "ic_picker_edit")?.maskWithColor(color: UIColor.white), for: .normal)
+        editBtn.setImage(UIImage(named: "ic_picker_edit")?.maskWithColor(color: UIColor.init(white: 1, alpha: 1)), for: .normal)
         
         editBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 9)
         frameBlue.addSubview(editBtn)
         addConstraints(currentView: editBtn, MainView: frameBlue, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: true, heightValue: 80)
         
         
-        loading = UIActivityIndicatorView(frame: CGRect(x: frameBlue.frame.width*0.5 - 8, y: frameBlue.frame.height*0.5 - 8, width: 16, height: 16))
-        loading.startAnimating()
-        loading.tintColor = UIColor(red: 0.8156, green: 0.9137, blue: 0.92156, alpha: 1.0)
+        loading = UIImageView(frame: CGRect(x: frameBlue.frame.width*0.5 - 8, y: frameBlue.frame.height*0.5 - 8, width: 16, height: 16))
+        loading.image = UIImage(named: "ic_picker_loading")
+        loading.rotate360Degrees(duration: 1.5)
         frameBlue.addSubview(loading)
        
         //loading.isHidden = true

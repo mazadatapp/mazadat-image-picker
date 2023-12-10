@@ -244,7 +244,7 @@ extension CameraController:ImageScrollViewDelegate{
                         imageItems.append(ImageItem(path: path))
                         downloadImage(url: path, index: index)
                     }else{
-                        imageItems.append(ImageItem(image: localImage!))
+                        imageItems.append(ImageItem(image: getCroppedImage(newImage: localImage!)))
                         //imagesCollection.reloadItems(at: [IndexPath(row: index, section: 0)])
                         if(selectedIndex == index){
                             itemSelected(index: selectedIndex)
@@ -303,7 +303,8 @@ extension CameraController:ImageScrollViewDelegate{
             let task = session.dataTask(with: request as URLRequest, completionHandler: { [self] data,_,_ in
                 DispatchQueue.main.async { [self] in
                     imageItems[index].path = nil
-                    imageItems[index].image = UIImage(data: data!)
+                    
+                    imageItems[index].image = getCroppedImage(newImage: UIImage(data: data!)!)
                     if(selectedIndex == index){
                         itemSelected(index: selectedIndex)
                     }
@@ -314,6 +315,18 @@ extension CameraController:ImageScrollViewDelegate{
             })
             task.resume()
         }
+    }
+    
+    func getCroppedImage(newImage:UIImage)->UIImage{
+        
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width * 3.0 / 4.0))
+        container.backgroundColor = .black
+        let image=UIImageView(frame: container.frame)
+        image.contentMode = .scaleAspectFit
+        image.image = newImage
+        container.addSubview(image)
+        return container.snapshot(of: container.bounds)
+        
     }
     
     func saveImage(image: UIImage,fileName:String) -> Bool {
@@ -353,7 +366,7 @@ extension CameraController:ImageScrollViewDelegate{
         }
         
         if #available(iOS 14.0, *) {
-            let controller=GallerMultiSelectController()
+            let controller=GalleryMultiSelectController()
             controller.setCameraController(cameraController: self, maxImages: maxImagesSize - imageTurn)
             controller.modalPresentationStyle = .overFullScreen
             present(controller, animated: true)
@@ -363,9 +376,6 @@ extension CameraController:ImageScrollViewDelegate{
             controller.modalPresentationStyle = .overFullScreen
             present(controller, animated: true)
         }
-        
-        
-        
     }
     
     @objc func capturePressed(_ sender: AnyObject) {

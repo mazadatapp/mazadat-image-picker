@@ -18,7 +18,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCell
         
-        cell.editBtn.isHidden = imageItems[indexPath.row].image == nil
+        //cell.editBtn.isHidden = imageItems[indexPath.row].image == nil
         cell.loading.isHidden = imageItems[indexPath.row].path == nil
         cell.blackLayer.isHidden = imageItems[indexPath.row].image == nil
         cell.editBtn.isEnabled=false
@@ -35,6 +35,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
             cell.image_.image = nil
         }
         cell.frameBlue.borderWidth = (selectedPosition == indexPath.row) ? 2 : 0
+        cell.editBtn.isHidden = imageItems[indexPath.row].image == nil || selectedPosition == indexPath.row
         
         if(isIdVerification){
             if(imageTurn == 0){
