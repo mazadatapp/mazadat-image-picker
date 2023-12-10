@@ -94,7 +94,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
     }
 
     public void onBind(ImageItem model, int position) {
-      selectToEdit.setVisibility(model.getFile() != null ? View.VISIBLE : View.GONE);
+      selectToEdit.setVisibility((model.getFile() != null && position != pickerCameraActivity.getSelectedPosition()) ? View.VISIBLE : View.GONE);
 
       if (model.getFile() != null) {
         image.setImageURI(Uri.fromFile(model.getFile()));
