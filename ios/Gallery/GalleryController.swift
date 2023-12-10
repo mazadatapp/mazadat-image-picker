@@ -12,6 +12,7 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     var cropView:CropperView!
     var cropIm:UIImageView!
     let imagePickerController = UIImagePickerController()
+    var list=[UIImage]()
     var cameraController:CameraController!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,9 +54,14 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: {[self] in
             let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-            cropView.isHidden = false
-            cropIm.isHidden=false
-            cropView.setImage(image: tempImage)
+//            cropView.isHidden = false
+//            cropIm.isHidden=false
+//            cropView.setImage(image: tempImage)
+            
+            list.append(getCroppedImage(newImage: tempImage))
+            cameraController.getCroppedImages(images: list)
+            dismiss(animated: false)
+            
         })
     }
     
@@ -71,6 +77,17 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
         self.cameraController=cameraController
     }
     
+    open func getCroppedImage(newImage:UIImage)->UIImage{
+        
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width * 3.0 / 4.0))
+        container.backgroundColor = .black
+        let image=UIImageView(frame: container.frame)
+        image.contentMode = .scaleAspectFit
+        image.image = newImage
+        container.addSubview(image)
+        return container.snapshot(of: container.bounds)
+        
+    }
     
     /*
      // MARK: - Navigation
