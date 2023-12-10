@@ -41,7 +41,7 @@ class ImageCell: UICollectionViewCell {
         frameBlue.addSubview(blackLayer)
         
         editBtn = UIButton()
-        editBtn.setImage(UIImage(named: "ic_picker_edit")?.maskWithColor(color: UIColor.init(white: 1, alpha: 1)), for: .normal)
+        editBtn.setImage(UIImage(named: "ic_picker_edit"), for: .normal)
         
         editBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 9)
         frameBlue.addSubview(editBtn)

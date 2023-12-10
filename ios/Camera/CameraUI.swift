@@ -253,11 +253,12 @@ extension CameraController:ImageScrollViewDelegate{
                    
                 }else{
                     imageItems.append(ImageItem(image: UIImage(contentsOfFile: path)!))
+                    if(selectedIndex == index){
+                        itemSelected(index: selectedIndex)
+                    }
                 }
                 index+=1
             }
-            
-            //itemSelected(index: 0)
             doneBtn.backgroundColor = Colors.blueColor()
             canPressDone = true
             
@@ -271,6 +272,7 @@ extension CameraController:ImageScrollViewDelegate{
             deleteBtn.isHidden=true
             
             doneBtn.setTitle(lang == "en" ? "Done (\(imageItems.count))" : "(\(imageItems.count)) تم", for: .normal)
+            
             
         }else{
             selectedPosition=0
