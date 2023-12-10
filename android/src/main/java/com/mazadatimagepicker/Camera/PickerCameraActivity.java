@@ -2,6 +2,8 @@ package com.mazadatimagepicker.Camera;
 
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -69,14 +72,15 @@ public class PickerCameraActivity extends AppCompatActivity {
   private ZoomImage imageCropper;
   private ProgressBar downloadPb;
   private TextView downloadTv;
+  private ImageView zoomIm;
   private Button cropBtn;
   private Button rotateBtn;
   private Button deleteBtn;
 
   private Button doneBtn;
 
-  private TextView confirmIm;
-  private TextView declineIm;
+  private TextView confirmTv;
+  private TextView declineTv;
 
   private Button galleryBtn;
 
@@ -118,6 +122,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private float oldZoomScale = 0;
 
   private int editIndex = -1;
+  private boolean showZoomIndicatorOnce = true;
 
   @SuppressLint("SetTextI18n")
   @Override
@@ -140,13 +145,14 @@ public class PickerCameraActivity extends AppCompatActivity {
     imageCropper = findViewById(R.id.image_cropper);
     downloadPb = findViewById(R.id.download_pb);
     downloadTv = findViewById(R.id.download_tv);
+    zoomIm = findViewById(R.id.zoom_im);
     image = findViewById(R.id.image);
     cropBtn = findViewById(R.id.crop_btn);
     rotateBtn = findViewById(R.id.rotate_btn);
     deleteBtn = findViewById(R.id.delete_btn);
 
-    confirmIm = findViewById(R.id.confirm_im);
-    declineIm = findViewById(R.id.decline_im);
+    confirmTv = findViewById(R.id.confirm_tv);
+    declineTv = findViewById(R.id.decline_tv);
 
     cropBlue = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop_blue, getTheme());
     cropWhite = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop, getTheme());
@@ -171,8 +177,8 @@ public class PickerCameraActivity extends AppCompatActivity {
     cropBtn.setOnClickListener(view -> cropPressed());
     rotateBtn.setOnClickListener(view -> rotatePressed());
     deleteBtn.setOnClickListener(view -> deletePressed());
-    confirmIm.setOnClickListener(view -> confirmPressed());
-    declineIm.setOnClickListener(view -> resetPressed());
+    confirmTv.setOnClickListener(view -> confirmPressed());
+    declineTv.setOnClickListener(view -> resetPressed());
 
     if (isIdVerification) {
       maxImagesTv.setVisibility(View.INVISIBLE);
@@ -217,11 +223,11 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     imageCropper.setZoomListener(zoomScale -> {
       if (zoomScale != oldZoomScale) {
-        confirmIm.setAlpha(1.0f);
-        declineIm.setAlpha(1.0f);
+        confirmTv.setAlpha(1.0f);
+        declineTv.setAlpha(1.0f);
 
-        confirmIm.setEnabled(true);
-        declineIm.setEnabled(true);
+        confirmTv.setEnabled(true);
+        declineTv.setEnabled(true);
         editType = EditModeTypes.CROP;
         disableDoneBtn();
       }
@@ -471,7 +477,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       adapter.notifyDataSetChanged();
 
       editCl.setVisibility(View.VISIBLE);
-      confirmIm.setVisibility(View.GONE);
+      confirmTv.setVisibility(View.GONE);
 
       galleryBtn.setVisibility(View.GONE);
       flashIm.setVisibility(View.GONE);
@@ -495,8 +501,8 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void resetAndOpenCamera() {
     editCl.setVisibility(View.GONE);
-    confirmIm.setVisibility(View.GONE);
-    declineIm.setVisibility(View.GONE);
+    confirmTv.setVisibility(View.GONE);
+    declineTv.setVisibility(View.GONE);
     captureIm.setVisibility(View.VISIBLE);
     previewView.setVisibility(View.VISIBLE);
 
@@ -510,8 +516,8 @@ public class PickerCameraActivity extends AppCompatActivity {
     isEditModeOn = false;
     editType = EditModeTypes.NOTHING;
 
-    declineIm.setVisibility(View.GONE);
-    confirmIm.setVisibility(View.GONE);
+    declineTv.setVisibility(View.GONE);
+    confirmTv.setVisibility(View.GONE);
 
     recycler.smoothScrollToPosition(imageItems.size() - 1);
     selectedPosition = imageItems.size() - 1;
@@ -520,19 +526,32 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void cropPressed() {
     if (isEditModeOn && editType == EditModeTypes.NOTHING) {
+      if(showZoomIndicatorOnce){
+        showZoomIndicatorOnce = false;
+        zoomIm.setVisibility(View.VISIBLE);
+        ViewPropertyAnimator animator = zoomIm.animate().alpha(0).setDuration(600).setStartDelay(1000);
+        animator.setListener(new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            super.onAnimationEnd(animation);
+            zoomIm.setVisibility(View.GONE);
+          }
+        });
+        animator.start();
+      }
       setHintText();
       cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropBlue, null, null);
       imageCropper.setVisibility(View.VISIBLE);
       image.setVisibility(View.INVISIBLE);
       imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
       imageCropper.reset();
-      declineIm.setVisibility(View.VISIBLE);
-      confirmIm.setVisibility(View.VISIBLE);
-      confirmIm.setAlpha(0.5f);
-      declineIm.setAlpha(0.5f);
+      declineTv.setVisibility(View.VISIBLE);
+      confirmTv.setVisibility(View.VISIBLE);
+      confirmTv.setAlpha(0.5f);
+      declineTv.setAlpha(0.5f);
 
-      confirmIm.setEnabled(false);
-      declineIm.setEnabled(false);
+      confirmTv.setEnabled(false);
+      declineTv.setEnabled(false);
 
       oldZoomScale = imageCropper.getCurrentScaleFactor();
     }
@@ -547,13 +566,13 @@ public class PickerCameraActivity extends AppCompatActivity {
       setHintText();
       rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateBlue, null, null);
       originalBitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
-      declineIm.setVisibility(View.VISIBLE);
-      confirmIm.setVisibility(View.VISIBLE);
-      confirmIm.setAlpha(1.0f);
-      declineIm.setAlpha(1.0f);
+      declineTv.setVisibility(View.VISIBLE);
+      confirmTv.setVisibility(View.VISIBLE);
+      confirmTv.setAlpha(1.0f);
+      declineTv.setAlpha(1.0f);
 
-      confirmIm.setEnabled(true);
-      declineIm.setEnabled(true);
+      confirmTv.setEnabled(true);
+      declineTv.setEnabled(true);
       rotateImage();
       disableDoneBtn();
     } else if (isEditModeOn && editType == EditModeTypes.ROTATE) {
@@ -634,8 +653,8 @@ public class PickerCameraActivity extends AppCompatActivity {
     cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropWhite, null, null);
     rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateWhite, null, null);
     editType = EditModeTypes.NOTHING;
-    declineIm.setVisibility(View.GONE);
-    confirmIm.setVisibility(View.GONE);
+    declineTv.setVisibility(View.GONE);
+    confirmTv.setVisibility(View.GONE);
 
     setHintText();
     enableDoneBtn();
