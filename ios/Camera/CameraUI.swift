@@ -354,7 +354,7 @@ extension CameraController:ImageScrollViewDelegate{
         
         if #available(iOS 14.0, *) {
             let controller=GallerMultiSelectController()
-            controller.setCameraController(cameraController: self, maxImages: maxImagesSize - imageItems.count)
+            controller.setCameraController(cameraController: self, maxImages: maxImagesSize - imageTurn)
             controller.modalPresentationStyle = .overFullScreen
             present(controller, animated: true)
         } else {
@@ -408,7 +408,7 @@ extension CameraController:ImageScrollViewDelegate{
             if(zoomFirstTimeOnly){
                 zoomFirstTimeOnly=false
                 zoomIndicatior.isHidden = false
-                UIView.animate(withDuration: 0.6, delay: 0.6, animations: { [self] in
+                UIView.animate(withDuration: 0.6, delay: 1.0, animations: { [self] in
                     zoomIndicatior.alpha = 0
                 },completion: { [self]_ in
                     zoomIndicatior.isHidden = true

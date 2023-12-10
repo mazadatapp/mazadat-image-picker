@@ -59,6 +59,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
     func itemSelected(index:Int){
         if(editModeType == EditModeTypes.NOTHING && imageItems[index].image != nil){
             editView.isHidden=false
+            
             editImage.image = imageItems[index].image
             showPreviewLayer(flag: false)
             editMode = true
@@ -73,7 +74,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
             captureBtn.isHidden=true
             editSelectedIndex=index
             selectedPosition = index
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (0.02 * (imageCropper.isHidden ? 1 : 0)), execute: { [self] in
                 cropPressed(nil)
             })
             
@@ -100,6 +101,10 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         deleteBtn.alpha=0.38
         captureBtn.isHidden=false
         
+        editImage.image = nil
+        editImage.setNeedsDisplay()
+        //imageCropper.display(image: nil)
+        
         let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
         cropBtn.setImage(whiteCropImage, for: .normal)
         
@@ -123,6 +128,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         gridVertical2.isHidden = true
         gridHorizontal1.isHidden = true
         gridHorizontal2.isHidden = true
+        imageCropper.isHidden = true
     }
     
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
