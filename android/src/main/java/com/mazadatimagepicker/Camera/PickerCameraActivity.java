@@ -91,7 +91,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private RecyclerView recycler;
   private ImageItemsAdapter adapter;
-  private LinkedList<ImageItem> imageItems;
+  private LinkedList<ImageItem> imageItems = new LinkedList<>();
 
   private int maxImagesSize;
   private int imageTurn = 0;
@@ -166,6 +166,10 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     maxImagesTv.setText(String.format("%s %s", getString(R.string.max_number_selected_images_is), maxImagesSize));
 
+    adapter = new ImageItemsAdapter(this, imageItems);
+    recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+    recycler.setAdapter(adapter);
+
 
     captureIm.setOnClickListener(view -> capturePressed());
     flashIm.setOnClickListener(view -> flashPressed());
@@ -183,7 +187,6 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (isIdVerification) {
       maxImagesTv.setVisibility(View.INVISIBLE);
     }
-    imageItems = new LinkedList<>();
     if (editPhotosMode) {
       editIndex = getIntent().getIntExtra("index", -1);
       String[] editPhotoPath = getIntent().getStringArrayExtra("paths");
@@ -193,12 +196,12 @@ public class PickerCameraActivity extends AppCompatActivity {
         } else {
           imageItems.addLast(new ImageItem(new File(editPhotoPath[i])));
         }
-        doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
-        doneBtn.setTextColor(getResources().getColor(R.color.white));
-        canPressDone = true;
-        doneBtn.setText(getString(R.string.done) + " (" + imageItems.size() + ")");
-        editOrCapturePhoto(0);
       }
+      doneBtn.setBackgroundResource(R.drawable.custom_blue_round_15);
+      doneBtn.setTextColor(getResources().getColor(R.color.white));
+      canPressDone = true;
+      doneBtn.setText(getString(R.string.done) + " (" + imageItems.size() + ")");
+      editOrCapturePhoto(editIndex);
 
       //recycler.setVisibility(View.GONE);
       captureHintTv.setVisibility(View.GONE);
@@ -215,9 +218,6 @@ public class PickerCameraActivity extends AppCompatActivity {
       checkDoneButton();
       doneBtn.setText(getString(R.string.done) + " (0)");
     }
-    adapter = new ImageItemsAdapter(this, imageItems);
-    recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-    recycler.setAdapter(adapter);
 
     setHintText();
 
