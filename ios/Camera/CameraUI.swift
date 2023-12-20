@@ -438,7 +438,7 @@ extension CameraController:ImageScrollViewDelegate{
                 zoomIndicatior.startAnimating()
                 zoomIndicatior.loadGif(asset: "ZoomImage")
                 zoomFirstTimeOnly=false
-                UIView.animate(withDuration: 3.0, delay: 0.6, animations: { [self] in
+                UIView.animate(withDuration: 5.0, delay: 0.6, animations: { [self] in
                     zoomIndicatior.alpha = 0
                 },completion: { [self]_ in
                     zoomIndicatior.isHidden = true
