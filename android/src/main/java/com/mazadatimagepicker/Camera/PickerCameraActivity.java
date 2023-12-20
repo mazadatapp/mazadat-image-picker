@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.Button;
@@ -61,6 +60,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class PickerCameraActivity extends AppCompatActivity {
 
   final int GALLERY_REQUEST_CODE = 10;
@@ -75,7 +76,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private ZoomImage imageCropper;
   private ProgressBar downloadPb;
   private TextView downloadTv;
-  private ImageView zoomIm;
+  private GifImageView zoomGif;
   private Button cropBtn;
   private Button rotateBtn;
   private Button deleteBtn;
@@ -149,7 +150,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     imageCropper = findViewById(R.id.image_cropper);
     downloadPb = findViewById(R.id.download_pb);
     downloadTv = findViewById(R.id.download_tv);
-    zoomIm = findViewById(R.id.zoom_im);
+    zoomGif = findViewById(R.id.zoom_gif);
     image = findViewById(R.id.image);
     cropBtn = findViewById(R.id.crop_btn);
     rotateBtn = findViewById(R.id.rotate_btn);
@@ -209,7 +210,6 @@ public class PickerCameraActivity extends AppCompatActivity {
       doneBtn.setText(getString(R.string.done) + " (" + imageItems.size() + ")");
       editOrCapturePhoto(editIndex);
 
-      //recycler.setVisibility(View.GONE);
       captureHintTv.setVisibility(View.GONE);
       maxImagesTv.setVisibility(View.GONE);
       captureIm.setVisibility(View.GONE);
@@ -535,13 +535,14 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (isEditModeOn && editType == EditModeTypes.NOTHING) {
       if(showZoomIndicatorOnce){
         showZoomIndicatorOnce = false;
-        zoomIm.setVisibility(View.VISIBLE);
-        ViewPropertyAnimator animator = zoomIm.animate().alpha(0).setDuration(600).setStartDelay(1000);
+        zoomGif.setVisibility(View.VISIBLE);
+        zoomGif.animate();
+        ViewPropertyAnimator animator = zoomGif.animate().alpha(0).setDuration(6000).setStartDelay(500);
         animator.setListener(new AnimatorListenerAdapter() {
           @Override
           public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
-            zoomIm.setVisibility(View.GONE);
+            zoomGif.setVisibility(View.GONE);
           }
         });
         animator.start();
