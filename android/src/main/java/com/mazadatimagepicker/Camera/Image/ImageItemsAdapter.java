@@ -97,7 +97,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
       selectToEdit.setVisibility((model.getFile() != null && position != pickerCameraActivity.getSelectedPosition()) ? View.VISIBLE : View.GONE);
 
       if (model.getFile() != null) {
-        image.setImageURI(Uri.fromFile(model.getFile()));
+        Glide.with(pickerCameraActivity).load(Uri.fromFile(model.getFile())).into(image);
         overlayIm.setVisibility(View.VISIBLE);
         image.setAlpha(1.0f);
         progress.setVisibility(View.GONE);

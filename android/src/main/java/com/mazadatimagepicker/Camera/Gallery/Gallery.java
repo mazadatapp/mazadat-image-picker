@@ -81,9 +81,11 @@ public class Gallery extends Activity {
         if (galleryItemModels.get(i).isCropped()) {
           paths.add(galleryItemModels.get(i).getCroppedFile().getPath());
         } else {
-          int width = getResources().getDisplayMetrics().widthPixels;
+          int width = galleryItemModels.get(i).getBitmap().getWidth();
           Bitmap fullBitmap = ImageUtils.createBitmap(width, (int) (width * 3f / 4f), galleryItemModels.get(i).getBitmap());
+          Log.i("datadata",fullBitmap.getWidth()+" "+fullBitmap.getHeight());
           File file = ImageUtils.bitmapToFile(this, fullBitmap);
+          Log.i("datadata",""+file.length()+"");
           paths.add(file.getPath());
         }
       }
@@ -219,16 +221,17 @@ public class Gallery extends Activity {
       } catch (Exception e) {
         e.printStackTrace();
       }
-      if (bitmap.getWidth() * bitmap.getHeight() > 23040000) {
-        float scale;
-        if (bitmap.getWidth() > bitmap.getHeight()) {
-          scale = 4800.0f / (float) bitmap.getWidth();
-        } else {
-          scale = 4800.0f / (float) bitmap.getHeight();
-        }
-        matrix.postScale(scale, scale);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-      } else if (rotation != 0) {
+//      if (bitmap.getWidth() * bitmap.getHeight() > 23040000) {
+//        float scale;
+//        if (bitmap.getWidth() > bitmap.getHeight()) {
+//          scale = 4800.0f / (float) bitmap.getWidth();
+//        } else {
+//          scale = 4800.0f / (float) bitmap.getHeight();
+//        }
+//        matrix.postScale(scale, scale);
+//        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+//      } else
+      if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight());
 

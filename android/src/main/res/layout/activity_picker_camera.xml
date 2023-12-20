@@ -307,4 +307,35 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintHeight_percent="0.0446" />
 
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/loading_cl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000"
+    android:visibility="gone">
+    <com.budiyev.android.circularprogressbar.CircularProgressBar
+      android:id="@+id/progress"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:backgroundStrokeWidth="2dp"
+      app:foregroundStrokeWidth="2dp"
+      app:backgroundStrokeColor="#00000000"
+      app:foregroundStrokeColor="#D0E9EB"
+      app:indeterminate="true"/>
+
+    <ImageView
+      android:id="@+id/loading_im"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:src="@drawable/images_loading"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

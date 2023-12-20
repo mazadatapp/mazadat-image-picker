@@ -14,8 +14,10 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.Button;
@@ -42,6 +44,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.DownloadListener;
+import com.bumptech.glide.Glide;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.mazadatimagepicker.BuildConfig;
 import com.mazadatimagepicker.Camera.CloseDialog.CloseDialog;
@@ -90,6 +93,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private TextView captureHintTv;
 
   private RecyclerView recycler;
+  private ConstraintLayout loadingCl;
   private ImageItemsAdapter adapter;
   private LinkedList<ImageItem> imageItems = new LinkedList<>();
 
@@ -153,6 +157,8 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     confirmTv = findViewById(R.id.confirm_tv);
     declineTv = findViewById(R.id.decline_tv);
+
+    loadingCl = findViewById(R.id.loading_cl);
 
     cropBlue = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop_blue, getTheme());
     cropWhite = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop, getTheme());
@@ -483,7 +489,8 @@ public class PickerCameraActivity extends AppCompatActivity {
       flashIm.setVisibility(View.GONE);
       previewView.setVisibility(View.GONE);
       captureIm.setVisibility(View.GONE);
-      image.setImageURI(Uri.fromFile(imageItems.get(position).getFile()));
+      Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
+      //image.setImageURI(Uri.fromFile(imageItems.get(position).getFile()));
       isEditModeOn = true;
       resetPressed();
 
@@ -543,7 +550,8 @@ public class PickerCameraActivity extends AppCompatActivity {
       cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropBlue, null, null);
       imageCropper.setVisibility(View.VISIBLE);
       image.setVisibility(View.INVISIBLE);
-      imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
+      Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(imageCropper);
+      //imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
       imageCropper.reset();
       declineTv.setVisibility(View.VISIBLE);
       confirmTv.setVisibility(View.VISIBLE);
@@ -559,7 +567,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void rotatePressed() {
     if (isEditModeOn && (editType == EditModeTypes.NOTHING || imageCropper.getCurrentScaleFactor() == oldZoomScale)) {
-      if (imageCropper.getCurrentScaleFactor() == oldZoomScale) {
+      if (imageCropper.getCurrentScaleFactor() == oldZoomScale && editType != EditModeTypes.ROTATE) {
         resetPressed();
       }
       editType = EditModeTypes.ROTATE;
@@ -583,9 +591,26 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void rotateImage() {
     rotationAngle += -90;
-    rotationBitmap = ImageUtils.rotateBitmap(originalBitmap, rotationAngle);
-    rotationBitmap = ImageUtils.createBitmap(image.getWidth(), image.getHeight(), rotationBitmap);
-    image.setImageBitmap(rotationBitmap);
+    if (originalBitmap.getWidth() * originalBitmap.getHeight() > 23040000) {
+
+      AsyncTask.execute(() -> {
+        runOnUiThread(() -> {
+          loadingCl.setVisibility(View.VISIBLE);
+        });
+        rotationBitmap = ImageUtils.rotateBitmap(originalBitmap, rotationAngle);
+        rotationBitmap = ImageUtils.createBitmap(originalBitmap.getWidth(), originalBitmap.getHeight(), rotationBitmap);
+        runOnUiThread(() -> {
+          Glide.with( this).load(rotationBitmap).into(image);
+          loadingCl.setVisibility(View.GONE);
+        });
+      });
+    }else{
+      rotationBitmap = ImageUtils.rotateBitmap(originalBitmap, rotationAngle);
+      rotationBitmap = ImageUtils.createBitmap(originalBitmap.getWidth(), originalBitmap.getHeight(), rotationBitmap);
+      Glide.with(this).load(rotationBitmap).into(image);
+    }
+
+
   }
 
   private void deletePressed() {
@@ -639,13 +664,14 @@ public class PickerCameraActivity extends AppCompatActivity {
       adapter.notifyItemChanged(selectedEditIndex);
     }
 
-    image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
+    Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
     resetPressed();
   }
 
   private void resetPressed() {
     if (editType == EditModeTypes.ROTATE) {
-      image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
+      Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
+      //image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
     }
     rotationAngle = 0;
     imageCropper.setVisibility(View.GONE);
