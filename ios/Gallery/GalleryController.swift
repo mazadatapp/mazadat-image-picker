@@ -83,7 +83,7 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
     
     open func getCroppedImage(newImage:UIImage)->UIImage{
         
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width * 3.0 / 4.0))
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: newImage.size.width, height: newImage.size.width * 3.0 / 4.0))
         container.backgroundColor = .black
         let image=UIImageView(frame: container.frame)
         image.contentMode = .scaleAspectFit

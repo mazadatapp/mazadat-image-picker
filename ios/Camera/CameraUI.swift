@@ -82,7 +82,7 @@ extension CameraController:ImageScrollViewDelegate{
         confirmBtn.setImage(UIImage(named: "ic_picker_confirm"), for: .normal)
         confirmBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 12)
         confirmBtn.setTitle(lang == "en" ? "Apply" : "تأكيد", for: .normal)
-        addConstraints(currentView: confirmBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.62*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 32, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+        addConstraints(currentView: confirmBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.63*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         confirmBtn.sizeToFit()
         confirmBtn.centerVertically(padding: 1, lang: lang)
         confirmBtn.isHidden=true
@@ -92,7 +92,7 @@ extension CameraController:ImageScrollViewDelegate{
         declineBtn.setImage(UIImage(named: "ic_picker_decline"), for: .normal)
         declineBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 12)
         declineBtn.setTitle(lang == "en" ? "Restore" : "استرجع", for: .normal)
-        addConstraints(currentView: declineBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.62*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -32, width: false, widthValue: 0, height: false, heightValue: 0)
+        addConstraints(currentView: declineBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.63*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -16, width: false, widthValue: 0, height: false, heightValue: 0)
         declineBtn.sizeToFit()
         declineBtn.centerVertically(padding: 1, lang: lang)
         declineBtn.isHidden=true
@@ -122,7 +122,7 @@ extension CameraController:ImageScrollViewDelegate{
             maxNoOfImagesL.textColor = UIColor.white
             maxNoOfImagesL.font = UIFont(name: "Montserrat-Regular", size: 12)
             UIviews.addSubview(maxNoOfImagesL)
-            addConstraints(currentView: maxNoOfImagesL, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.85*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
+            addConstraints(currentView: maxNoOfImagesL, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.86*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         }
         
         //done button
@@ -199,10 +199,9 @@ extension CameraController:ImageScrollViewDelegate{
         }
         
         editView.addSubview(zoomIndicatior)
-        addConstraints(currentView: zoomIndicatior, MainView: editView, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
-        zoomIndicatior.image = UIImage(named: "ic_picker_zoom")
+        addConstraints(currentView: zoomIndicatior, MainView: editView, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: 60, height: true, heightValue: 60)
         zoomIndicatior.isHidden = true
-
+        zoomIndicatior.animationDuration = 1000
         
         editView.isHidden=true
         imageCropper.isHidden=true
@@ -234,6 +233,22 @@ extension CameraController:ImageScrollViewDelegate{
         editView.addSubview(gridVertical2)
         editView.addSubview(gridHorizontal1)
         editView.addSubview(gridHorizontal2)
+        
+        loadingView = UIView(frame: view.frame)
+        loadingView.backgroundColor = UIColor.init(white: 0, alpha: 0.6)
+        view.addSubview(loadingView)
+        let loadingImage=UIImageView()
+        loadingView.addSubview(loadingImage)
+        addConstraints(currentView: loadingImage, MainView: loadingView, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: 100, height: true, heightValue: 100)
+        loadingImage.rotate360Degrees(duration: 2)
+        loadingImage.image = UIImage(named: "ic_picker_loading")
+        
+        let uploadingImage=UIImageView()
+        loadingView.addSubview(uploadingImage)
+        addConstraints(currentView: uploadingImage, MainView: loadingView, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: true, widthValue: 48, height: true, heightValue: 48)
+        uploadingImage.image = UIImage(named: "ic_picker_uploading")
+        
+        loadingView.isHidden = true
         
         if(editPhotoPath != nil){
             var index=0
@@ -321,7 +336,7 @@ extension CameraController:ImageScrollViewDelegate{
     
     func getCroppedImage(newImage:UIImage)->UIImage{
         
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width * 3.0 / 4.0))
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: newImage.size.width, height: newImage.size.width * 3.0 / 4.0))
         container.backgroundColor = .black
         let image=UIImageView(frame: container.frame)
         image.contentMode = .scaleAspectFit
@@ -418,9 +433,12 @@ extension CameraController:ImageScrollViewDelegate{
             gridHorizontal2.isHidden = false
             
             if(zoomFirstTimeOnly){
-                zoomFirstTimeOnly=false
+                
                 zoomIndicatior.isHidden = false
-                UIView.animate(withDuration: 0.6, delay: 1.0, animations: { [self] in
+                zoomIndicatior.startAnimating()
+                zoomIndicatior.loadGif(name: "ZoomImage")
+                zoomFirstTimeOnly=false
+                UIView.animate(withDuration: 3.0, delay: 0.6, animations: { [self] in
                     zoomIndicatior.alpha = 0
                 },completion: { [self]_ in
                     zoomIndicatior.isHidden = true
@@ -445,11 +463,29 @@ extension CameraController:ImageScrollViewDelegate{
             declineBtn.isHidden=false
             
             editImageRotation -= .pi/2
-            editImage.image = originalImage.rotate(radians: editImageRotation)
+            loadingView.isHidden = false
+            DispatchQueue.global().async(execute: { [self] in
+                let newImage = originalImage.rotate(radians: editImageRotation)
+                DispatchQueue.main.sync(execute: {
+                    editImage.image = newImage
+                    loadingView.isHidden = true
+                })
+                
+            })
+            
         }else if(editModeType == EditModeTypes.ROTATE){
             disableDoneBtn()
             editImageRotation -= .pi/2
-            editImage.image = originalImage.rotate(radians: editImageRotation)
+            loadingView.isHidden = false
+            DispatchQueue.global().async(execute: { [self] in
+                let newImage = originalImage.rotate(radians: editImageRotation)
+                DispatchQueue.main.sync(execute: {
+                    editImage.image = newImage
+                    loadingView.isHidden = true
+                })
+                
+            })
+            
         }
         
         //editImage.image=imageItems[editSelectedIndex].image

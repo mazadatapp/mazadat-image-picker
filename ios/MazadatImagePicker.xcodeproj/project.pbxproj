@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		505457172B333BFB00A0D209 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505457162B333BFA00A0D209 /* Gif.swift */; };
 		50ACB347298BBC7F00E8D8ED /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ACB346298BBC7F00E8D8ED /* ImageScrollView.swift */; };
 		50C0DB702B0F985D006BDC90 /* GalleryMultiSelectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C0DB6F2B0F985D006BDC90 /* GalleryMultiSelectController.swift */; };
 		50CEEED429868730006C3166 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEED329868730006C3166 /* CameraController.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libMazadatImagePicker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMazadatImagePicker.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		505457162B333BFA00A0D209 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		50ACB346298BBC7F00E8D8ED /* ImageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
 		50C0DB6F2B0F985D006BDC90 /* GalleryMultiSelectController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryMultiSelectController.swift; sourceTree = "<group>"; };
 		50CEEED329868730006C3166 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				50CEEEF72986C263006C3166 /* ButtonExtension.swift */,
 				50CEEEFF2986D4EF006C3166 /* UIViewControllerExtension.swift */,
 				50CEEF0F298BB020006C3166 /* UIImageViewExtention.swift */,
+				505457162B333BFA00A0D209 /* Gif.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				50CEEEF62986BE33006C3166 /* UIImageExtension.swift in Sources */,
 				50CEEF0C2987E772006C3166 /* EditModeTypes.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* MazadatImagePicker.swift in Sources */,
+				505457172B333BFB00A0D209 /* Gif.swift in Sources */,
 				50CEEEEB2986A177006C3166 /* CameraCollection.swift in Sources */,
 				50C0DB702B0F985D006BDC90 /* GalleryMultiSelectController.swift in Sources */,
 				50CEEEEE2986A1E0006C3166 /* ImageCell.swift in Sources */,

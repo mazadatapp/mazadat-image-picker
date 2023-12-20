@@ -222,9 +222,11 @@ class CropperView: UIView {
         setMargins()
     }
     open func getCroppedImage()->UIImage{
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: allRect.width, height: allRect.width * aspectRatioY / aspectRatioX))
+        let width = CGFloat((image_.image?.size.width)!)
+        let height = width * CGFloat(aspectRatioY / aspectRatioX)
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         container.backgroundColor = .black
-        let image=UIImageView(frame: CGRect(x: 0, y: 0, width: allRect.width, height: allRect.width * aspectRatioY / aspectRatioX))
+        let image=UIImageView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         image.contentMode = .scaleAspectFit
         image.image = imageView.snapshot(of: cropArea)
         container.addSubview(image)

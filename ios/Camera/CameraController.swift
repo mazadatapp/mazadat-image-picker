@@ -55,6 +55,8 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var gridHorizontal1:UIView!
     var gridHorizontal2:UIView!
     
+    var loadingView:UIView!
+    
     var cameraOverlay:CameraOverlay!
     
     var isFlashOn=false

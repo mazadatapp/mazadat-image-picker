@@ -12,6 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5054571B2B33436100A0D209 /* ZoomImage.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5054571A2B33436100A0D209 /* ZoomImage.gif */; };
 		50CEEEE629869D92006C3166 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50CEEEE229869D92006C3166 /* Montserrat-Bold.ttf */; };
 		50CEEEE729869D92006C3166 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50CEEEE329869D92006C3166 /* Montserrat-SemiBold.ttf */; };
 		50CEEEE829869D92006C3166 /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50CEEEE429869D92006C3166 /* Montserrat-Medium.ttf */; };
@@ -42,6 +43,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MazadatImagePickerExample/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-MazadatImagePickerExample-MazadatImagePickerExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MazadatImagePickerExample-MazadatImagePickerExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-MazadatImagePickerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MazadatImagePickerExample.debug.xcconfig"; path = "Target Support Files/Pods-MazadatImagePickerExample/Pods-MazadatImagePickerExample.debug.xcconfig"; sourceTree = "<group>"; };
+		505457192B33435000A0D209 /* Zoom (1).gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "Zoom (1).gif"; sourceTree = "<group>"; };
+		5054571A2B33436100A0D209 /* ZoomImage.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ZoomImage.gif; path = ../../../../../Downloads/ZoomImage.gif; sourceTree = "<group>"; };
 		50CEEEE229869D92006C3166 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		50CEEEE329869D92006C3166 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		50CEEEE429869D92006C3166 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.ttf"; sourceTree = "<group>"; };
@@ -96,6 +99,7 @@
 			children = (
 				50CEEEE129869D71006C3166 /* Font */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				5054571A2B33436100A0D209 /* ZoomImage.gif */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -118,6 +122,7 @@
 		50CEEEE129869D71006C3166 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				505457192B33435000A0D209 /* Zoom (1).gif */,
 				50CEEEE229869D92006C3166 /* Montserrat-Bold.ttf */,
 				50CEEEE429869D92006C3166 /* Montserrat-Medium.ttf */,
 				50CEEEE529869D92006C3166 /* Montserrat-Regular.ttf */,
@@ -268,6 +273,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				50CEEEE729869D92006C3166 /* Montserrat-SemiBold.ttf in Resources */,
 				50CEEEE629869D92006C3166 /* Montserrat-Bold.ttf in Resources */,
+				5054571B2B33436100A0D209 /* ZoomImage.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
