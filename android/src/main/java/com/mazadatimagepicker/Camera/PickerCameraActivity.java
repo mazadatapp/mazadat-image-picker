@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.Button;
@@ -236,6 +237,9 @@ public class PickerCameraActivity extends AppCompatActivity {
         declineTv.setEnabled(true);
         editType = EditModeTypes.CROP;
         disableDoneBtn();
+
+        Log.i("datadata_zoom",imageCropper.getBounds().left+" "+imageCropper.getBounds().right+" "+imageCropper.getBounds().width()+" "+imageCropper.getCurrentScaleFactor());
+
       }
     });
   }
@@ -391,7 +395,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     Bitmap croppedBitmap = Bitmap.createBitmap(scaledBitmap, (int) rect.left, (int) rect.top, (int) rect.width(), (int) rect.height());
     File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, croppedBitmap);
-    addImageToList(file);
+    addImageToList(file,100);
 
   }
 
@@ -451,9 +455,10 @@ public class PickerCameraActivity extends AppCompatActivity {
     return selectedPosition;
   }
 
-  private void addImageToList(File file) {
+  private void addImageToList(File file,int percentage) {
 
     imageItems.get(imageTurn).setFile(file);
+    imageItems.get(imageTurn).setPercentage(percentage);
     adapter.notifyItemChanged(imageTurn);
 
 
@@ -654,13 +659,27 @@ public class PickerCameraActivity extends AppCompatActivity {
   private void confirmPressed() {
     if (editType == EditModeTypes.CROP) {
       imageCropper.setShowGrid(false);
+      Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
+      //Log.i("datadata_zoom",imageCropper.getBounds().left+" "+imageCropper.getBounds().right+" "+imageCropper.getBounds().width()+" "+imageCropper.getCurrentScaleFactor()+" "+bitmap.getWidth());
+      float top = imageCropper.getBounds().left;
+      float left = imageCropper.getBounds().top;
+      float width = imageCropper.getBounds().width();
+      float scale = imageCropper.getCurrentScaleFactor();
+      float originalWidth = width/scale;
+
+      float myWidth = ((float)imageCropper.getWidth()/(float)getResources().getDisplayMetrics().widthPixels) * originalWidth;
+      float myLeft = left/scale;
+      float myTop = top/scale;
       Bitmap croppedBitmap = getBitmapFromView(imageCropper);
       imageCropper.setShowGrid(true);
-      File file = ImageUtils.bitmapToFile(this, croppedBitmap);
+      File file = ImageUtils.bitmapToFile(this, croppedBitmap,imageItems.get(selectedEditIndex).getPercentage());
+      //Log.i("datadata_bitmap",imageCropper.getLeft()+"");
+
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
     } else if (editType == EditModeTypes.ROTATE) {
-      File file = ImageUtils.bitmapToFile(this, rotationBitmap);
+      File file = ImageUtils.bitmapToFile(this, rotationBitmap,imageItems.get(selectedEditIndex).getPercentage());
+      //Log.i("datadata_bitmap",file.length()+" "+selectedEditIndex+" "+rotationBitmap.getWidth()+" "+rotationBitmap.getHeight());
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
     }
@@ -704,8 +723,9 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     if (resultCode == RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
       ArrayList<String> paths = data.getStringArrayListExtra("paths");
+      ArrayList<Integer> percentages = data.getIntegerArrayListExtra("percentages");
       for (int i = 0; i < paths.size(); i++) {
-        addImageToList(new File(paths.get(i)));
+        addImageToList(new File(paths.get(i)),percentages.get(i));
       }
     }
   }

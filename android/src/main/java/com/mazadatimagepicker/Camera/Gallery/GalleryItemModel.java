@@ -7,12 +7,14 @@ import java.io.File;
 
 public class GalleryItemModel {
   RectF cropView;
+  int percentage;
   Bitmap bitmap;
   Boolean cropped=false;
   File croppedFile;
 
-  public GalleryItemModel(Bitmap bitmap) {
+  public GalleryItemModel(Bitmap bitmap,int percentage) {
     this.bitmap = bitmap;
+    this.percentage = percentage;
   }
 
   public RectF getCropView() {
@@ -27,8 +29,8 @@ public class GalleryItemModel {
     return bitmap;
   }
 
-  public void setBitmap(Bitmap bitmap) {
-    this.bitmap = bitmap;
+  public int getPercentage() {
+    return percentage;
   }
 
   public Boolean isCropped() {

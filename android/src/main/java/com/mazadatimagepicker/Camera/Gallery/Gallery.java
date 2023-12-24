@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,8 +26,13 @@ import com.mazadatimagepicker.Camera.Utils.FileUtils;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -77,20 +83,21 @@ public class Gallery extends Activity {
     progress.setVisibility(View.VISIBLE);
     AsyncTask.execute(() -> {
       ArrayList<String> paths = new ArrayList<>();
+      ArrayList<Integer> perentages = new ArrayList<>();
       for (int i = 0; i < galleryItemModels.size(); i++) {
         if (galleryItemModels.get(i).isCropped()) {
           paths.add(galleryItemModels.get(i).getCroppedFile().getPath());
         } else {
           int width = galleryItemModels.get(i).getBitmap().getWidth();
           Bitmap fullBitmap = ImageUtils.createBitmap(width, (int) (width * 3f / 4f), galleryItemModels.get(i).getBitmap());
-          Log.i("datadata",fullBitmap.getWidth()+" "+fullBitmap.getHeight());
-          File file = ImageUtils.bitmapToFile(this, fullBitmap);
-          Log.i("datadata",""+file.length()+"");
+          File file = ImageUtils.bitmapToFile(this, fullBitmap,galleryItemModels.get(i).getPercentage());
           paths.add(file.getPath());
+          perentages.add(galleryItemModels.get(i).getPercentage());
         }
       }
       Intent intent = new Intent();
       intent.putStringArrayListExtra("paths", paths);
+      intent.putIntegerArrayListExtra("percentages", perentages);
       setResult(RESULT_OK, intent);
       finish();
     });
@@ -209,7 +216,8 @@ public class Gallery extends Activity {
       File temp = createTmpFileFromUri(selectedImageUri, "test.png");
       Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
       String path = fileUtils.getPath(selectedImageUri);
-      Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight() + " " + createTmpFileFromUri(selectedImageUri, "test.png").length() + "");
+      int percentage=100;
+      //Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight() + " " + temp.length() + "");
       Matrix matrix = new Matrix();
       int rotation = 0;
       try {
@@ -221,22 +229,17 @@ public class Gallery extends Activity {
       } catch (Exception e) {
         e.printStackTrace();
       }
-//      if (bitmap.getWidth() * bitmap.getHeight() > 23040000) {
-//        float scale;
-//        if (bitmap.getWidth() > bitmap.getHeight()) {
-//          scale = 4800.0f / (float) bitmap.getWidth();
-//        } else {
-//          scale = 4800.0f / (float) bitmap.getHeight();
-//        }
-//        matrix.postScale(scale, scale);
-//        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//      } else
+      if (temp.length() > 4000000) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        percentage = (int)((4000000.0/temp.length())*100);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
+        bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+       // Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight()+" "+out.toByteArray().length);
+      }
       if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight());
-
       }
-      return new GalleryItemModel(bitmap);
+      return new GalleryItemModel(bitmap,percentage);
     } catch (Exception e) {
       e.printStackTrace();
       return null;

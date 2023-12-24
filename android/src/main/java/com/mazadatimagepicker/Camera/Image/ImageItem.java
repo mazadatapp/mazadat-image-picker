@@ -5,6 +5,8 @@ import java.io.File;
 public class ImageItem {
   private File file;
   private String url;
+
+  private int percentage;
   public ImageItem() {
   }
 
@@ -30,5 +32,13 @@ public class ImageItem {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public int getPercentage() {
+    return percentage;
+  }
+
+  public void setPercentage(int percentage) {
+    this.percentage = percentage;
   }
 }

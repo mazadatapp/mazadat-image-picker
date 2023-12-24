@@ -8,7 +8,6 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.jsibbold.zoomage.ZoomageView;
 import com.mazadatimagepicker.R;
 
 @SuppressLint("DrawAllocation")

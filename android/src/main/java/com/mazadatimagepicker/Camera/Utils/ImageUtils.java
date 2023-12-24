@@ -40,6 +40,29 @@ public class ImageUtils {
     return file;
   }
 
+  public static File bitmapToFile(Context context, Bitmap bitmap,int percentage) {
+    File file = new File(context.getCacheDir(), UUID.randomUUID().toString() + ".jpg");
+    try {
+      file.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, percentage /*ignored for PNG*/, bos);
+    byte[] bitmapdata = bos.toByteArray();
+
+    try {
+      FileOutputStream fos = new FileOutputStream(file);
+      fos.write(bitmapdata);
+      fos.flush();
+      fos.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return file;
+  }
+
   public static Bitmap rotateBitmap(Bitmap bitmap, int angle) {
     Matrix matrix = new Matrix();
     matrix.postRotate(angle);
