@@ -45,11 +45,19 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
                         }
                         
                         DispatchQueue.main.async { [self] in
-                            if let image = image as? UIImage {
+                            if var image = image as? UIImage {
+                                var imgData = image.jpegData(compressionQuality: 1)!
+                                var imageSize: Int = imgData.count
+                                if(imageSize > 4000000){
+                                    imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
+                                    imageSize = imgData.count
+                                    image = UIImage(data: imgData)!
+                                }
+                                
                                 list.append(getCroppedImage(newImage: image))
                                 count += 1
                                 if(count == results.count){
-                                    cameraController.getCroppedImages(images: list)
+                                    cameraController.getImagesFromGallery(images: list)
                                     dismiss(animated: false)
                                 }
                                 

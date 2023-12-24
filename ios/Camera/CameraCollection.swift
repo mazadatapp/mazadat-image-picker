@@ -26,11 +26,9 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.editBtn.sizeToFit()
         cell.editBtn.centerVertically(padding: 2, lang: lang)
         if(imageItems[indexPath.row].image != nil){
+            let scale = UIScreen.main.scale
             cell.image_.image = imageItems[indexPath.row].image
-        }else if(imageItems[indexPath.row].path != nil){
-            //cell.image_.image = imageItems[indexPath.row].image
-           // print("yes")
-           // cell.loading.isHidden = false
+                //.imageResized(to: CGSize(width: cell.image_.frame.width * scale, height: cell.image_.frame.height * scale))
         }else{
             cell.image_.image = nil
         }

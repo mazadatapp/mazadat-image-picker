@@ -49,9 +49,10 @@ extension UIView {
     
     func snapshot(of rect: CGRect? = nil) -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: rect!)
-        return renderer.image { (context) in
+        let value = renderer.image { (context) in
             self.layer.render(in: context.cgContext)
         }
+        return value
     }
     
     func rotate360Degrees(duration: CFTimeInterval = 3) {

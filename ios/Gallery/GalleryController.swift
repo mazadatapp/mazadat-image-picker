@@ -59,9 +59,16 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
 //            cropView.setImage(image: tempImage)
             addUI()
             DispatchQueue.main.async { [self] in
-                let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-                list.append(getCroppedImage(newImage: tempImage))
-                cameraController.getCroppedImages(images: list)
+                var image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+                var imgData = image.jpegData(compressionQuality: 1)!
+                var imageSize: Int = imgData.count
+                if(imageSize > 4000000){
+                    imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
+                    imageSize = imgData.count
+                    image = UIImage(data: imgData)!
+                }
+                list.append(getCroppedImage(newImage: image))
+                cameraController.getImagesFromGallery(images: list)
                 dismiss(animated: false)
             }
             

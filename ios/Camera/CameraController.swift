@@ -46,6 +46,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var editModeType=EditModeTypes.NOTHING
     var editSelectedIndex = -1
     var originalImage:UIImage!
+    var rotatedImage:UIImage!
     var editImageRotation:Double=0
     var editPhotoPath:[String]!
     var selectedIndex:Int!
@@ -65,6 +66,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var isIdVerification = false
     var canPressDone = false
     var zoomFirstTimeOnly=true
+    
     override func viewDidLoad() {
         
         if(editPhotoPath==nil){
@@ -119,7 +121,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         checkDoneButton()
     }
     
-    func getCroppedImages(images:[UIImage]){
+    func getImagesFromGallery(images:[UIImage]){
         for image in images{
             if(imageTurn < maxImagesSize){
                 imageItems[imageTurn].image=image

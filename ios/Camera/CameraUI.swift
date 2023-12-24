@@ -334,9 +334,25 @@ extension CameraController:ImageScrollViewDelegate{
         }
     }
     
-    func getCroppedImage(newImage:UIImage)->UIImage{
+    func getCroppedImage(newImage:UIImage,radians:CGFloat? = 0)->UIImage{
         
         let container = UIView(frame: CGRect(x: 0, y: 0, width: newImage.size.width, height: newImage.size.width * 3.0 / 4.0))
+        container.backgroundColor = .black
+        let image=UIImageView(frame: container.frame)
+        image.contentMode = .scaleAspectFit
+        if radians != 0 {
+            image.image = newImage.rotate(radians: radians!)
+        }else{
+            image.image = newImage
+        }
+        container.addSubview(image)
+        return container.snapshot(of: container.bounds)
+        
+    }
+    
+    func getCroppedImageForRotation(newImage:UIImage)->UIImage{
+        
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: originalImage.size.width, height: originalImage.size.width * 3.0 / 4.0))
         container.backgroundColor = .black
         let image=UIImageView(frame: container.frame)
         image.contentMode = .scaleAspectFit
@@ -462,34 +478,36 @@ extension CameraController:ImageScrollViewDelegate{
             confirmBtn.isHidden=false
             declineBtn.isHidden=false
             
-            editImageRotation -= .pi/2
-            loadingView.isHidden = false
-            DispatchQueue.global().async(execute: { [self] in
-                let newImage = originalImage.rotate(radians: editImageRotation)
-                DispatchQueue.main.sync(execute: {
-                    editImage.image = newImage
-                    loadingView.isHidden = true
-                })
-                
-            })
+            rotateImage()
             
         }else if(editModeType == EditModeTypes.ROTATE){
             disableDoneBtn()
-            editImageRotation -= .pi/2
-            loadingView.isHidden = false
-            DispatchQueue.global().async(execute: { [self] in
-                let newImage = originalImage.rotate(radians: editImageRotation)
-                DispatchQueue.main.sync(execute: {
-                    editImage.image = newImage
-                    loadingView.isHidden = true
-                })
-                
-            })
+            rotateImage()
             
         }
         
         //editImage.image=imageItems[editSelectedIndex].image
         
+    }
+    
+    func rotateImage(){
+        editImageRotation -= .pi/2
+        print("\(originalImage.size)")
+        if (originalImage.size.width * originalImage.size.height > 4000000) {
+            loadingView.isHidden = false
+            DispatchQueue.global().async(execute: { [self] in
+                rotatedImage = originalImage.rotate(radians: editImageRotation)
+                DispatchQueue.main.sync(execute: {
+                    editImage.image = rotatedImage
+                    loadingView.isHidden = true
+                })
+                
+            })
+        }else{
+            rotatedImage = originalImage.rotate(radians: editImageRotation)
+            editImage.image = rotatedImage
+            loadingView.isHidden = true
+        }
     }
     
     @objc func deletePressed(_ sender: AnyObject) {
@@ -652,12 +670,18 @@ extension CameraController:ImageScrollViewDelegate{
                 let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
                 cropBtn.setImage(whiteCropImage, for: .normal)
             }else if(editModeType==EditModeTypes.ROTATE){
-                let image=editView.snapshot(of: editView.bounds)
-                imageItems[editSelectedIndex].image=image
-                reloadCell(index: editSelectedIndex)
+                DispatchQueue.main.async { [self] in
+                    
+                    let image=getCroppedImageForRotation(newImage: rotatedImage!)
+                    imageItems[editSelectedIndex].image=image
+                    editImage.image = image
+                    reloadCell(index: editSelectedIndex)
+                    
+                    let whiteRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color:.white)
+                    rotateBtn.setImage(whiteRotateImage, for: .normal)
+                    
+                }
                 
-                let whiteRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color:.white)
-                rotateBtn.setImage(whiteRotateImage, for: .normal)
             }
         }
         
@@ -700,7 +724,11 @@ extension CameraController:ImageScrollViewDelegate{
         setCameraHintText()
         enableDoneBtn()
     }
-    
+    func cropImage(image: UIImage, rect: CGRect) -> UIImage {
+        let cgImage = image.cgImage! // better to write "guard" in realm app
+        let croppedCGImage = cgImage.cropping(to: rect)
+        return UIImage(cgImage: croppedCGImage!)
+    }
     func cancelCrop() {
         let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
         cropBtn.setImage(whiteCropImage, for: .normal)
@@ -737,6 +765,7 @@ extension CameraController:ImageScrollViewDelegate{
         
         disableDoneBtn()
         editModeType = EditModeTypes.CROP
+        
     }
     
 }
