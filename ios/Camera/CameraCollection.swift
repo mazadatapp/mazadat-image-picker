@@ -32,7 +32,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         }else{
             cell.image_.image = nil
         }
-        cell.frameBlue.borderWidth = (selectedPosition == indexPath.row) ? 2 : 0
+        cell.frameBlue.borderColor = (selectedPosition == indexPath.row) ? Colors.blueColor() : UIColor.init(red: 0.34, green: 0.34, blue: 0.34, alpha: 1)
         cell.editBtn.isHidden = imageItems[indexPath.row].image == nil || selectedPosition == indexPath.row
         
         if(isIdVerification){

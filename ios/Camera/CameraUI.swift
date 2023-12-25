@@ -668,6 +668,7 @@ extension CameraController:ImageScrollViewDelegate{
                 editImage.isHidden=false
                 let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
                 cropBtn.setImage(whiteCropImage, for: .normal)
+                
             }else if(editModeType==EditModeTypes.ROTATE){
                 let image=getCroppedImageForRotation(newImage: rotatedImage!)
                 imageItems[editSelectedIndex].image=image

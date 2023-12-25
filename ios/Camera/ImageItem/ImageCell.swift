@@ -20,6 +20,7 @@ class ImageCell: UICollectionViewCell {
         super.init(frame: frame)
         frameBlue=UIView(frame: CGRect(x: 8, y: 0, width: 101, height: 76))
         frameBlue.cornerRadius = 8
+        frameBlue.borderWidth = 2
         frameBlue.borderColor = Colors.blueColor()
         frameBlue.backgroundColor = UIColor.init(white: 1, alpha: 0.38)
         contentView.addSubview(frameBlue)
@@ -53,6 +54,7 @@ class ImageCell: UICollectionViewCell {
         loading.rotate360Degrees(duration: 1.5)
         frameBlue.addSubview(loading)
        
+        frameBlue.clipsToBounds=true
         //loading.isHidden = true
         
         
