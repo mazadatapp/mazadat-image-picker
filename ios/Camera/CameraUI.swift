@@ -492,7 +492,6 @@ extension CameraController:ImageScrollViewDelegate{
     
     func rotateImage(){
         editImageRotation -= .pi/2
-        print("\(originalImage.size)")
         if (originalImage.size.width * originalImage.size.height > 4000000) {
             loadingView.isHidden = false
             DispatchQueue.global().async(execute: { [self] in
@@ -670,18 +669,9 @@ extension CameraController:ImageScrollViewDelegate{
                 let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)
                 cropBtn.setImage(whiteCropImage, for: .normal)
             }else if(editModeType==EditModeTypes.ROTATE){
-                DispatchQueue.main.async { [self] in
-                    
-                    let image=getCroppedImageForRotation(newImage: rotatedImage!)
-                    imageItems[editSelectedIndex].image=image
-                    editImage.image = image
-                    reloadCell(index: editSelectedIndex)
-                    
-                    let whiteRotateImage=UIImage(named: "ic_picker_rotate")?.maskWithColor(color:.white)
-                    rotateBtn.setImage(whiteRotateImage, for: .normal)
-                    
-                }
-                
+                let image=getCroppedImageForRotation(newImage: rotatedImage!)
+                imageItems[editSelectedIndex].image=image
+                reloadCell(index: editSelectedIndex)
             }
         }
         
