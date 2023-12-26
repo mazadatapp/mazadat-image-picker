@@ -473,6 +473,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       maxImagesTv.setTextColor(getResources().getColor(R.color.red));
       captureIm.setEnabled(false);
       captureIm.setAlpha(0.38f);
+      previewView.setVisibility(View.GONE);
     }
 
     checkDoneButton();
@@ -673,13 +674,11 @@ public class PickerCameraActivity extends AppCompatActivity {
       Bitmap croppedBitmap = getBitmapFromView(imageCropper);
       imageCropper.setShowGrid(true);
       File file = ImageUtils.bitmapToFile(this, croppedBitmap,imageItems.get(selectedEditIndex).getPercentage());
-      //Log.i("datadata_bitmap",imageCropper.getLeft()+"");
 
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
     } else if (editType == EditModeTypes.ROTATE) {
       File file = ImageUtils.bitmapToFile(this, rotationBitmap,imageItems.get(selectedEditIndex).getPercentage());
-      //Log.i("datadata_bitmap",file.length()+" "+selectedEditIndex+" "+rotationBitmap.getWidth()+" "+rotationBitmap.getHeight());
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
     }
