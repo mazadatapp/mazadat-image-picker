@@ -229,7 +229,7 @@ public class Gallery extends Activity {
       } catch (Exception e) {
         e.printStackTrace();
       }
-      if (temp.length() > 4000000) {
+      if (temp.length() > 2000000) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         percentage = (int)((4000000.0/temp.length())*100);
         bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);

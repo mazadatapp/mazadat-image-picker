@@ -1,6 +1,6 @@
 {
   "name": "mazadat-image-picker",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
