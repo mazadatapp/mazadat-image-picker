@@ -6,7 +6,7 @@ public class ImageItem {
   private File file;
   private String url;
 
-  private int percentage;
+  private int percentage=100;
   public ImageItem() {
   }
 

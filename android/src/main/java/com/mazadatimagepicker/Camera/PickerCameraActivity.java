@@ -670,9 +670,6 @@ public class PickerCameraActivity extends AppCompatActivity {
       float scale = imageCropper.getCurrentScaleFactor();
       float originalWidth = width/scale;
 
-      float myWidth = ((float)imageCropper.getWidth()/(float)getResources().getDisplayMetrics().widthPixels) * originalWidth;
-      float myLeft = left/scale;
-      float myTop = top/scale;
       Bitmap croppedBitmap = getBitmapFromView(imageCropper);
       imageCropper.setShowGrid(true);
       File file = ImageUtils.bitmapToFile(this, croppedBitmap,imageItems.get(selectedEditIndex).getPercentage());
@@ -680,6 +677,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);
     } else if (editType == EditModeTypes.ROTATE) {
+
       File file = ImageUtils.bitmapToFile(this, rotationBitmap,imageItems.get(selectedEditIndex).getPercentage());
       imageItems.get(selectedEditIndex).setFile(file);
       adapter.notifyItemChanged(selectedEditIndex);

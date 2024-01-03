@@ -49,7 +49,7 @@ public class ImageUtils {
     }
 
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG, percentage /*ignored for PNG*/, bos);
+    bitmap.compress(percentage == 100 ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, percentage /*ignored for PNG*/, bos);
     byte[] bitmapdata = bos.toByteArray();
 
     try {
