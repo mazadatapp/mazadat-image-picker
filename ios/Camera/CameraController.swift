@@ -110,10 +110,13 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
                 maxNoOfImagesL.textColor = Colors.redColor()
                 captureBtn.alpha=0.38
                 captureBtn.isEnabled=false
+                selectedPosition = imageItems.count-1
+                itemSelected(index: selectedPosition)
             }else{
                 imageItems.append(ImageItem())
+                selectedPosition = imageTurn
             }
-            selectedPosition = imageTurn
+            
         }
         imagesCollection.reloadData()
         doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
