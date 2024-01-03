@@ -463,17 +463,19 @@ public class PickerCameraActivity extends AppCompatActivity {
 
 
     imageTurn++;
-    selectedPosition = imageTurn;
+
     if (imageTurn < maxImagesSize) {
       doneBtn.setText(getString(R.string.done) + " (" + imageTurn + ")");
       imageItems.addLast(new ImageItem());
       recycler.smoothScrollToPosition(imageTurn);
+      selectedPosition = imageTurn;
     } else {
       doneBtn.setText(getString(R.string.done) + " (" + (maxImagesSize) + ")");
       maxImagesTv.setTextColor(getResources().getColor(R.color.red));
       captureIm.setEnabled(false);
       captureIm.setAlpha(0.38f);
-      previewView.setVisibility(View.GONE);
+      selectedPosition = imageItems.size() - 1;
+      editOrCapturePhoto(selectedPosition);
     }
 
     checkDoneButton();
