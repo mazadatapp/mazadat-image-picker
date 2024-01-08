@@ -54,7 +54,7 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
                                     image = UIImage(data: imgData)!
                                 }
                                 
-                                list.append(getCroppedImage(newImage: image))
+                                list.append(image)
                                 count += 1
                                 if(count == results.count){
                                     cameraController.getImagesFromGallery(images: list)

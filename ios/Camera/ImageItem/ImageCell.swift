@@ -9,7 +9,7 @@
 import UIKit
 
 class ImageCell: UICollectionViewCell {
-    var image_:UIImageView!
+    var image_:ImageScrollView!
     var loading:UIImageView!
     var editBtn:UIButton!
     var frameBlue:UIView!
@@ -31,7 +31,7 @@ class ImageCell: UICollectionViewCell {
         hintL.textColor = UIColor(white: 0, alpha: 0.26)
         addConstraints(currentView: hintL, MainView: frameBlue, centerX: true, centerXValue: 0, centerY: true, centerYValue: 0, top: false, topValue: 0, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
-        image_=UIImageView(frame: CGRect(x: 2, y: 2, width: frameBlue.frame.width - 4, height: frameBlue.frame.height-4))
+        image_=ImageScrollView(frame: CGRect(x: 2, y: 2, width: frameBlue.frame.width - 4, height: frameBlue.frame.height-4))
         image_.contentMode = .scaleAspectFit
         image_.cornerRadius = 8
         frameBlue.addSubview(image_)

@@ -176,7 +176,7 @@ open class ImageScrollView: UIScrollView {
 
     // MARK: - Display image
     
-    @objc open func display(image: UIImage) {
+    @objc open func display(image: UIImage?) {
 
         if let zoomView = zoomView {
             zoomView.removeFromSuperview()
@@ -189,8 +189,9 @@ open class ImageScrollView: UIScrollView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ImageScrollView.doubleTapGestureRecognizer(_:)))
         tapGesture.numberOfTapsRequired = 2
         zoomView!.addGestureRecognizer(tapGesture)
-        
-        configureImageForSize(image.size)
+        if(image != nil){
+            configureImageForSize(image!.size)
+        }
     }
     
     private func configureImageForSize(_ size: CGSize) {
@@ -299,6 +300,7 @@ extension ImageScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         imageScrollViewDelegate?.scrollViewDidScroll?(scrollView)
+        print(zoomScale)
     }
 
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

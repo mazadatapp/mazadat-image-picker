@@ -27,10 +27,10 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.editBtn.centerVertically(padding: 2, lang: lang)
         if(imageItems[indexPath.row].image != nil){
             let scale = UIScreen.main.scale
-            cell.image_.image = imageItems[indexPath.row].image.imageResized(to: CGSize(width: cell.frameBlue.frame.width, height: cell.frameBlue.frame.height))
+            cell.image_.display(image: imageItems[indexPath.row].image)  //.imageResized(to: CGSize(width: cell.frameBlue.frame.width, height: cell.frameBlue.frame.height))
                 //.imageResized(to: CGSize(width: cell.image_.frame.width * scale, height: cell.image_.frame.height * scale))
         }else{
-            cell.image_.image = nil
+            cell.image_.display(image: nil)
         }
         cell.frameBlue.borderColor = (selectedPosition == indexPath.row) ? Colors.blueColor() : UIColor.init(red: 0.34, green: 0.34, blue: 0.34, alpha: 1)
         cell.editBtn.isHidden = imageItems[indexPath.row].image == nil || selectedPosition == indexPath.row
@@ -59,7 +59,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         if(editModeType == EditModeTypes.NOTHING && imageItems[index].image != nil){
             editView.isHidden=false
             
-            editImage.image = imageItems[index].image
+            editImage.display(image: imageItems[index].image)
             showPreviewLayer(flag: false)
             editMode = true
             
@@ -100,7 +100,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         deleteBtn.alpha=0.38
         captureBtn.isHidden=false
         
-        editImage.image = nil
+        editImage.display(image: nil)
         editImage.setNeedsDisplay()
         //imageCropper.display(image: nil)
         

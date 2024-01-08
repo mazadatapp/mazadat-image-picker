@@ -29,7 +29,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     let deleteBtn=UIButton()
     
     let editView=UIView()
-    let editImage=UIImageView()
+    let editImage=ImageScrollView()
     let indicator=UIActivityIndicatorView()
     let zoomIndicatior=UIImageView()
     let imageCropper=ImageScrollView()

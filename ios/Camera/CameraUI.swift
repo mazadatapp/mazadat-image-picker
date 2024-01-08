@@ -497,14 +497,18 @@ extension CameraController:ImageScrollViewDelegate{
             DispatchQueue.global().async(execute: { [self] in
                 rotatedImage = originalImage.rotate(radians: editImageRotation)
                 DispatchQueue.main.sync(execute: {
-                    editImage.image = rotatedImage
+                    print(rotatedImage.size)
+                    editImage.display(image: rotatedImage)
+                    //editImage.minimumZoomScale = 0.2140856800479329
+                    //editImage.setZoomScale(0.2140856800479329, animated: true)
+                    print(editImage.minimumZoomScale)
                     loadingView.isHidden = true
                 })
                 
             })
         }else{
             rotatedImage = originalImage.rotate(radians: editImageRotation)
-            editImage.image = rotatedImage
+            editImage.display(image: rotatedImage)
             loadingView.isHidden = true
         }
     }
@@ -692,7 +696,7 @@ extension CameraController:ImageScrollViewDelegate{
         
         imageCropper.isHidden=true
         editImage.isHidden=false
-        editImage.image = imageItems[editSelectedIndex].image
+        editImage.display(image: imageItems[editSelectedIndex].image)
         
         confirmBtn.isHidden=true
         declineBtn.isHidden=true

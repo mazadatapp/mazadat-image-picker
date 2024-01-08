@@ -67,7 +67,7 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
                     imageSize = imgData.count
                     image = UIImage(data: imgData)!
                 }
-                list.append(getCroppedImage(newImage: image))
+                list.append(image)
                 cameraController.getImagesFromGallery(images: list)
                 dismiss(animated: false)
             }
