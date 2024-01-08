@@ -26,13 +26,13 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
         imagePicker.delegate = self
         present(imagePicker, animated: true)
         
-        
     }
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         var count=0
         var list=[UIImage]()
+        var hasError=false
         if(results.count>0){
             addUI()
             
@@ -48,17 +48,27 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
                             if var image = image as? UIImage {
                                 var imgData = image.jpegData(compressionQuality: 1)!
                                 var imageSize: Int = imgData.count
-                                if(imageSize > 2000000){
-                                    imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
-                                    imageSize = imgData.count
-                                    image = UIImage(data: imgData)!
-                                }
-                                
-                                list.append(getCroppedImage(newImage: image))
                                 count += 1
-                                if(count == results.count){
-                                    cameraController.getImagesFromGallery(images: list)
-                                    dismiss(animated: false)
+                                if(imageSize <= 5000000){
+                                    if(imageSize > 2000000){
+                                        imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
+                                        imageSize = imgData.count
+                                        image = UIImage(data: imgData)!
+                                    }
+                                    
+                                    list.append(getCroppedImage(newImage: image))
+                                    
+                                    if(count == results.count){
+                                        cameraController.getImagesFromGallery(images: list, hasError: hasError)
+                                        dismiss(animated: false)
+                                    }
+                                }else{
+                                    hasError = true
+                                    if(count == results.count){
+                                        cameraController.getImagesFromGallery(images: list, hasError: hasError)
+                                        dismiss(animated: false)
+                                    }
+                                    
                                 }
                                 
                             }
