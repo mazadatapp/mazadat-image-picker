@@ -47,6 +47,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("\(editModeType) \(imageItems[indexPath.row].path)")
         if(editModeType == EditModeTypes.NOTHING && imageItems[indexPath.row].path == nil){
             itemSelected(index: indexPath.row)
             selectedPosition = indexPath.row

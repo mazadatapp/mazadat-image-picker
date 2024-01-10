@@ -29,7 +29,7 @@ open class ImageScrollView: UIScrollView {
     
     static let kZoomInFactorFromMinWhenDoubleTap: CGFloat = 2
     
-    @objc open var imageContentMode: ScaleMode = .widthFill
+    @objc open var imageContentMode: ScaleMode = .aspectFill
     @objc open var initialOffset: Offset = .begining
     
     @objc public private(set) var zoomView: UIImageView? = nil
@@ -40,7 +40,7 @@ open class ImageScrollView: UIScrollView {
     private var pointToCenterAfterResize: CGPoint = CGPoint.zero
     private var scaleToRestoreAfterResize: CGFloat = 1.0
     open var maxScaleFromMinScale: CGFloat = 3.0
-    
+    open var image:UIImage!
     override open var frame: CGRect {
         willSet {
             if frame.equalTo(newValue) == false && newValue.equalTo(CGRect.zero) == false && imageSize.equalTo(CGSize.zero) == false {
@@ -177,7 +177,7 @@ open class ImageScrollView: UIScrollView {
     // MARK: - Display image
     
     @objc open func display(image: UIImage?) {
-
+        self.image=image
         if let zoomView = zoomView {
             zoomView.removeFromSuperview()
         }
@@ -231,7 +231,7 @@ open class ImageScrollView: UIScrollView {
         case .aspectFill:
             minScale = max(xScale, yScale)
         case .aspectFit:
-            minScale = min(xScale, yScale)
+            minScale = max(xScale, yScale)
         case .widthFill:
             minScale = xScale
         case .heightFill:
@@ -300,7 +300,7 @@ extension ImageScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         imageScrollViewDelegate?.scrollViewDidScroll?(scrollView)
-        print(zoomScale)
+        print("\(zoomScale) \(contentOffset) \(imageSize) \(reactContentFrame)")
     }
 
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

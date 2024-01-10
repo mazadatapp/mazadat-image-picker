@@ -110,6 +110,7 @@ extension CameraController:ImageScrollViewDelegate{
         layout.scrollDirection = .horizontal
         imagesCollection.collectionViewLayout = layout
         imagesCollection.isScrollEnabled=true
+        imagesCollection.isUserInteractionEnabled = true
         imagesCollection.showsHorizontalScrollIndicator = false
         imagesCollection.showsVerticalScrollIndicator = false
         UIviews.addSubview(imagesCollection)
@@ -499,9 +500,7 @@ extension CameraController:ImageScrollViewDelegate{
                 DispatchQueue.main.sync(execute: {
                     print(rotatedImage.size)
                     editImage.display(image: rotatedImage)
-                    //editImage.minimumZoomScale = 0.2140856800479329
-                    //editImage.setZoomScale(0.2140856800479329, animated: true)
-                    print(editImage.minimumZoomScale)
+                    
                     loadingView.isHidden = true
                 })
                 
@@ -509,8 +508,26 @@ extension CameraController:ImageScrollViewDelegate{
         }else{
             rotatedImage = originalImage.rotate(radians: editImageRotation)
             editImage.display(image: rotatedImage)
+            
             loadingView.isHidden = true
         }
+    }
+    
+    func checkImageScale(){
+        
+        var minScale: CGFloat = 1
+        var customScale:CGFloat = 1
+        if(rotatedImage.size.width > rotatedImage.size.height){
+            let height = rotatedImage.size.width * 3.0 / 4.0
+            customScale = rotatedImage.size.height / height
+        }else{
+            let width = rotatedImage.size.height * 3.0 / 4.0
+            customScale = rotatedImage.size.width / width
+        }
+        print("custom_scale \(editImage.zoomScale) \(1-customScale)")
+        editImage.setZoomScale(0.14, animated: true)
+        editImage.minimumZoomScale = 1-customScale
+        print(editImage.minimumZoomScale)
     }
     
     @objc func deletePressed(_ sender: AnyObject) {
@@ -665,7 +682,9 @@ extension CameraController:ImageScrollViewDelegate{
                 gridHorizontal1.isHidden = true
                 gridHorizontal2.isHidden = true
                 
-                let image=editView.snapshot(of: editView.bounds)
+                //let image=editView.snapshot(of: editView.bounds)
+                
+                let image = cropImage(image: editImage.image, rect: CGRect(x: editImage.contentOffset.y, y: editImage.contentOffset.y, width: editView.frame.width, height: editView.frame.height))
                 imageItems[editSelectedIndex].image=image
                 reloadCell(index: editSelectedIndex)
                 imageCropper.isHidden=true
@@ -721,6 +740,7 @@ extension CameraController:ImageScrollViewDelegate{
     }
     func cropImage(image: UIImage, rect: CGRect) -> UIImage {
         let cgImage = image.cgImage! // better to write "guard" in realm app
+        print(rect)
         let croppedCGImage = cgImage.cropping(to: rect)
         return UIImage(cgImage: croppedCGImage!)
     }
