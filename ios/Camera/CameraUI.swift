@@ -674,7 +674,9 @@ extension CameraController:ImageScrollViewDelegate{
                 gridHorizontal2.isHidden = true
                 
                 //let image=editView.snapshot(of: editView.bounds)
+                
                 let image = cropImage(image: editImage.image, rect: CGRect(x: imageCropper.contentOffset.x/imageCropper.zoomScale, y: imageCropper.contentOffset.y/imageCropper.zoomScale, width: editView.frame.width / imageCropper.zoomScale, height: editView.frame.height / imageCropper.zoomScale))
+                
                 imageItems[editSelectedIndex].edited = true
                 imageItems[editSelectedIndex].image=image
                 reloadCell(index: editSelectedIndex)
@@ -732,9 +734,10 @@ extension CameraController:ImageScrollViewDelegate{
         enableDoneBtn()
     }
     func cropImage(image: UIImage, rect: CGRect) -> UIImage {
-        let cgImage = image.cgImage! // better to write "guard" in realm app
-        let croppedCGImage = cgImage.cropping(to: rect)
-        return UIImage(cgImage: croppedCGImage!)
+        return image.croppedImage(inRect: rect)
+//        let cgImage = image.cgImage! // better to write "guard" in realm app
+//        let croppedCGImage = cgImage.cropping(to: rect)
+//        return UIImage(cgImage: croppedCGImage!)
     }
     func cancelCrop() {
         let whiteCropImage=UIImage(named: "ic_picker_crop")?.maskWithColor(color:.white)

@@ -126,7 +126,10 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         checkDoneButton()
     }
     
-    func getImagesFromGallery(images:[UIImage]){
+    func getImagesFromGallery(images:[UIImage],hasError:Bool){
+        if(hasError){
+            showToast(message: "Cannot choose images more than 5MB",width: 280)
+        }
         for image in images{
             if(imageTurn < maxImagesSize){
                 imageItems[imageTurn].image=image

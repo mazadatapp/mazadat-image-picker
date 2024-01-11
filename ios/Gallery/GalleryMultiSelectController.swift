@@ -26,13 +26,13 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
         imagePicker.delegate = self
         present(imagePicker, animated: true)
         
-        
     }
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         var count=0
         var list=[UIImage]()
+        var hasError=false
         if(results.count>0){
             addUI()
             
@@ -56,8 +56,9 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
                                 
                                 list.append(image)
                                 count += 1
+                                
                                 if(count == results.count){
-                                    cameraController.getImagesFromGallery(images: list)
+                                    cameraController.getImagesFromGallery(images: list, hasError: hasError)
                                     dismiss(animated: false)
                                 }
                                 
