@@ -240,7 +240,7 @@ open class ImageScrollView: UIScrollView {
         
         
         var maxScale = maxScaleFromMinScale*minScale
-        maxScale = 150
+        maxScale = 15 //15X
         // don't let minScale exceed maxScale. (If the image is smaller than the screen, we don't want to force it to be zoomed.)
         if minScale > maxScale {
             minScale = maxScale
@@ -300,7 +300,6 @@ extension ImageScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         imageScrollViewDelegate?.scrollViewDidScroll?(scrollView)
-        print("\(zoomScale) \(contentOffset) \(imageSize) \(reactContentFrame)")
     }
 
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

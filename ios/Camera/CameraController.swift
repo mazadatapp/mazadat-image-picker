@@ -67,6 +67,8 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     var canPressDone = false
     var zoomFirstTimeOnly=true
     
+    let cellWidth:CGFloat = 109
+    let cellHeight:CGFloat = 82
     override func viewDidLoad() {
         
         if(editPhotoPath==nil){

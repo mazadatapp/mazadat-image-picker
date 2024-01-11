@@ -11,6 +11,7 @@ import UIKit
 class ImageItem {
     var image:UIImage!
     var path:String!
+    var edited = false
     init(){
         
     }

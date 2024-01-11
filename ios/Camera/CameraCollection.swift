@@ -25,11 +25,13 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.editBtn.setTitle(lang == "en" ? "Select to edit" : "إضغط للتعديل", for: .normal)
         cell.editBtn.sizeToFit()
         cell.editBtn.centerVertically(padding: 2, lang: lang)
+        cell.image_.isHidden = imageItems[indexPath.row].image == nil
         if(imageItems[indexPath.row].image != nil){
             let scale = UIScreen.main.scale
             cell.image_.display(image: imageItems[indexPath.row].image)  //.imageResized(to: CGSize(width: cell.frameBlue.frame.width, height: cell.frameBlue.frame.height))
                 //.imageResized(to: CGSize(width: cell.image_.frame.width * scale, height: cell.image_.frame.height * scale))
         }else{
+            
             cell.image_.display(image: nil)
         }
         cell.frameBlue.borderColor = (selectedPosition == indexPath.row) ? Colors.blueColor() : UIColor.init(red: 0.34, green: 0.34, blue: 0.34, alpha: 1)
@@ -47,7 +49,6 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("\(editModeType) \(imageItems[indexPath.row].path)")
         if(editModeType == EditModeTypes.NOTHING && imageItems[indexPath.row].path == nil){
             itemSelected(index: indexPath.row)
             selectedPosition = indexPath.row
@@ -131,9 +132,9 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         imageCropper.isHidden = true
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: 109, height: 76)
-//    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
     
     
     

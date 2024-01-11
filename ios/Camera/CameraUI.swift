@@ -309,6 +309,7 @@ extension CameraController:ImageScrollViewDelegate{
         doneBtn.addTarget(self, action: #selector(donePressed(_:)), for: .touchUpInside)
         
         flashBtn.addTarget(self, action: #selector(flashPressed(_:)), for: .touchUpInside)
+        
     }
     func downloadImage(url: String,index:Int) {
         
@@ -498,7 +499,6 @@ extension CameraController:ImageScrollViewDelegate{
             DispatchQueue.global().async(execute: { [self] in
                 rotatedImage = originalImage.rotate(radians: editImageRotation)
                 DispatchQueue.main.sync(execute: {
-                    print(rotatedImage.size)
                     editImage.display(image: rotatedImage)
                     
                     loadingView.isHidden = true
@@ -511,23 +511,6 @@ extension CameraController:ImageScrollViewDelegate{
             
             loadingView.isHidden = true
         }
-    }
-    
-    func checkImageScale(){
-        
-        var minScale: CGFloat = 1
-        var customScale:CGFloat = 1
-        if(rotatedImage.size.width > rotatedImage.size.height){
-            let height = rotatedImage.size.width * 3.0 / 4.0
-            customScale = rotatedImage.size.height / height
-        }else{
-            let width = rotatedImage.size.height * 3.0 / 4.0
-            customScale = rotatedImage.size.width / width
-        }
-        print("custom_scale \(editImage.zoomScale) \(1-customScale)")
-        editImage.setZoomScale(0.14, animated: true)
-        editImage.minimumZoomScale = 1-customScale
-        print(editImage.minimumZoomScale)
     }
     
     @objc func deletePressed(_ sender: AnyObject) {
@@ -662,6 +645,14 @@ extension CameraController:ImageScrollViewDelegate{
         for item in imageItems{
             if(item.image != nil){
                 let uuid = UUID().uuidString
+                if(!item.edited){
+                    let customView=UIView(frame: CGRect(x: 0, y: 0, width: cellWidth, height: cellHeight))
+                    let scrollImage = ImageScrollView(frame: customView.frame)
+                    customView.addSubview(scrollImage)
+                    scrollImage.display(image: item.image)
+                    let image = cropImage(image: item.image, rect: CGRect(x: scrollImage.contentOffset.x/scrollImage.zoomScale, y: scrollImage.contentOffset.y/scrollImage.zoomScale, width: cellWidth / scrollImage.zoomScale, height: cellHeight / scrollImage.zoomScale))
+                    item.image = image
+                }
                 let path = item.image.saveImage(name: "\(uuid).jpg")
                 result = result + path.path + ","
             }
@@ -683,8 +674,8 @@ extension CameraController:ImageScrollViewDelegate{
                 gridHorizontal2.isHidden = true
                 
                 //let image=editView.snapshot(of: editView.bounds)
-                
-                let image = cropImage(image: editImage.image, rect: CGRect(x: editImage.contentOffset.y, y: editImage.contentOffset.y, width: editView.frame.width, height: editView.frame.height))
+                let image = cropImage(image: editImage.image, rect: CGRect(x: imageCropper.contentOffset.x/imageCropper.zoomScale, y: imageCropper.contentOffset.y/imageCropper.zoomScale, width: editView.frame.width / imageCropper.zoomScale, height: editView.frame.height / imageCropper.zoomScale))
+                imageItems[editSelectedIndex].edited = true
                 imageItems[editSelectedIndex].image=image
                 reloadCell(index: editSelectedIndex)
                 imageCropper.isHidden=true
@@ -693,7 +684,9 @@ extension CameraController:ImageScrollViewDelegate{
                 cropBtn.setImage(whiteCropImage, for: .normal)
                 
             }else if(editModeType==EditModeTypes.ROTATE){
-                let image=getCroppedImageForRotation(newImage: rotatedImage!)
+                let image = cropImage(image: rotatedImage, rect: CGRect(x: editImage.contentOffset.x/editImage.zoomScale, y: editImage.contentOffset.y/editImage.zoomScale, width: editView.frame.width / editImage.zoomScale, height: editView.frame.height / editImage.zoomScale))
+                
+                imageItems[editSelectedIndex].edited = true
                 imageItems[editSelectedIndex].image=image
                 reloadCell(index: editSelectedIndex)
             }
@@ -740,7 +733,6 @@ extension CameraController:ImageScrollViewDelegate{
     }
     func cropImage(image: UIImage, rect: CGRect) -> UIImage {
         let cgImage = image.cgImage! // better to write "guard" in realm app
-        print(rect)
         let croppedCGImage = cgImage.cropping(to: rect)
         return UIImage(cgImage: croppedCGImage!)
     }
