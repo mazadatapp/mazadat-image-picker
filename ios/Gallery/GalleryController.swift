@@ -63,16 +63,12 @@ class GalleryController: UIViewController,UINavigationControllerDelegate, UIImag
                 var image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
                 var imgData = image.jpegData(compressionQuality: 1)!
                 var imageSize: Int = imgData.count
-                if(imageSize<=5000000){
-                    if(imageSize > 2000000){
-                        imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
-                        imageSize = imgData.count
-                        image = UIImage(data: imgData)!
-                    }
-                    list.append(getCroppedImage(newImage: image))
-                }else{
-                    hasError = true
+                if(imageSize > 2000000){
+                    imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
+                    imageSize = imgData.count
+                    image = UIImage(data: imgData)!
                 }
+                list.append(getCroppedImage(newImage: image))
                 cameraController.getImagesFromGallery(images: list, hasError: hasError)
                 dismiss(animated: false)
             }

@@ -49,7 +49,7 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
                                 var imgData = image.jpegData(compressionQuality: 1)!
                                 var imageSize: Int = imgData.count
                                 count += 1
-                                if(imageSize <= 5000000){
+                                
                                     if(imageSize > 2000000){
                                         imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
                                         imageSize = imgData.count
@@ -62,14 +62,7 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
                                         cameraController.getImagesFromGallery(images: list, hasError: hasError)
                                         dismiss(animated: false)
                                     }
-                                }else{
-                                    hasError = true
-                                    if(count == results.count){
-                                        cameraController.getImagesFromGallery(images: list, hasError: hasError)
-                                        dismiss(animated: false)
-                                    }
-                                    
-                                }
+                                
                                 
                             }
                         }
@@ -99,14 +92,14 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
             width: image.size.width,
             height: image.size.height
         )
-
+        context.setFillColor(UIColor.black.cgColor)
+        context.fill(CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
         // Draw the original image in the center of the new context
         print(image.size)
         image.draw(in: imageRect)
 
         // Set the fill color to black and fill the rest of the context
-        context.setFillColor(UIColor.black.cgColor)
-        context.fill(CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+        
 
         // Extract the new image
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
