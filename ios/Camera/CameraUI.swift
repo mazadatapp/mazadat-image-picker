@@ -260,7 +260,7 @@ extension CameraController:ImageScrollViewDelegate{
                         imageItems.append(ImageItem(path: path))
                         downloadImage(url: path, index: index)
                     }else{
-                        imageItems.append(ImageItem(image: getCroppedImage(newImage: localImage!)))
+                        imageItems.append(ImageItem(image: localImage!))
                         //imagesCollection.reloadItems(at: [IndexPath(row: index, section: 0)])
                         if(selectedIndex == index){
                             itemSelected(index: selectedIndex)
@@ -323,7 +323,7 @@ extension CameraController:ImageScrollViewDelegate{
                 DispatchQueue.main.async { [self] in
                     imageItems[index].path = nil
                     
-                    imageItems[index].image = getCroppedImage(newImage: UIImage(data: data!)!)
+                    imageItems[index].image = UIImage(data: data!)
                     if(selectedIndex == index){
                         itemSelected(index: selectedIndex)
                     }

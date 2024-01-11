@@ -28,8 +28,9 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.image_.isHidden = imageItems[indexPath.row].image == nil
         if(imageItems[indexPath.row].image != nil){
             let scale = UIScreen.main.scale
-            cell.image_.display(image: imageItems[indexPath.row].image)  //.imageResized(to: CGSize(width: cell.frameBlue.frame.width, height: cell.frameBlue.frame.height))
+            cell.image_.display(image: imageItems[indexPath.row].image)//.imageResized(to: CGSize(width: cell.frameBlue.frame.width, height: cell.frameBlue.frame.height))
                 //.imageResized(to: CGSize(width: cell.image_.frame.width * scale, height: cell.image_.frame.height * scale))
+           
         }else{
             
             cell.image_.display(image: nil)
