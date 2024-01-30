@@ -11,7 +11,7 @@ import android.util.Log;
 import com.mazadatimagepicker.R;
 
 @SuppressLint("DrawAllocation")
-public class ZoomImage extends ZoomageView {
+public class ZoomImage extends OriginalZoomageView {
 
   Paint mainColor;
   boolean showGrid = true;

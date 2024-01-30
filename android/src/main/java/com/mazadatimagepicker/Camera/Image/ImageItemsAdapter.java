@@ -147,9 +147,12 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
           public boolean onResourceReady(@NonNull Bitmap bitmap, @NonNull Object model_, Target<Bitmap> target, @NonNull DataSource dataSource, boolean isFirstResource) {
             AsyncTask.execute(() -> {
               File file = ImageUtils.bitmapToFile(pickerCameraActivity,
-                ImageUtils.createBitmap(bitmap.getWidth(), (int) (bitmap.getWidth() * 3f / 4f), bitmap));
+              //  ImageUtils.createBitmap(bitmap.getWidth(), (int) (bitmap.getWidth() * 3f / 4f), bitmap));
+                bitmap);
               model.setUrl(null);
               model.setFile(file);
+              model.setImageWidth(bitmap.getWidth());
+              model.setImageHeight(bitmap.getHeight());
               pickerCameraActivity.reloadItem(position);
             });
             return true;
