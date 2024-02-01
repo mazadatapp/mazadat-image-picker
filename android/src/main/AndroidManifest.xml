@@ -16,7 +16,9 @@
   <application
     android:supportsRtl="true"
     android:usesCleartextTraffic="true"
-    android:requestLegacyExternalStorage="true">
+    android:requestLegacyExternalStorage="true"
+    android:allowBackup="false"
+    tools:replace="android:allowBackup">
     <activity
       android:name=".Camera.Gallery.Gallery"
       android:exported="false"

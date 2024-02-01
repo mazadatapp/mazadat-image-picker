@@ -1,6 +1,7 @@
 package com.mazadatimagepicker.Camera.Image;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
 import com.mazadatimagepicker.Camera.PickerCameraActivity;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
@@ -77,7 +79,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    RoundedImageView image;
+    ZoomImage image;
     RoundedImageView overlayIm;
     TextView selectToEdit;
     CircularProgressBar progress;
@@ -96,19 +98,29 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
 
     public void onBind(ImageItem model, int position) {
       selectToEdit.setVisibility((model.getFile() != null && position != pickerCameraActivity.getSelectedPosition()) ? View.VISIBLE : View.GONE);
-
+      if(model.getZoomImage()==null){
+        model.setZoomImage(image);
+      }
+      image.setShowGrid(false);
       if (model.getFile() != null) {
         Glide.with(pickerCameraActivity).load(Uri.fromFile(model.getFile())).into(image);
-        overlayIm.setVisibility(View.VISIBLE);
+        Log.i("datadata_edit",model.isUpdateZoomOnce()+" "+position);
+        if(!model.isUpdateZoomOnce()) {
+          updateZoomInBackGround(model.getFile(), null, image,position);
+          model.setUpdateZoomOnce(true);
+        }else{
+          image.setZoom(model.getZoomLevel());
+        }
+        overlayIm.setAlpha(1.0f);
         image.setAlpha(1.0f);
         progress.setVisibility(View.GONE);
       } else if (model.getUrl() != null) {
         checkIfImageExist(model, position, true);
         image.setAlpha(0.5f);
-        overlayIm.setVisibility(View.VISIBLE);
+        overlayIm.setAlpha(1.0f);
       } else {
         image.setImageDrawable(null);
-        overlayIm.setVisibility(View.GONE);
+        overlayIm.setAlpha(0.0f);
       }
 
       idTypeTv.setVisibility(pickerCameraActivity.isIdVerification() ? View.VISIBLE : View.GONE);
@@ -124,10 +136,26 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
 
       itemView.setBackgroundResource(pickerCameraActivity.getSelectedPosition() == position ? R.drawable.custom_image_boarder : R.drawable.custom_image);
       if (model.getUrl() == null) {
-        itemView.setOnClickListener(view -> pickerCameraActivity.editOrCapturePhoto(position));
+        overlayIm.setOnClickListener(view -> pickerCameraActivity.editOrCapturePhoto(position));
       } else {
-        itemView.setOnClickListener(null);
+        overlayIm.setOnClickListener(null);
       }
+    }
+
+    private void updateZoomInBackGround(File file,Bitmap bitmap,ZoomImage zoomImage,int position) {
+      final Bitmap[] finalBitmap = new Bitmap[1];
+      AsyncTask.execute(() -> {
+        if(file!=null){
+          finalBitmap[0] = BitmapFactory.decodeFile(file.getPath());
+        }else{
+          finalBitmap[0] = bitmap;
+        }
+        images.get(position).setZoomLevel(pickerCameraActivity.updateImageZoom(finalBitmap[0],zoomImage));
+        images.get(position).setUpdateZoomOnce(true);
+        pickerCameraActivity.reloadItem(position);
+       // pickerCameraActivity.runOnUiThread(()->notifyItemChanged(position));
+      });
+
     }
 
     private void checkIfImageExist(ImageItem model, int position, boolean fromCache) {

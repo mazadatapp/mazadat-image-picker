@@ -355,6 +355,7 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
     if (scaleType != null) {
       super.setScaleType(scaleType);
       startScaleType = scaleType;
+      Log.i("datadata_zoom",startScaleType.name());
       startValues = null;
     }
   }
@@ -528,6 +529,8 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
 
           last.set(focusx, focusy);
           Log.i("datadata_factor","down3 "+bounds.top);
+          Log.i("datadata_zoom",getCurrentDisplayedWidth()+" "+getCurrentDisplayedHeight()+" "+getCurrentScaleFactor());
+          Log.i("datadata_calc",getCurrentDisplayedWidth() +" "+getCurrentScaleFactor()+" "+bounds.left+" "+bounds.right);
         }
 
         if (event.getActionMasked() == MotionEvent.ACTION_UP ||
@@ -564,6 +567,8 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
     Matrix zoomMatrix = new Matrix(matrix);
     zoomMatrix.postScale((float) Math.sqrt(factor), (float) Math.sqrt(factor), scaleDetector.getFocusX(), scaleDetector.getFocusY());
     animateScaleAndTranslationToMatrix(zoomMatrix, RESET_DURATION);
+    setCurrentScaleFactor(factor);
+    setScaleRange(factor,150);
     reset();
     Log.i("datadata","down2 ");
   }
@@ -620,7 +625,7 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
    * This helps to keep the image on-screen by animating the translation to the nearest
    * edge, both vertically and horizontally.
    */
-  private void center() {
+  public void center() {
     if (autoCenter) {
       animateTranslationX();
       animateTranslationY();

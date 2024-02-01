@@ -85,15 +85,9 @@ public class Gallery extends Activity {
       ArrayList<String> paths = new ArrayList<>();
       ArrayList<Integer> perentages = new ArrayList<>();
       for (int i = 0; i < galleryItemModels.size(); i++) {
-        if (galleryItemModels.get(i).isCropped()) {
-          paths.add(galleryItemModels.get(i).getCroppedFile().getPath());
-        } else {
-          int width = galleryItemModels.get(i).getBitmap().getWidth();
-          Bitmap fullBitmap = ImageUtils.createBitmap(width, (int) (width * 3f / 4f), galleryItemModels.get(i).getBitmap());
-          File file = ImageUtils.bitmapToFile(this, fullBitmap,galleryItemModels.get(i).getPercentage());
-          paths.add(file.getPath());
-          perentages.add(galleryItemModels.get(i).getPercentage());
-        }
+        File file = ImageUtils.bitmapToFile(this, galleryItemModels.get(i).getBitmap(),galleryItemModels.get(i).getPercentage());
+        paths.add(file.getPath());
+        perentages.add(galleryItemModels.get(i).getPercentage());
       }
       Intent intent = new Intent();
       intent.putStringArrayListExtra("paths", paths);

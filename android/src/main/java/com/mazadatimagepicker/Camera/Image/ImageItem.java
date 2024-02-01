@@ -2,16 +2,22 @@ package com.mazadatimagepicker.Camera.Image;
 
 import android.graphics.Bitmap;
 
+import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
+
 import java.io.File;
 
 public class ImageItem {
   private File file;
+  private File adapterFile;
   private String url;
 
   private int percentage=100;
   int imageWidth;
   int imageHeight;
-  Bitmap bitmap;
+  boolean isEdited=false;
+  boolean updateZoomOnce=false;
+  ZoomImage zoomImage;
+  float zoomLevel;
   public ImageItem() {
   }
 
@@ -63,11 +69,43 @@ public class ImageItem {
     this.imageHeight = imageHeight;
   }
 
-  public Bitmap getBitmap() {
-    return bitmap;
+  public boolean isEdited() {
+    return isEdited;
   }
 
-  public void setBitmap(Bitmap bitmap) {
-    this.bitmap = bitmap;
+  public void setEdited(boolean edited) {
+    isEdited = edited;
+  }
+
+  public ZoomImage getZoomImage() {
+    return zoomImage;
+  }
+
+  public void setZoomImage(ZoomImage zoomImage) {
+    this.zoomImage = zoomImage;
+  }
+
+  public boolean isUpdateZoomOnce() {
+    return updateZoomOnce;
+  }
+
+  public void setUpdateZoomOnce(boolean updateZoomOnce) {
+    this.updateZoomOnce = updateZoomOnce;
+  }
+
+  public float getZoomLevel() {
+    return zoomLevel;
+  }
+
+  public void setZoomLevel(float zoomLevel) {
+    this.zoomLevel = zoomLevel;
+  }
+
+  public File getAdapterFile() {
+    return adapterFile;
+  }
+
+  public void setAdapterFile(File adapterFile) {
+    this.adapterFile = adapterFile;
   }
 }
