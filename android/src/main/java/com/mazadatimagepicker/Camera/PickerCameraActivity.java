@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
@@ -699,7 +698,6 @@ public class PickerCameraActivity extends AppCompatActivity {
       }
     }
     imageItems.get(position).setZoomLevel(zoomPercentage);
-    Log.i("datadata_zoom_listener",zoomPercentage+"");
     if (image != null) {
       image.resetZoom();
       image.setZoom(zoomPercentage);
@@ -769,6 +767,8 @@ public class PickerCameraActivity extends AppCompatActivity {
     imageItems.get(selectedEditIndex).setZoomLevel(1.0f);
     imageCropper.setZoom(1.0f);
     image.setZoom(1.0f);
+    imageCropper.setMinZoom(1.0f);
+    image.setMinZoom(1.0f);
     image.resetZoom();
     imageCropper.resetZoom();
     imageItems.get(selectedEditIndex).setEdited(true);
@@ -790,21 +790,22 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void resetPressed() {
-    if (editType == EditModeTypes.ROTATE) {
-      Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
-      Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
-      updateImageZoom(bitmap, image, selectedEditIndex);
-      //image.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
-    }
-    imageCropper.setScrollPosition(0, 0);
-    image.setScrollPosition(0, 0);
-    //imageCropper.setZoom(1);
-    //image.setZoom(1);
     imageCropper.resetZoom();
     image.resetZoom();
     imageCropper.setZoom(imageItems.get(selectedEditIndex).getZoomLevel());
     image.setZoom(imageItems.get(selectedEditIndex).getZoomLevel());
+    imageCropper.invalidate();
+    image.invalidate();
     rotationAngle = 0;
+    Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
+    Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
+    updateImageZoom(bitmap, image, selectedEditIndex);
+    updateImageZoom(bitmap, imageCropper, selectedEditIndex);
+    imageCropper.setScrollPosition(0, 0);
+    image.setScrollPosition(0, 0);
+    //imageCropper.setZoom(1);
+    //image.setZoom(1);
+
     imageCropper.setVisibility(View.INVISIBLE);
     image.setVisibility(View.VISIBLE);
     cropBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, cropWhite, null, null);
