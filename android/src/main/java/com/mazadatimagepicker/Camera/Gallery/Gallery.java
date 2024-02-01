@@ -211,7 +211,6 @@ public class Gallery extends Activity {
       Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
       String path = fileUtils.getPath(selectedImageUri);
       int percentage=100;
-      //Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight() + " " + temp.length() + "");
       Matrix matrix = new Matrix();
       int rotation = 0;
       try {
@@ -228,7 +227,6 @@ public class Gallery extends Activity {
         percentage = (int)((4000000.0/temp.length())*100);
         bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
         bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-       // Log.i("datadata", bitmap.getWidth() + " " + bitmap.getHeight()+" "+out.toByteArray().length);
       }
       if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);

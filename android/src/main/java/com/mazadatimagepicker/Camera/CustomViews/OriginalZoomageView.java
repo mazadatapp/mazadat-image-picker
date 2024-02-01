@@ -355,7 +355,6 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
     if (scaleType != null) {
       super.setScaleType(scaleType);
       startScaleType = scaleType;
-      Log.i("datadata_zoom",startScaleType.name());
       startValues = null;
     }
   }
@@ -515,7 +514,6 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
             xdistance = getXDistance(focusx, last.x);
             ydistance = getYDistance(focusy, last.y);
             matrix.postTranslate(xdistance, ydistance);
-            Log.i("datadata_top",bounds.top+"");
           }
 
           if (allowZoom(event)) {
@@ -528,10 +526,7 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
           setImageMatrix(matrix);
 
           last.set(focusx, focusy);
-          Log.i("datadata_factor","down3 "+bounds.top);
-          Log.i("datadata_zoom",getCurrentDisplayedWidth()+" "+getCurrentDisplayedHeight()+" "+getCurrentScaleFactor());
-          Log.i("datadata_calc",getCurrentDisplayedWidth() +" "+getCurrentScaleFactor()+" "+bounds.left+" "+bounds.right);
-        }
+       }
 
         if (event.getActionMasked() == MotionEvent.ACTION_UP ||
           event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
@@ -544,8 +539,6 @@ public class OriginalZoomageView extends AppCompatImageView implements OnScaleGe
               float topScale = Math.abs(bounds.top) * 180f / getBounds().height();
 
               int finalHeight = (int) Math.floor(180f / getCurrentScaleFactor());
-              Log.i("datadata_height",topScale+" "+finalHeight);
-              //Log.i("datadata_to_",bounds.top+" "+bounds.bottom);
             }
           },400);
         }

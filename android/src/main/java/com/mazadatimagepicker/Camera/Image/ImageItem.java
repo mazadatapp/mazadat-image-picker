@@ -8,9 +8,10 @@ import java.io.File;
 
 public class ImageItem {
   private File file;
+  private File finalFile;
   private File adapterFile;
   private String url;
-
+  private Bitmap bitmap;
   private int percentage=100;
   int imageWidth;
   int imageHeight;
@@ -107,5 +108,21 @@ public class ImageItem {
 
   public void setAdapterFile(File adapterFile) {
     this.adapterFile = adapterFile;
+  }
+
+  public File getFinalFile() {
+    return finalFile;
+  }
+
+  public void setFinalFile(File finalFile) {
+    this.finalFile = finalFile;
+  }
+
+  public Bitmap getBitmap() {
+    return bitmap;
+  }
+
+  public void setBitmap(Bitmap bitmap) {
+    this.bitmap = bitmap;
   }
 }

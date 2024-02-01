@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.mazadatimagepicker.R;
 import com.ortiz.touchview.TouchImageView;
@@ -18,6 +17,7 @@ public class ZoomImage extends TouchImageView {
   Paint mainColor;
   boolean showGrid = true;
   private ZoomListener zoomListener;
+  private float oldScale = -1;
 
   public ZoomImage(Context context) {
     super(context);
@@ -30,7 +30,6 @@ public class ZoomImage extends TouchImageView {
 
   public void setRect(RectF rect) {
     this.rect = rect;
-    Log.i("datadata_draw", rect.toString());
     invalidate();
   }
 
@@ -39,7 +38,7 @@ public class ZoomImage extends TouchImageView {
     mainColor = new Paint();
     mainColor.setAntiAlias(true);
     mainColor.setColor(getResources().getColor(R.color.turquoise_blue));
-    // setScaleRange(0.6f,150);
+    setMaxZoom(150);
   }
 
   public void setZoomListener(ZoomListener zoomListener) {
@@ -63,15 +62,27 @@ public class ZoomImage extends TouchImageView {
       canvas.drawRect(cropView.left + cropView.width() * 0.66f - 2, cropView.top, cropView.left + cropView.width() * 0.66f + 2, cropView.bottom, mainColor);
     }
     if (rect != null) {
-      Log.i("datadata_draw", rect.toString());
+
       canvas.drawRect(rect, mainColor);
     }
-    if (zoomListener != null) {
-      zoomListener.onZoomChangeScale(getCurrentZoom());
+    if (zoomListener != null && getDrawable() != null) {
+      if (oldScale != getCurrentZoom()) {
+        zoomListener.onZoomChangeScale(getCurrentZoom());
+        oldScale = getCurrentZoom();
+      } else {
+        zoomListener.onScroll(getZoomedRect());
+      }
     }
+  }
+
+  public void setOldScale(float oldScale) {
+    this.oldScale = oldScale;
+    invalidate();
   }
 
   public interface ZoomListener {
     void onZoomChangeScale(float zoomScale);
+
+    void onScroll(RectF rectF);
   }
 }

@@ -27,6 +27,7 @@ import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
 import com.mazadatimagepicker.Camera.PickerCameraActivity;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -79,11 +80,12 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    ZoomImage image;
+    RoundedImageView image;
     RoundedImageView overlayIm;
     TextView selectToEdit;
     CircularProgressBar progress;
     TextView idTypeTv;
+    View boarderView;
 
 
     public ViewHolder(View itemView) {
@@ -93,23 +95,33 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
       overlayIm = itemView.findViewById(R.id.overlay_im);
       selectToEdit = itemView.findViewById(R.id.select_to_edit_tv);
       idTypeTv = itemView.findViewById(R.id.id_type_tv);
+      boarderView = itemView.findViewById(R.id.boarder_view);
 
     }
 
     public void onBind(ImageItem model, int position) {
       selectToEdit.setVisibility((model.getFile() != null && position != pickerCameraActivity.getSelectedPosition()) ? View.VISIBLE : View.GONE);
-      if(model.getZoomImage()==null){
-        model.setZoomImage(image);
-      }
-      image.setShowGrid(false);
+
       if (model.getFile() != null) {
-        Glide.with(pickerCameraActivity).load(Uri.fromFile(model.getFile())).into(image);
-        Log.i("datadata_edit",model.isUpdateZoomOnce()+" "+position);
+
+        if(model.getBitmap()!=null) {
+          Bitmap bitmap = model.getBitmap();
+          bitmap = Bitmap.createBitmap(bitmap,0,0,(int)(bitmap.getWidth()/model.getZoomLevel()),(int)(bitmap.getHeight()/model.getZoomLevel()));
+          if(bitmap.getWidth()*0.75>bitmap.getHeight()) {
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getHeight() * 1.3333), bitmap.getHeight());
+          }else{
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), (int) (bitmap.getWidth()*0.75));
+          }
+          if (bitmap.getWidth() * bitmap.getHeight() > 12000000) {
+            Glide.with(pickerCameraActivity).load(bitmap).apply(new RequestOptions().override((int)(107*pickerCameraActivity.dp), (int)(78*pickerCameraActivity.dp))).into(image);
+          } else {
+            image.setImageBitmap(bitmap);
+          }
+        }
+        //Glide.with(pickerCameraActivity).load(model.getFile()).into(image);
         if(!model.isUpdateZoomOnce()) {
-          updateZoomInBackGround(model.getFile(), null, image,position);
+          updateZoomInBackGround(model.getFile(),position);
           model.setUpdateZoomOnce(true);
-        }else{
-          image.setZoom(model.getZoomLevel());
         }
         overlayIm.setAlpha(1.0f);
         image.setAlpha(1.0f);
@@ -134,26 +146,24 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
       }
 
 
-      itemView.setBackgroundResource(pickerCameraActivity.getSelectedPosition() == position ? R.drawable.custom_image_boarder : R.drawable.custom_image);
+      boarderView.setBackgroundResource(pickerCameraActivity.getSelectedPosition() == position ? R.drawable.custom_blue_boarder : R.drawable.custom_gray_boarder);
       if (model.getUrl() == null) {
-        overlayIm.setOnClickListener(view -> pickerCameraActivity.editOrCapturePhoto(position));
+        overlayIm.setOnClickListener(view -> {
+          pickerCameraActivity.editOrCapturePhoto(position);
+        });
       } else {
         overlayIm.setOnClickListener(null);
       }
     }
 
-    private void updateZoomInBackGround(File file,Bitmap bitmap,ZoomImage zoomImage,int position) {
+    private void updateZoomInBackGround(File file,int position) {
       final Bitmap[] finalBitmap = new Bitmap[1];
       AsyncTask.execute(() -> {
-        if(file!=null){
-          finalBitmap[0] = BitmapFactory.decodeFile(file.getPath());
-        }else{
-          finalBitmap[0] = bitmap;
-        }
-        images.get(position).setZoomLevel(pickerCameraActivity.updateImageZoom(finalBitmap[0],zoomImage));
+        finalBitmap[0] = BitmapFactory.decodeFile(file.getPath());
+        images.get(position).setZoomLevel(pickerCameraActivity.updateImageZoom(finalBitmap[0],null,position));
+        images.get(position).setBitmap(finalBitmap[0]);
         images.get(position).setUpdateZoomOnce(true);
         pickerCameraActivity.reloadItem(position);
-       // pickerCameraActivity.runOnUiThread(()->notifyItemChanged(position));
       });
 
     }
@@ -177,6 +187,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
               File file = ImageUtils.bitmapToFile(pickerCameraActivity,
               //  ImageUtils.createBitmap(bitmap.getWidth(), (int) (bitmap.getWidth() * 3f / 4f), bitmap));
                 bitmap);
+
               model.setUrl(null);
               model.setFile(file);
               model.setImageWidth(bitmap.getWidth());
