@@ -386,38 +386,35 @@ public class PickerCameraActivity extends AppCompatActivity {
         return;
       }
     }
-    AsyncTask.execute(new Runnable() {
-      @Override
-      public void run() {
-        for (int i = 0; i < imageItems.size(); i++) {
-          if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null) {
-
-            Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getWidth() / imageItems.get(i).getZoomLevel()), (int) (bitmap.getHeight() / imageItems.get(i).getZoomLevel()));
-            if (bitmap.getWidth() * 0.75 > bitmap.getHeight()) {
-              bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getHeight() * 1.3333), bitmap.getHeight());
-            } else {
-              bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), (int) (bitmap.getWidth() * 0.75));
-            }
-            File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap, imageItems.get(i).getPercentage());
-            imageItems.get(i).setFile(file);
+    AsyncTask.execute(() -> {
+      for (int i = 0; i < imageItems.size(); i++) {
+        if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null) {
+          runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
+          Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
+          bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getWidth() / imageItems.get(i).getZoomLevel()), (int) (bitmap.getHeight() / imageItems.get(i).getZoomLevel()));
+          if (bitmap.getWidth() * 0.75 > bitmap.getHeight()) {
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getHeight() * 1.3333), bitmap.getHeight());
+          } else {
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), (int) (bitmap.getWidth() * 0.75));
           }
+          File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap, imageItems.get(i).getPercentage());
+          imageItems.get(i).setFile(file);
         }
-        StringBuilder output = new StringBuilder();
-        for (int i = 0; i < imageItems.size(); i++) {
-          if (imageItems.get(i).getFile() != null) {
-            output.append(imageItems.get(i).getFile().getPath()).append(",");
-          }
-        }
-        if (output.length() > 0) {
-          output = new StringBuilder(output.substring(0, output.length() - 1));
-        }
-        Intent intent = new Intent();
-        intent.setAction(BuildConfig.BROADCAST_ACTION);
-        intent.putExtra("data", output.toString());
-        sendBroadcast(intent);
-        finish();
       }
+      StringBuilder output = new StringBuilder();
+      for (int i = 0; i < imageItems.size(); i++) {
+        if (imageItems.get(i).getFile() != null) {
+          output.append(imageItems.get(i).getFile().getPath()).append(",");
+        }
+      }
+      if (output.length() > 0) {
+        output = new StringBuilder(output.substring(0, output.length() - 1));
+      }
+      Intent intent = new Intent();
+      intent.setAction(BuildConfig.BROADCAST_ACTION);
+      intent.putExtra("data", output.toString());
+      sendBroadcast(intent);
+      finish();
     });
 
   }
