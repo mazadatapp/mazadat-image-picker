@@ -644,6 +644,7 @@ extension CameraController:ImageScrollViewDelegate{
         var result = ""
         for item in imageItems{
             if(item.image != nil){
+                loadingView.isHidden=false
                 let uuid = UUID().uuidString
                 if(!item.edited){
                     let customView=UIView(frame: CGRect(x: 0, y: 0, width: cellWidth, height: cellHeight))
