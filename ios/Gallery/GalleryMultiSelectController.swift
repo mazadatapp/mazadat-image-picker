@@ -49,7 +49,11 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
                                 var imgData = image.jpegData(compressionQuality: 1)!
                                 var imageSize: Int = imgData.count
                                 if(imageSize > 2000000){
-                                    imgData = image.jpegData(compressionQuality: CGFloat(4000000)/CGFloat(imageSize))!
+                                    var percentage = CGFloat(4000000)/CGFloat(imageSize)
+                                    if(percentage>1){
+                                        percentage = 1
+                                    }
+                                    imgData = image.jpegData(compressionQuality: percentage)!
                                     imageSize = imgData.count
                                     image = UIImage(data: imgData)!
                                 }

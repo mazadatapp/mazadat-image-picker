@@ -11,6 +11,7 @@ import UIKit
 @objc public protocol ImageScrollViewDelegate: UIScrollViewDelegate {
     func imageScrollViewDidChangeOrientation(imageScrollView: ImageScrollView)
     func zoomBegin()
+    func scrollBegin(point:CGPoint)
 }
 
 open class ImageScrollView: UIScrollView {
@@ -300,6 +301,7 @@ extension ImageScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         imageScrollViewDelegate?.scrollViewDidScroll?(scrollView)
+        self.imageScrollViewDelegate?.scrollBegin(point: scrollView.contentOffset)
     }
 
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

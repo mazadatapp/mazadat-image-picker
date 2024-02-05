@@ -225,6 +225,9 @@ public class Gallery extends Activity {
       if (temp.length() > 2000000) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         percentage = (int)((4000000.0/temp.length())*100);
+        if(percentage>100){
+          percentage = 100
+        }
         bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
         bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
       }
