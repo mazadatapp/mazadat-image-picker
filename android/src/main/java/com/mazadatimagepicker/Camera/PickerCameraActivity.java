@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
@@ -746,15 +747,33 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (editType == EditModeTypes.CROP) {
       imageCropper.setShowGrid(false);
       imageCropper.invalidate();
-      Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
+      Log.i("datadata",""+imageItems.get(selectedEditIndex).getFile().length());
+      if (imageItems.get(selectedEditIndex).getFile().length() > 2000000) {
+        AsyncTask.execute(() -> {
+          Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
 
-      Bitmap resizedBmp = getBitmapFromZoomedImages(bitmap, imageCropper, selectedEditIndex);
-      //Bitmap croppedBitmap = getBitmapFromView(imageCropper);
-      imageCropper.setShowGrid(true);
-      File file = ImageUtils.bitmapToFile(this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
+          Bitmap resizedBmp = getBitmapFromZoomedImages(bitmap, imageCropper, selectedEditIndex);
+          //Bitmap croppedBitmap = getBitmapFromView(imageCropper);
+          File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
+          runOnUiThread(() -> {
+            imageCropper.setShowGrid(true);
+            imageItems.get(selectedEditIndex).setFile(file);
+            imageItems.get(selectedEditIndex).setFinalFile(file);
+          });
 
-      imageItems.get(selectedEditIndex).setFile(file);
-      imageItems.get(selectedEditIndex).setFinalFile(file);
+        });
+      }else{
+        Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
+
+        Bitmap resizedBmp = getBitmapFromZoomedImages(bitmap, imageCropper, selectedEditIndex);
+        //Bitmap croppedBitmap = getBitmapFromView(imageCropper);
+        File file = ImageUtils.bitmapToFile(this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
+
+        imageCropper.setShowGrid(true);
+        imageItems.get(selectedEditIndex).setFile(file);
+        imageItems.get(selectedEditIndex).setFinalFile(file);
+      }
+
     } else if (editType == EditModeTypes.ROTATE) {
       Bitmap resizedBmp = getBitmapFromZoomedImages(rotationBitmap, image, selectedEditIndex);
       File file = ImageUtils.bitmapToFile(this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
