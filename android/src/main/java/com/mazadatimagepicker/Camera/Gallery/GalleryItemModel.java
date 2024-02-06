@@ -11,10 +11,12 @@ public class GalleryItemModel {
   Bitmap bitmap;
   Boolean cropped=false;
   File croppedFile;
+  float zoomPercentage=1;
 
-  public GalleryItemModel(Bitmap bitmap,int percentage) {
+  public GalleryItemModel(Bitmap bitmap,int percentage,float zoomPercentage) {
     this.bitmap = bitmap;
     this.percentage = percentage;
+    this.zoomPercentage = zoomPercentage;
   }
 
   public RectF getCropView() {
@@ -47,5 +49,13 @@ public class GalleryItemModel {
 
   public void setCroppedFile(File croppedFile) {
     this.croppedFile = croppedFile;
+  }
+
+  public float getZoomPercentage() {
+    return zoomPercentage;
+  }
+
+  public void setZoomPercentage(float zoomPercentage) {
+    this.zoomPercentage = zoomPercentage;
   }
 }

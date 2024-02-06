@@ -18,7 +18,7 @@ public class ImageItem {
   boolean isEdited=false;
   boolean updateZoomOnce=false;
   ZoomImage zoomImage;
-  float zoomLevel;
+  float zoomLevel=1;
   public ImageItem() {
   }
 

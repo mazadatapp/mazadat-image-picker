@@ -393,9 +393,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       for (int i = 0; i < imageItems.size(); i++) {
         if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null) {
           runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
-          BitmapFactory.Options options = new BitmapFactory.Options();
-          options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-          Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath(),options);
+          Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
           bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getWidth() / imageItems.get(i).getZoomLevel()), (int) (bitmap.getHeight() / imageItems.get(i).getZoomLevel()));
           if (bitmap.getWidth() * 0.75 > bitmap.getHeight()) {
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getHeight() * 1.3333), bitmap.getHeight());
@@ -438,7 +436,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     Bitmap croppedBitmap = Bitmap.createBitmap(scaledBitmap, (int) rect.left, (int) rect.top, (int) rect.width(), (int) rect.height());
     File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, croppedBitmap);
-    addImageToList(file, 100);
+    addImageToList(file, 100,1);
 
   }
 
@@ -498,10 +496,11 @@ public class PickerCameraActivity extends AppCompatActivity {
     return selectedPosition;
   }
 
-  private void addImageToList(File file, int percentage) {
+  private void addImageToList(File file, int percentage,float zoomLevel) {
 
     imageItems.get(imageTurn).setFile(file);
     imageItems.get(imageTurn).setPercentage(percentage);
+    imageItems.get(imageTurn).setZoomLevel(zoomLevel);
     adapter.notifyItemChanged(imageTurn);
     imageTurn++;
 
@@ -538,9 +537,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       previewView.setVisibility(View.GONE);
       captureIm.setVisibility(View.GONE);
       Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-      Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath(),options);
+      Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
       updateImageZoom(bitmap, image, position);
       adapter.notifyDataSetChanged();
       //image.setImageURI(Uri.fromFile(imageItems.get(position).getFile()));
@@ -611,9 +608,7 @@ public class PickerCameraActivity extends AppCompatActivity {
           @Override
           public void onGlobalLayout() {
             imageCropper.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath(),options);
+            Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
             lastImageName = imageItems.get(selectedEditIndex).getFile().getPath();
             Glide.with(PickerCameraActivity.this).load(bitmap).into(imageCropper);
             //imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
@@ -650,9 +645,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       editType = EditModeTypes.ROTATE;
       setHintText();
       rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateBlue, null, null);
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-      originalBitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath(),options);
+      originalBitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
       declineTv.setVisibility(View.VISIBLE);
       confirmTv.setVisibility(View.VISIBLE);
       confirmTv.setAlpha(1.0f);
@@ -763,9 +756,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       imageCropper.invalidate();
       AsyncTask.execute(() -> {
         runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath(),options);
+        Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
 
         Bitmap resizedBmp = getBitmapFromZoomedImages(bitmap, imageCropper, selectedEditIndex);
         //Bitmap croppedBitmap = getBitmapFromView(imageCropper);
@@ -824,9 +815,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     imageCropper.invalidate();
     image.invalidate();
     rotationAngle = 0;
-    BitmapFactory.Options options = new BitmapFactory.Options();
-    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-    Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath(),options);
+    Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
     Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
     updateImageZoom(bitmap, image, selectedEditIndex);
     updateImageZoom(bitmap, imageCropper, selectedEditIndex);
@@ -865,8 +854,9 @@ public class PickerCameraActivity extends AppCompatActivity {
     if (resultCode == RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
       ArrayList<String> paths = data.getStringArrayListExtra("paths");
       ArrayList<Integer> percentages = data.getIntegerArrayListExtra("percentages");
+      ArrayList<String> zoomLevels = data.getStringArrayListExtra("zoomLevels");
       for (int i = 0; i < paths.size(); i++) {
-        addImageToList(new File(paths.get(i)), percentages.get(i));
+        addImageToList(new File(paths.get(i)), percentages.get(i), Float.parseFloat(zoomLevels.get(i)));
       }
     }
   }

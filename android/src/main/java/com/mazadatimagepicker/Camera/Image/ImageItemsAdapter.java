@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -80,7 +81,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    RoundedImageView image;
+    ZoomImage image;
     RoundedImageView overlayIm;
     TextView selectToEdit;
     CircularProgressBar progress;
@@ -103,28 +104,21 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
       selectToEdit.setVisibility((model.getFile() != null && position != pickerCameraActivity.getSelectedPosition()) ? View.VISIBLE : View.GONE);
 
       if (model.getFile() != null) {
-
-        if(model.getBitmap()!=null) {
-          Bitmap bitmap = model.getBitmap();
-          bitmap = Bitmap.createBitmap(bitmap,0,0,(int)(bitmap.getWidth()/model.getZoomLevel()),(int)(bitmap.getHeight()/model.getZoomLevel()));
-          if(bitmap.getWidth()*0.75>bitmap.getHeight()) {
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getHeight() * 1.3333), bitmap.getHeight());
-          }else{
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), (int) (bitmap.getWidth()*0.75));
+        Glide.with(pickerCameraActivity).load(model.getFile()).into(image);
+        image.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+          @Override
+          public void onGlobalLayout() {
+            image.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            if(image.getDrawable()==null) {
+              pickerCameraActivity.reloadItem(position);
+            }
           }
-          if (bitmap.getWidth() * bitmap.getHeight() > 12000000) {
-            Glide.with(pickerCameraActivity).load(bitmap).apply(new RequestOptions().override((int)(107*pickerCameraActivity.dp), (int)(78*pickerCameraActivity.dp))).into(image);
-          } else {
-            image.setImageBitmap(bitmap);
-          }
-        }
-        //Glide.with(pickerCameraActivity).load(model.getFile()).into(image);
-        if(!model.isUpdateZoomOnce()) {
-          updateZoomInBackGround(model.getFile(),position);
-          model.setUpdateZoomOnce(true);
-        }
+        });
+        image.setMinZoom(model.getZoomLevel());
+        image.setZoom(model.getZoomLevel(),0,0);
         overlayIm.setAlpha(1.0f);
         image.setAlpha(1.0f);
+
         progress.setVisibility(View.GONE);
       } else if (model.getUrl() != null) {
         checkIfImageExist(model, position, true);
@@ -134,7 +128,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
         image.setImageDrawable(null);
         overlayIm.setAlpha(0.0f);
       }
-
+      image.setShowGrid(false);
       idTypeTv.setVisibility(pickerCameraActivity.isIdVerification() ? View.VISIBLE : View.GONE);
 
       if (pickerCameraActivity.isIdVerification()) {
@@ -159,9 +153,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
     private void updateZoomInBackGround(File file,int position) {
       final Bitmap[] finalBitmap = new Bitmap[1];
       AsyncTask.execute(() -> {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        finalBitmap[0] = BitmapFactory.decodeFile(file.getPath(),options);
+        finalBitmap[0] = BitmapFactory.decodeFile(file.getPath());
         images.get(position).setZoomLevel(pickerCameraActivity.updateImageZoom(finalBitmap[0],null,position));
         images.get(position).setBitmap(finalBitmap[0]);
         images.get(position).setUpdateZoomOnce(true);

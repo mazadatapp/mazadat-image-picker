@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
 import com.mazadatimagepicker.Camera.CustomViews.ImageCropper;
+import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
 import com.mazadatimagepicker.Camera.Utils.FileUtils;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
@@ -84,14 +85,17 @@ public class Gallery extends Activity {
     AsyncTask.execute(() -> {
       ArrayList<String> paths = new ArrayList<>();
       ArrayList<Integer> perentages = new ArrayList<>();
+      ArrayList<String> zoomLevels = new ArrayList<>();
       for (int i = 0; i < galleryItemModels.size(); i++) {
         File file = ImageUtils.bitmapToFile(this, galleryItemModels.get(i).getBitmap(),galleryItemModels.get(i).getPercentage());
         paths.add(file.getPath());
         perentages.add(galleryItemModels.get(i).getPercentage());
+        zoomLevels.add(galleryItemModels.get(i).getZoomPercentage()+"");
       }
       Intent intent = new Intent();
       intent.putStringArrayListExtra("paths", paths);
       intent.putIntegerArrayListExtra("percentages", perentages);
+      intent.putStringArrayListExtra("zoomLevels", zoomLevels);
       setResult(RESULT_OK, intent);
       finish();
     });
@@ -234,13 +238,31 @@ public class Gallery extends Activity {
       if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
       }
-      return new GalleryItemModel(bitmap,percentage);
+      return new GalleryItemModel(bitmap,percentage,updateImageZoom(bitmap));
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     }
 
 
+  }
+
+  public float updateImageZoom(Bitmap bitmap) {
+    int imageWidth = bitmap.getWidth();
+    int imageHeight = bitmap.getHeight();
+    float zoomPercentage = 1;
+    float ratio = (float) imageHeight / (float) imageWidth;
+    boolean needAdjustment = !(ratio > 0.74 && ratio < 0.76);
+    if (needAdjustment) {
+      if (imageWidth < imageHeight) {
+        float newHeight = imageWidth * 0.75f;
+        zoomPercentage = imageHeight / newHeight;
+      } else {
+        float newWidth = imageHeight * 0.75f;
+        zoomPercentage = imageWidth / newWidth;
+      }
+    }
+    return zoomPercentage;
   }
 
   private File createTmpFileFromUri(Uri uri, String fileName) {
