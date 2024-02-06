@@ -748,31 +748,21 @@ public class PickerCameraActivity extends AppCompatActivity {
       imageCropper.setShowGrid(false);
       imageCropper.invalidate();
       Log.i("datadata",""+imageItems.get(selectedEditIndex).getFile().length());
-      if (imageItems.get(selectedEditIndex).getFile().length() > 2000000) {
-        AsyncTask.execute(() -> {
-          Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
-
-          Bitmap resizedBmp = getBitmapFromZoomedImages(bitmap, imageCropper, selectedEditIndex);
-          //Bitmap croppedBitmap = getBitmapFromView(imageCropper);
-          File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
-          runOnUiThread(() -> {
-            imageCropper.setShowGrid(true);
-            imageItems.get(selectedEditIndex).setFile(file);
-            imageItems.get(selectedEditIndex).setFinalFile(file);
-          });
-
-        });
-      }else{
+      AsyncTask.execute(() -> {
+        runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
         Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
 
         Bitmap resizedBmp = getBitmapFromZoomedImages(bitmap, imageCropper, selectedEditIndex);
         //Bitmap croppedBitmap = getBitmapFromView(imageCropper);
-        File file = ImageUtils.bitmapToFile(this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
+        File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
+        runOnUiThread(() -> {
+          loadingCl.setVisibility(View.GONE);
+          imageCropper.setShowGrid(true);
+          imageItems.get(selectedEditIndex).setFile(file);
+          imageItems.get(selectedEditIndex).setFinalFile(file);
+        });
 
-        imageCropper.setShowGrid(true);
-        imageItems.get(selectedEditIndex).setFile(file);
-        imageItems.get(selectedEditIndex).setFinalFile(file);
-      }
+      });
 
     } else if (editType == EditModeTypes.ROTATE) {
       Bitmap resizedBmp = getBitmapFromZoomedImages(rotationBitmap, image, selectedEditIndex);
