@@ -760,6 +760,7 @@ public class PickerCameraActivity extends AppCompatActivity {
           imageCropper.setShowGrid(true);
           imageItems.get(selectedEditIndex).setFile(file);
           imageItems.get(selectedEditIndex).setFinalFile(file);
+          confirmCommonChanges();
         });
 
       });
@@ -769,7 +770,12 @@ public class PickerCameraActivity extends AppCompatActivity {
       File file = ImageUtils.bitmapToFile(this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
       imageItems.get(selectedEditIndex).setFile(file);
       imageItems.get(selectedEditIndex).setFinalFile(file);
+      confirmCommonChanges();
     }
+
+  }
+
+  private void confirmCommonChanges(){
     imageItems.get(selectedEditIndex).setZoomLevel(1.0f);
     imageCropper.setZoom(1.0f);
     image.setZoom(1.0f);
