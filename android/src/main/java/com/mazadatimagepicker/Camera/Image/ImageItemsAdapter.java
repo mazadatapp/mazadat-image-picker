@@ -159,7 +159,9 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
     private void updateZoomInBackGround(File file,int position) {
       final Bitmap[] finalBitmap = new Bitmap[1];
       AsyncTask.execute(() -> {
-        finalBitmap[0] = BitmapFactory.decodeFile(file.getPath());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        finalBitmap[0] = BitmapFactory.decodeFile(file.getPath(),options);
         images.get(position).setZoomLevel(pickerCameraActivity.updateImageZoom(finalBitmap[0],null,position));
         images.get(position).setBitmap(finalBitmap[0]);
         images.get(position).setUpdateZoomOnce(true);
