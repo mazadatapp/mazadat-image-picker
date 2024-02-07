@@ -766,7 +766,7 @@ extension CameraController:ImageScrollViewDelegate{
     }
     
     func scrollBegin(point:CGPoint) {
-        if(point.y>0 && point.y>0){
+        if(point.y>0 || point.y>0){
             confirmBtn.alpha = 1.0
             declineBtn.alpha = 1.0
             
