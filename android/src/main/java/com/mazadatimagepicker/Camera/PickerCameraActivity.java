@@ -119,6 +119,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private boolean cropFirstTime = true;
 
   private String lastImageName = "";
+  private boolean editPhotosMode;
 
   @SuppressLint("SetTextI18n")
   @Override
@@ -159,7 +160,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     rotateWhite = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_rotate, getTheme());
 
     maxImagesSize = getIntent().getIntExtra("maxImagesSize", 0);
-    boolean editPhotosMode = getIntent().getBooleanExtra("editPhotosMode", false);
+    editPhotosMode = getIntent().getBooleanExtra("editPhotosMode", false);
     lang = getIntent().getStringExtra("lang");
     isIdVerification = getIntent().getBooleanExtra("isIdVerification", false);
 
@@ -390,7 +391,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     }
     AsyncTask.execute(() -> {
       for (int i = 0; i < imageItems.size(); i++) {
-        if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null && imageItems.get(i).getZoomLevel() > 1) {
+        if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null && !editPhotosMode) {
           runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
           Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
           bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getWidth() / imageItems.get(i).getZoomLevel()), (int) (bitmap.getHeight() / imageItems.get(i).getZoomLevel()));
