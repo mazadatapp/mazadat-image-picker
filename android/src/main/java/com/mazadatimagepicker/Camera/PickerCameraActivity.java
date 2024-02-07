@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
@@ -676,7 +677,7 @@ public class PickerCameraActivity extends AppCompatActivity {
         Glide.with(this).load(rotationBitmap).into(image);
         updateImageZoom(rotationBitmap, image, selectedEditIndex);
         loadingCl.setVisibility(View.GONE);
-        rotateBtn.setEnabled(false);
+        rotateBtn.setEnabled(true);
       });
     });
 
@@ -689,7 +690,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     float zoomPercentage = 1;
     float ratio = (float) imageHeight / (float) imageWidth;
     boolean needAdjustment = !(ratio > 0.74 && ratio < 0.76);
-    if (imageItems.get(position).getFinalFile() == null && needAdjustment) {
+    if (needAdjustment) {
       if (imageWidth < imageHeight) {
         float newHeight = imageWidth * 0.75f;
         zoomPercentage = imageHeight / newHeight;
@@ -698,7 +699,7 @@ public class PickerCameraActivity extends AppCompatActivity {
         zoomPercentage = imageWidth / newWidth;
       }
     }
-
+    //Log.i("datadata",needAdjustment)
     imageItems.get(position).setZoomLevel(zoomPercentage);
     if (image != null) {
       image.resetZoom();
@@ -739,9 +740,9 @@ public class PickerCameraActivity extends AppCompatActivity {
   public void reloadItem(int index) {
     runOnUiThread(() -> {
       recycler.post(() -> adapter.notifyItemChanged(index));
-      if (editIndex == index) {
-        editOrCapturePhoto(editIndex);
-      }
+//      if (editIndex == index) {
+//        editOrCapturePhoto(editIndex);
+//      }
     });
 
 
@@ -773,6 +774,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       File file = ImageUtils.bitmapToFile(this, resizedBmp, imageItems.get(selectedEditIndex).getPercentage());
       imageItems.get(selectedEditIndex).setFile(file);
       imageItems.get(selectedEditIndex).setFinalFile(file);
+      originalBitmap = resizedBmp;
       confirmCommonChanges();
     }
 
@@ -816,6 +818,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
     updateImageZoom(bitmap, image, selectedEditIndex);
     updateImageZoom(bitmap, imageCropper, selectedEditIndex);
+    image.resetZoom();
     imageCropper.setScrollPosition(0, 0);
     image.setScrollPosition(0, 0);
     //imageCropper.setZoom(1);
