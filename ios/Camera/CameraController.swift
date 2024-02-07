@@ -69,6 +69,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     
     let cellWidth:CGFloat = 109
     let cellHeight:CGFloat = 82
+    var isEditPhotoMode=false
     override func viewDidLoad() {
         
         if(editPhotoPath==nil){
@@ -92,6 +93,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
         self.lang = lang
         self.editPhotoPath = path
         self.selectedIndex = selectedIndex
+        isEditPhotoMode=true
         
     }
     
