@@ -390,7 +390,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     }
     AsyncTask.execute(() -> {
       for (int i = 0; i < imageItems.size(); i++) {
-        if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null) {
+        if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null && imageItems.get(i).getZoomLevel() > 1) {
           runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
           Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
           bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getWidth() / imageItems.get(i).getZoomLevel()), (int) (bitmap.getHeight() / imageItems.get(i).getZoomLevel()));
