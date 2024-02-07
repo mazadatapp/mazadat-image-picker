@@ -40,7 +40,7 @@ public class ImageUtils {
     return file;
   }
 
-  public static File bitmapToFile(Context context, Bitmap bitmap,int percentage) {
+  public static File bitmapToFile(Context context, Bitmap bitmap, int percentage) {
     File file = new File(context.getCacheDir(), UUID.randomUUID().toString() + ".jpg");
     try {
       file.createNewFile();

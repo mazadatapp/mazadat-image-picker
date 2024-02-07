@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <style name="FullScreen" parent="Theme.AppCompat.NoActionBar">
     <item name="android:windowNoTitle">true</item>
     <item name="android:windowIsTranslucent">false</item>
   </style>
+
   <style name="Theme.Transparent" parent="android:Theme">
     <item name="android:windowIsTranslucent">true</item>
     <item name="android:windowBackground">#CC000000</item>

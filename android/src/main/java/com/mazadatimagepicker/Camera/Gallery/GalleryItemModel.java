@@ -9,11 +9,11 @@ public class GalleryItemModel {
   RectF cropView;
   int percentage;
   Bitmap bitmap;
-  Boolean cropped=false;
+  Boolean cropped = false;
   File croppedFile;
-  float zoomPercentage=1;
+  float zoomPercentage = 1;
 
-  public GalleryItemModel(Bitmap bitmap,int percentage,float zoomPercentage) {
+  public GalleryItemModel(Bitmap bitmap, int percentage, float zoomPercentage) {
     this.bitmap = bitmap;
     this.percentage = percentage;
     this.zoomPercentage = zoomPercentage;

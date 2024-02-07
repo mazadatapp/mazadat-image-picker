@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
@@ -69,6 +68,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   final int GALLERY_REQUEST_CODE = 10;
   final int CAMERA_PERMISSION = 21;
+  private final LinkedList<ImageItem> imageItems = new LinkedList<>();
   public float dp;
   private PreviewView previewView;
   private ImageView captureIm;
@@ -93,7 +93,6 @@ public class PickerCameraActivity extends AppCompatActivity {
   private RecyclerView recycler;
   private ConstraintLayout loadingCl;
   private ImageItemsAdapter adapter;
-  private LinkedList<ImageItem> imageItems = new LinkedList<>();
   private int maxImagesSize;
   private int imageTurn = 0;
   private int selectedEditIndex = -1;
@@ -119,7 +118,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   private boolean showZoomIndicatorOnce = true;
   private boolean cropFirstTime = true;
 
-  private String lastImageName="";
+  private String lastImageName = "";
 
   @SuppressLint("SetTextI18n")
   @Override
@@ -436,7 +435,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
     Bitmap croppedBitmap = Bitmap.createBitmap(scaledBitmap, (int) rect.left, (int) rect.top, (int) rect.width(), (int) rect.height());
     File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, croppedBitmap);
-    addImageToList(file, 100,1);
+    addImageToList(file, 100, 1);
 
   }
 
@@ -496,7 +495,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     return selectedPosition;
   }
 
-  private void addImageToList(File file, int percentage,float zoomLevel) {
+  private void addImageToList(File file, int percentage, float zoomLevel) {
 
     imageItems.get(imageTurn).setFile(file);
     imageItems.get(imageTurn).setPercentage(percentage);
@@ -603,7 +602,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       imageCropper.setVisibility(View.VISIBLE);
       image.setVisibility(View.INVISIBLE);
 
-      if(!lastImageName.equals(imageItems.get(selectedEditIndex).getFile().getPath())) {
+      if (!lastImageName.equals(imageItems.get(selectedEditIndex).getFile().getPath())) {
         imageCropper.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
           @Override
           public void onGlobalLayout() {
@@ -642,6 +641,8 @@ public class PickerCameraActivity extends AppCompatActivity {
       if (imageCropper.getCurrentZoom() == oldZoomScale && editType != EditModeTypes.ROTATE) {
         resetPressed();
       }
+      rotateBtn.setEnabled(false);
+      disableDoneBtn();
       editType = EditModeTypes.ROTATE;
       setHintText();
       rotateBtn.setCompoundDrawablesRelativeWithIntrinsicBounds(null, rotateBlue, null, null);
@@ -654,35 +655,30 @@ public class PickerCameraActivity extends AppCompatActivity {
       confirmTv.setEnabled(true);
       declineTv.setEnabled(true);
       rotateImage();
-      disableDoneBtn();
     } else if (isEditModeOn && editType == EditModeTypes.ROTATE) {
-      rotateImage();
+      rotateBtn.setEnabled(false);
       disableDoneBtn();
+      rotateImage();
     }
   }
 
   private void rotateImage() {
     rotationAngle += -90;
-    if (originalBitmap.getWidth() * originalBitmap.getHeight() > 23040000) {
-
-      AsyncTask.execute(() -> {
-        runOnUiThread(() -> {
+    AsyncTask.execute(() -> {
+      runOnUiThread(() -> {
+        if (originalBitmap.getWidth() * originalBitmap.getHeight() > 23040000) {
           loadingCl.setVisibility(View.VISIBLE);
-        });
-        rotationBitmap = ImageUtils.rotateBitmap(originalBitmap, rotationAngle);
-        //rotationBitmap = ImageUtils.createBitmap(originalBitmap.getWidth(), originalBitmap.getHeight(), rotationBitmap);
-        runOnUiThread(() -> {
-          Glide.with(this).load(rotationBitmap).into(image);
-          updateImageZoom(rotationBitmap, image, selectedEditIndex);
-          loadingCl.setVisibility(View.GONE);
-        });
+        }
       });
-    } else {
       rotationBitmap = ImageUtils.rotateBitmap(originalBitmap, rotationAngle);
       //rotationBitmap = ImageUtils.createBitmap(originalBitmap.getWidth(), originalBitmap.getHeight(), rotationBitmap);
-      Glide.with(this).load(rotationBitmap).into(image);
-      updateImageZoom(rotationBitmap, image, selectedEditIndex);
-    }
+      runOnUiThread(() -> {
+        Glide.with(this).load(rotationBitmap).into(image);
+        updateImageZoom(rotationBitmap, image, selectedEditIndex);
+        loadingCl.setVisibility(View.GONE);
+        rotateBtn.setEnabled(false);
+      });
+    });
 
 
   }
@@ -702,10 +698,11 @@ public class PickerCameraActivity extends AppCompatActivity {
         zoomPercentage = imageWidth / newWidth;
       }
     }
+
     imageItems.get(position).setZoomLevel(zoomPercentage);
     if (image != null) {
       image.resetZoom();
-      image.setZoom(zoomPercentage);
+      image.setZoom(zoomPercentage, 0, 0);
       image.setMinZoom(zoomPercentage);
       image.setScrollPosition(0, 0);
       image.setOldScale(zoomPercentage);
@@ -781,7 +778,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   }
 
-  private void confirmCommonChanges(){
+  private void confirmCommonChanges() {
     imageItems.get(selectedEditIndex).setZoomLevel(1.0f);
     imageCropper.setZoom(1.0f);
     image.setZoom(1.0f);

@@ -5,10 +5,12 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   tools:context=".Camera.Gallery.Gallery">
+
   <View
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CC000000"/>
+    android:background="#CC000000" />
+
   <com.mazadatimagepicker.Camera.CustomViews.ImageCropper
     android:id="@+id/image_cropper"
     android:layout_width="match_parent"
@@ -54,24 +56,24 @@
     android:id="@+id/progress"
     android:layout_width="100dp"
     android:layout_height="100dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:backgroundStrokeWidth="2dp"
-    app:foregroundStrokeWidth="2dp"
     app:backgroundStrokeColor="#00000000"
-    app:foregroundStrokeColor="#D0E9EB" />
+    app:backgroundStrokeWidth="2dp"
+    app:foregroundStrokeColor="#D0E9EB"
+    app:foregroundStrokeWidth="2dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
   <ImageView
     android:id="@+id/loading_im"
     android:layout_width="48dp"
     android:layout_height="48dp"
     android:src="@drawable/images_loading"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

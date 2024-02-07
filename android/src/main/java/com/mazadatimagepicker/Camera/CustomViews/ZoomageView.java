@@ -2,13 +2,13 @@ package com.mazadatimagepicker.Camera.CustomViews;
 
 /**
  * Copyright 2016 Jeffrey Sibbold
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,6 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -53,25 +52,21 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
   private static final float MIN_SCALE = 0.6f;
   private static final float MAX_SCALE = 8f;
   private final int RESET_DURATION = 200;
-
-  private ScaleType startScaleType;
-
+  private final RectF bounds = new RectF();
   // These matrices will be used to move and zoom image
-  private Matrix matrix = new Matrix();
+  private final Matrix matrix = new Matrix();
+  private final float[] matrixValues = new float[9];
+  private final PointF last = new PointF(0, 0);
+  public float xdistance;
+  public float ydistance;
+  private ScaleType startScaleType;
   private Matrix startMatrix = new Matrix();
-
-  private float[] matrixValues = new float[9];
   private float[] startValues = null;
-
   private float minScale = MIN_SCALE;
   private float maxScale = MAX_SCALE;
-
   //the adjusted scale bounds that account for an image's starting scale values
   private float calculatedMinScale = MIN_SCALE;
   private float calculatedMaxScale = MAX_SCALE;
-
-  private final RectF bounds = new RectF();
-
   private boolean translatable;
   private boolean zoomable;
   private boolean doubleTapToZoom;
@@ -81,22 +76,45 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
   private float doubleTapToZoomScaleFactor;
   @AutoResetMode
   private int autoResetMode;
-
-  private PointF last = new PointF(0, 0);
   private float startScale = 1f;
   private float scaleBy = 1f;
   private float currentScaleFactor = 1f;
   private int previousPointerCount = 1;
   private int currentPointerCount = 0;
-
   private ScaleGestureDetector scaleDetector;
   private ValueAnimator resetAnimator;
-
   private GestureDetector gestureDetector;
   private boolean doubleTapDetected = false;
   private boolean singleTapDetected = false;
-  public float xdistance;
-  public float ydistance;
+  private final GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent e) {
+      if (e.getAction() == MotionEvent.ACTION_UP) {
+        doubleTapDetected = true;
+      }
+
+      singleTapDetected = false;
+
+      return false;
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+      singleTapDetected = true;
+      return false;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+      singleTapDetected = false;
+      return false;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+      return true;
+    }
+  };
 
   public ZoomageView(Context context) {
     super(context);
@@ -539,11 +557,7 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
   }
 
   protected boolean disallowParentTouch(MotionEvent event) {
-    if ((currentPointerCount > 1 || currentScaleFactor > 1.0f || isAnimating())) {
-      return true;
-    } else {
-      return false;
-    }
+    return currentPointerCount > 1 || currentScaleFactor > 1.0f || isAnimating();
   }
 
   protected boolean allowTranslate(MotionEvent event) {
@@ -725,7 +739,7 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
     animator.addUpdateListener(new AnimatorUpdateListener() {
 
       final float[] values = new float[9];
-      Matrix current = new Matrix();
+      final Matrix current = new Matrix();
 
       @Override
       public void onAnimationUpdate(ValueAnimator animation) {
@@ -879,36 +893,6 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
   public void onScaleEnd(ScaleGestureDetector detector) {
     scaleBy = 1f;
   }
-
-  private final GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
-      if (e.getAction() == MotionEvent.ACTION_UP) {
-        doubleTapDetected = true;
-      }
-
-      singleTapDetected = false;
-
-      return false;
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-      singleTapDetected = true;
-      return false;
-    }
-
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
-      singleTapDetected = false;
-      return false;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-      return true;
-    }
-  };
 
   private class SimpleAnimatorListener implements Animator.AnimatorListener {
     @Override

@@ -79,9 +79,9 @@ public class GalleryImageItemsAdapter extends RecyclerView.Adapter<GalleryImageI
     public void onBind(GalleryItemModel model, int position) {
       selectedIm.setVisibility(model.isCropped() ? View.VISIBLE : View.GONE);
       overlayIm.setVisibility(selectedPosition != position ? View.VISIBLE : View.GONE);
-      if(model.getCroppedFile()==null) {
+      if (model.getCroppedFile() == null) {
         image.setImageBitmap(model.getBitmap());
-      }else{
+      } else {
         image.setImageURI(Uri.fromFile(model.getCroppedFile()));
       }
       itemView.setOnClickListener(view -> {

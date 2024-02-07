@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,18 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
 import com.mazadatimagepicker.Camera.CustomViews.ImageCropper;
-import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
 import com.mazadatimagepicker.Camera.Utils.FileUtils;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -87,10 +82,10 @@ public class Gallery extends Activity {
       ArrayList<Integer> perentages = new ArrayList<>();
       ArrayList<String> zoomLevels = new ArrayList<>();
       for (int i = 0; i < galleryItemModels.size(); i++) {
-        File file = ImageUtils.bitmapToFile(this, galleryItemModels.get(i).getBitmap(),galleryItemModels.get(i).getPercentage());
+        File file = ImageUtils.bitmapToFile(this, galleryItemModels.get(i).getBitmap(), galleryItemModels.get(i).getPercentage());
         paths.add(file.getPath());
         perentages.add(galleryItemModels.get(i).getPercentage());
-        zoomLevels.add(galleryItemModels.get(i).getZoomPercentage()+"");
+        zoomLevels.add(String.valueOf(galleryItemModels.get(i).getZoomPercentage()));
       }
       Intent intent = new Intent();
       intent.putStringArrayListExtra("paths", paths);
@@ -214,7 +209,7 @@ public class Gallery extends Activity {
       File temp = createTmpFileFromUri(selectedImageUri, "test.png");
       Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
       String path = fileUtils.getPath(selectedImageUri);
-      int percentage=100;
+      int percentage = 100;
       Matrix matrix = new Matrix();
       int rotation = 0;
       try {
@@ -228,8 +223,8 @@ public class Gallery extends Activity {
       }
       if (temp.length() > 2000000) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        percentage = (int)((4000000.0/temp.length())*100);
-        if(percentage>100){
+        percentage = (int) ((4000000.0 / temp.length()) * 100);
+        if (percentage > 100) {
           percentage = 100;
         }
         bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
@@ -238,7 +233,7 @@ public class Gallery extends Activity {
       if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
       }
-      return new GalleryItemModel(bitmap,percentage,updateImageZoom(bitmap));
+      return new GalleryItemModel(bitmap, percentage, updateImageZoom(bitmap));
     } catch (Exception e) {
       e.printStackTrace();
       return null;

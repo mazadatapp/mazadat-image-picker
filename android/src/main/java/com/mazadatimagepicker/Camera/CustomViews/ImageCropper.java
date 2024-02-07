@@ -10,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -98,6 +97,7 @@ public class ImageCropper extends AppCompatImageView {
     }
     return Bitmap.createBitmap(bm, (int) (cropView.left), (int) (cropView.top), width, (int) cropView.height());
   }
+
   @Override
   public void setImageBitmap(Bitmap bm) {
     super.setImageBitmap(bm);

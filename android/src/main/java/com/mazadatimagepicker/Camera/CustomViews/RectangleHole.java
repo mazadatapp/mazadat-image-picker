@@ -22,8 +22,9 @@ public class RectangleHole extends ViewGroup {
   Paint frameColor;
   Paint blackFramePaint;
 
-  boolean showBlackFrame=false;
+  boolean showBlackFrame = false;
   ValueAnimator animator;
+
   public RectangleHole(Context context) {
     super(context);
     init(context);
@@ -50,12 +51,12 @@ public class RectangleHole extends ViewGroup {
     blackFramePaint.setStyle(Paint.Style.FILL);
   }
 
-  public void animateFrame(){
-    animator = ValueAnimator.ofFloat(0,3);
+  public void animateFrame() {
+    animator = ValueAnimator.ofFloat(0, 3);
     animator.setInterpolator(new LinearInterpolator());
     animator.setDuration(300);
     animator.addUpdateListener(valueAnimator -> {
-      int value = (int)(float)valueAnimator.getAnimatedValue();
+      int value = (int) (float) valueAnimator.getAnimatedValue();
       showBlackFrame = (value == 2);
       invalidate();
     });
@@ -100,7 +101,7 @@ public class RectangleHole extends ViewGroup {
 
     canvas.drawRect(focusArea, eraser);
 
-    if(showBlackFrame){
+    if (showBlackFrame) {
       canvas.drawRect(focusArea, blackFramePaint);
     }
 

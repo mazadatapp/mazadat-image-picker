@@ -2,10 +2,8 @@ package com.mazadatimagepicker.Camera.Image;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,6 @@ import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
 import com.mazadatimagepicker.Camera.PickerCameraActivity;
 import com.mazadatimagepicker.Camera.Utils.ImageUtils;
 import com.mazadatimagepicker.R;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -109,13 +106,13 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
           @Override
           public void onGlobalLayout() {
             image.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            if(image.getDrawable()==null) {
+            if (image.getDrawable() == null) {
               pickerCameraActivity.reloadItem(position);
             }
           }
         });
         image.setMinZoom(model.getZoomLevel());
-        image.setZoom(model.getZoomLevel(),0,0);
+        image.setZoom(model.getZoomLevel(), 0, 0);
         overlayIm.setAlpha(1.0f);
         image.setAlpha(1.0f);
 
@@ -150,11 +147,11 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
       }
     }
 
-    private void updateZoomInBackGround(File file,int position) {
+    private void updateZoomInBackGround(File file, int position) {
       final Bitmap[] finalBitmap = new Bitmap[1];
       AsyncTask.execute(() -> {
         finalBitmap[0] = BitmapFactory.decodeFile(file.getPath());
-        images.get(position).setZoomLevel(pickerCameraActivity.updateImageZoom(finalBitmap[0],null,position));
+        images.get(position).setZoomLevel(pickerCameraActivity.updateImageZoom(finalBitmap[0], null, position));
         images.get(position).setBitmap(finalBitmap[0]);
         images.get(position).setUpdateZoomOnce(true);
         pickerCameraActivity.reloadItem(position);
@@ -179,7 +176,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
           public boolean onResourceReady(@NonNull Bitmap bitmap, @NonNull Object model_, Target<Bitmap> target, @NonNull DataSource dataSource, boolean isFirstResource) {
             AsyncTask.execute(() -> {
               File file = ImageUtils.bitmapToFile(pickerCameraActivity,
-              //  ImageUtils.createBitmap(bitmap.getWidth(), (int) (bitmap.getWidth() * 3f / 4f), bitmap));
+                //  ImageUtils.createBitmap(bitmap.getWidth(), (int) (bitmap.getWidth() * 3f / 4f), bitmap));
                 bitmap);
 
               model.setUrl(null);

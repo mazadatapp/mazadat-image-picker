@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="101dp"
   android:layout_height="76dp"
   android:layout_marginStart="16dp"
-  app:cardCornerRadius="8dp"
   android:clipChildren="true"
+  android:clipToOutline="true"
   android:clipToPadding="true"
-  android:clipToOutline="true">
+  app:cardCornerRadius="8dp">
+
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/custom_image_boarder">
+
     <TextView
       android:id="@+id/id_type_tv"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:fontFamily="@font/montserrat_semibold"
       android:textColor="@color/black_26"
       android:textSize="14dp"
-      android:fontFamily="@font/montserrat_semibold"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -29,50 +30,50 @@
       android:id="@+id/image"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:riv_corner_radius="8dp"
       android:layout_margin="2dp"
+      android:clipToOutline="true"
       android:visibility="visible"
-      android:clipToOutline="true"/>
+      app:riv_corner_radius="8dp" />
 
     <com.makeramen.roundedimageview.RoundedImageView
       android:id="@+id/overlay_im"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:riv_corner_radius="8dp"
       android:layout_margin="2dp"
-      android:src="@color/black_26"
       android:clickable="true"
-      android:scaleType="fitXY"/>
+      android:scaleType="fitXY"
+      android:src="@color/black_26"
+      app:riv_corner_radius="8dp" />
 
     <TextView
       android:id="@+id/select_to_edit_tv"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:drawableTop="@drawable/ic_edit"
+      android:fontFamily="@font/montserrat_semibold"
       android:text="@string/select_to_edit"
       android:textColor="@color/white_74"
       android:textSize="9dp"
-      android:fontFamily="@font/montserrat_semibold"
+      android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      android:visibility="gone"/>
+      app:layout_constraintTop_toTopOf="parent" />
 
     <com.budiyev.android.circularprogressbar.CircularProgressBar
       android:id="@+id/progress"
       android:layout_width="24dp"
       android:layout_height="24dp"
+      android:visibility="gone"
+      app:backgroundStrokeColor="#00000000"
+      app:backgroundStrokeWidth="2dp"
+      app:foregroundStrokeColor="#D0E9EB"
+      app:foregroundStrokeWidth="2dp"
+      app:indeterminate="true"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:backgroundStrokeColor="#00000000"
-      app:foregroundStrokeColor="#D0E9EB"
-      app:indeterminate="true"
-      android:visibility="gone"
-      app:backgroundStrokeWidth="2dp"
-      app:foregroundStrokeWidth="2dp"/>
+      app:layout_constraintTop_toTopOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <View
@@ -80,6 +81,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/custom_blue_boarder"
-    android:translationZ="2dp"/>
+    android:translationZ="2dp" />
 
 </androidx.cardview.widget.CardView>

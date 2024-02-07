@@ -7,18 +7,19 @@ import com.mazadatimagepicker.Camera.CustomViews.ZoomImage;
 import java.io.File;
 
 public class ImageItem {
+  int imageWidth;
+  int imageHeight;
+  boolean isEdited = false;
+  boolean updateZoomOnce = false;
+  ZoomImage zoomImage;
+  float zoomLevel = 1;
   private File file;
   private File finalFile;
   private File adapterFile;
   private String url;
   private Bitmap bitmap;
-  private int percentage=100;
-  int imageWidth;
-  int imageHeight;
-  boolean isEdited=false;
-  boolean updateZoomOnce=false;
-  ZoomImage zoomImage;
-  float zoomLevel=1;
+  private int percentage = 100;
+
   public ImageItem() {
   }
 
