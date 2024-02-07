@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
@@ -676,6 +675,9 @@ public class PickerCameraActivity extends AppCompatActivity {
       runOnUiThread(() -> {
         Glide.with(this).load(rotationBitmap).into(image);
         updateImageZoom(rotationBitmap, image, selectedEditIndex);
+        for (int i = 0; i < 3; i++) {
+          image.setZoom(imageItems.get(selectedEditIndex).getZoomLevel(), 0, 0);
+        }
         loadingCl.setVisibility(View.GONE);
         rotateBtn.setEnabled(true);
       });

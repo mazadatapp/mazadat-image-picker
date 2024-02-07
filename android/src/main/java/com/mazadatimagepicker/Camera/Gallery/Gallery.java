@@ -79,17 +79,17 @@ public class Gallery extends Activity {
     progress.setVisibility(View.VISIBLE);
     AsyncTask.execute(() -> {
       ArrayList<String> paths = new ArrayList<>();
-      ArrayList<Integer> perentages = new ArrayList<>();
+      ArrayList<Integer> percentages = new ArrayList<>();
       ArrayList<String> zoomLevels = new ArrayList<>();
       for (int i = 0; i < galleryItemModels.size(); i++) {
         File file = ImageUtils.bitmapToFile(this, galleryItemModels.get(i).getBitmap(), galleryItemModels.get(i).getPercentage());
         paths.add(file.getPath());
-        perentages.add(galleryItemModels.get(i).getPercentage());
+        percentages.add(galleryItemModels.get(i).getPercentage());
         zoomLevels.add(String.valueOf(galleryItemModels.get(i).getZoomPercentage()));
       }
       Intent intent = new Intent();
       intent.putStringArrayListExtra("paths", paths);
-      intent.putIntegerArrayListExtra("percentages", perentages);
+      intent.putIntegerArrayListExtra("percentages", percentages);
       intent.putStringArrayListExtra("zoomLevels", zoomLevels);
       setResult(RESULT_OK, intent);
       finish();
@@ -226,9 +226,10 @@ public class Gallery extends Activity {
         percentage = (int) ((4000000.0 / temp.length()) * 100);
         if (percentage > 100) {
           percentage = 100;
+        } else {
+          bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
+          bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
         }
-        bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
-        bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
       }
       if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);

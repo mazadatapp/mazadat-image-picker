@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 
 import androidx.exifinterface.media.ExifInterface;
 
@@ -47,9 +48,8 @@ public class ImageUtils {
     } catch (IOException e) {
       e.printStackTrace();
     }
-
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    bitmap.compress(percentage == 100 ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, percentage /*ignored for PNG*/, bos);
+    bitmap.compress(Bitmap.CompressFormat.JPEG, percentage /*ignored for PNG*/, bos);
     byte[] bitmapdata = bos.toByteArray();
 
     try {
