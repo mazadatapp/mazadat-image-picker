@@ -224,7 +224,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     imageCropper.setZoomListener(new ZoomImage.ZoomListener() {
       @Override
       public void onZoomChangeScale(float zoomScale) {
-        if ((zoomScale != oldZoomScale && imageCropper.getCurrentZoom() != oldZoomScale) || (imageCropper.getZoomedRect().top > 0.01 || imageCropper.getZoomedRect().left > 0.01)) {
+        if (imageCropper.getZoomedRect().top > 0.01 || imageCropper.getZoomedRect().left > 0.01) {
           confirmTv.setAlpha(1.0f);
           declineTv.setAlpha(1.0f);
 
@@ -242,7 +242,6 @@ public class PickerCameraActivity extends AppCompatActivity {
           editType = EditModeTypes.NOTHING;
           enableDoneBtn();
         }
-        Log.i("datadata_zoom", imageCropper.getCurrentZoom() + "" + imageCropper.getZoomedRect());
       }
 
       @Override
@@ -265,7 +264,6 @@ public class PickerCameraActivity extends AppCompatActivity {
           editType = EditModeTypes.NOTHING;
           enableDoneBtn();
         }
-        Log.i("datadata_zoom", imageCropper.getCurrentZoom() + "" + imageCropper.getZoomedRect());
       }
     });
   }
@@ -606,24 +604,26 @@ public class PickerCameraActivity extends AppCompatActivity {
       imageCropper.setVisibility(View.VISIBLE);
       image.setVisibility(View.INVISIBLE);
 
-      Log.i("datadata_name", lastImageName);
-      Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
-      lastImageName = imageItems.get(selectedEditIndex).getFile().getPath();
-      //imageTest.setVisibility(View.VISIBLE);
-      // Glide.with(PickerCameraActivity.this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageTest);
+      if (!lastImageName.equals(imageItems.get(selectedEditIndex).getFile().getPath())) {
+        lastImageName = imageItems.get(selectedEditIndex).getFile().getPath();
+        Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
+        lastImageName = imageItems.get(selectedEditIndex).getFile().getPath();
+        imageCropper.resetZoom();
+        if (cropFirstTime) {
+          cropFirstTime = false;
+          new Handler().postDelayed(() -> {
+            Glide.with(PickerCameraActivity.this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).dontTransform().into(imageCropper);
 
-
-//      //imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
-      if (cropFirstTime) {
-        cropFirstTime = false;
-        new Handler().postDelayed(() -> {
+            oldZoomScale = updateImageZoom(bitmap, imageCropper, selectedEditIndex);
+            imageCropper.setZoom(oldZoomScale, 0, 0);
+          }, 500);
+        } else {
           Glide.with(PickerCameraActivity.this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).dontTransform().into(imageCropper);
+          imageCropper.invalidate();
           oldZoomScale = updateImageZoom(bitmap, imageCropper, selectedEditIndex);
-        }, 500);
-      } else {
-        Glide.with(PickerCameraActivity.this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).dontTransform().into(imageCropper);
-        oldZoomScale = updateImageZoom(bitmap, imageCropper, selectedEditIndex);
+          imageCropper.setZoom(oldZoomScale, 0, 0);
 
+        }
       }
 
 
@@ -799,12 +799,9 @@ public class PickerCameraActivity extends AppCompatActivity {
     adapter.notifyItemChanged(selectedEditIndex);
     Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).dontTransform().into(image);
     resetPressed();
-
-    Log.i("datadata_level", "" + image.getCurrentZoom());
   }
 
   public Bitmap getBitmapFromZoomedImages(Bitmap bitmap, ZoomImage imageCropper, int position) {
-    Log.i("datadata_zoom", imageCropper.getCurrentZoom() + " " + imageCropper.getZoomedRect());
     float left = bitmap.getWidth() * imageCropper.getZoomedRect().left;
     float top = bitmap.getHeight() * imageCropper.getZoomedRect().top;
 
