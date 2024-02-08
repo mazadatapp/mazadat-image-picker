@@ -103,7 +103,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
       selectToEdit.setVisibility((model.getFile() != null && position != pickerCameraActivity.getSelectedPosition()) ? View.VISIBLE : View.GONE);
 
       if (model.getFile() != null) {
-        Glide.with(pickerCameraActivity).load(model.getFile()).into(image);
+        Glide.with(pickerCameraActivity).load(model.getFile()).dontTransform().into(image);
         image.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
           @Override
           public void onGlobalLayout() {
@@ -191,7 +191,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
             return true;
           }
         })
-        .into(image);
+        .dontTransform().into(image);
     }
 
   }
