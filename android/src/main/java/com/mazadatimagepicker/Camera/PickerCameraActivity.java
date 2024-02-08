@@ -609,7 +609,7 @@ public class PickerCameraActivity extends AppCompatActivity {
             imageCropper.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
             lastImageName = imageItems.get(selectedEditIndex).getFile().getPath();
-            Glide.with(PickerCameraActivity.this).load(bitmap).into(imageCropper);
+            Glide.with(PickerCameraActivity.this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(imageCropper);
             //imageCropper.setImageURI(Uri.fromFile(imageItems.get(selectedEditIndex).getFile()));
             imageCropper.resetZoom();
             if (cropFirstTime) {

@@ -56,7 +56,7 @@
     <com.mazadatimagepicker.Camera.CustomViews.ZoomImage
       android:id="@+id/image"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="match_parent"/>
 
     <com.mazadatimagepicker.Camera.CustomViews.ZoomImage
       android:id="@+id/image_cropper"

@@ -2,6 +2,7 @@ package com.mazadatimagepicker.Camera.Image;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -114,8 +115,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
           }
         });
 
-//        image.setMinZoom(model.getZoomLevel());
-//        image.setZoom(model.getZoomLevel(), 0, 0);
+        image.setZoom(model.getZoomLevel(), 0, 0);
         overlayIm.setAlpha(1.0f);
         image.setAlpha(1.0f);
 

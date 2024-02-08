@@ -227,14 +227,15 @@ public class Gallery extends Activity {
         percentage = (int) ((4000000.0 / temp.length()) * 100);
         if (percentage > 100) {
           percentage = 100;
+        }else {
+          bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
         }
-        bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
         //bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
       }
       if (rotation != 0) {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
       }
-      ImageUtils.bitmapToFile(this,bitmap);
+
       return new GalleryItemModel(bitmap, percentage, updateImageZoom(bitmap));
     } catch (Exception e) {
       e.printStackTrace();
