@@ -679,6 +679,7 @@ public class PickerCameraActivity extends AppCompatActivity {
       //rotationBitmap = ImageUtils.createBitmap(originalBitmap.getWidth(), originalBitmap.getHeight(), rotationBitmap);
       runOnUiThread(() -> {
         //displayImage(null,rotationBitmap.getWidth(), rotationBitmap.getHeight(), rotationBitmap,image);
+        Glide.with(this).load(rotationBitmap).dontTransform().into(image);
         updateImageZoom(rotationBitmap, image, selectedEditIndex);
         for (int i = 0; i < 3; i++) {
           image.setZoom(imageItems.get(selectedEditIndex).getZoomLevel(), 0, 0);
@@ -689,10 +690,6 @@ public class PickerCameraActivity extends AppCompatActivity {
     });
 
 
-  }
-
-  public void displayImage(File file, int width, int height, Bitmap bitmap, ZoomImage zoomImage) {
-    Glide.with(this).load(rotationBitmap).into(image);
   }
 
   public float updateImageZoom(Bitmap bitmap, ZoomImage image, int position) {
