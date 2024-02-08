@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -207,7 +208,7 @@ public class Gallery extends Activity {
   private GalleryItemModel uriToGalleryModel(Uri selectedImageUri) {
     try {
       File temp = createTmpFileFromUri(selectedImageUri, "test.png");
-      Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+      Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
       String path = fileUtils.getPath(selectedImageUri);
       int percentage = 100;
       Matrix matrix = new Matrix();
@@ -226,14 +227,14 @@ public class Gallery extends Activity {
         percentage = (int) ((4000000.0 / temp.length()) * 100);
         if (percentage > 100) {
           percentage = 100;
-        } else {
-          bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
-          bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
         }
+        bitmap.compress(Bitmap.CompressFormat.JPEG, percentage, out);
+        //bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
       }
       if (rotation != 0) {
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
       }
+      ImageUtils.bitmapToFile(this,bitmap);
       return new GalleryItemModel(bitmap, percentage, updateImageZoom(bitmap));
     } catch (Exception e) {
       e.printStackTrace();

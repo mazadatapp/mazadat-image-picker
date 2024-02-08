@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
@@ -242,6 +243,7 @@ public class PickerCameraActivity extends AppCompatActivity {
           editType = EditModeTypes.NOTHING;
           enableDoneBtn();
         }
+        Log.i("datadata_zoom",imageCropper.getCurrentZoom()+""+imageCropper.getZoomedRect());
       }
 
       @Override
@@ -264,6 +266,7 @@ public class PickerCameraActivity extends AppCompatActivity {
           editType = EditModeTypes.NOTHING;
           enableDoneBtn();
         }
+        Log.i("datadata_zoom",imageCropper.getCurrentZoom()+""+imageCropper.getZoomedRect());
       }
     });
   }
@@ -392,14 +395,10 @@ public class PickerCameraActivity extends AppCompatActivity {
     AsyncTask.execute(() -> {
       for (int i = 0; i < imageItems.size(); i++) {
         if (!imageItems.get(i).isEdited() && imageItems.get(i).getFile() != null && !editPhotosMode) {
+          RectF rectF = imageItems.get(i).getZoomImage().getZoomedRect();
           runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
           Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
-          bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getWidth() / imageItems.get(i).getZoomLevel()), (int) (bitmap.getHeight() / imageItems.get(i).getZoomLevel()));
-          if (bitmap.getWidth() * 0.75 > bitmap.getHeight()) {
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) (bitmap.getHeight() * 1.3333), bitmap.getHeight());
-          } else {
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), (int) (bitmap.getWidth() * 0.75));
-          }
+          bitmap = Bitmap.createBitmap(bitmap, (int)(bitmap.getWidth()*rectF.left), (int)(bitmap.getHeight()*rectF.top), (int)(bitmap.getWidth()*rectF.width()), (int)(bitmap.getHeight()*rectF.height()));
           File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap, imageItems.get(i).getPercentage());
           imageItems.get(i).setFile(file);
         }
@@ -638,7 +637,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void rotatePressed() {
-    if (isEditModeOn && (editType == EditModeTypes.NOTHING || imageCropper.getCurrentZoom() == oldZoomScale)) {
+    if (isEditModeOn && editType == EditModeTypes.NOTHING) {
       if (imageCropper.getCurrentZoom() == oldZoomScale && editType != EditModeTypes.ROTATE) {
         resetPressed();
       }
@@ -702,10 +701,11 @@ public class PickerCameraActivity extends AppCompatActivity {
         zoomPercentage = imageWidth / newWidth;
       }
     }
+    Log.i("datadata_level",zoomPercentage+" "+image.getCurrentZoom());
     //Log.i("datadata",needAdjustment)
     imageItems.get(position).setZoomLevel(zoomPercentage);
     if (image != null) {
-      image.resetZoom();
+     // image.resetZoom();
       image.setZoom(zoomPercentage, 0, 0);
       image.setMinZoom(zoomPercentage);
       image.setScrollPosition(0, 0);
@@ -785,19 +785,20 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   private void confirmCommonChanges() {
     imageItems.get(selectedEditIndex).setZoomLevel(1.0f);
-    imageCropper.setZoom(1.0f);
-    image.setZoom(1.0f);
-    imageCropper.setMinZoom(1.0f);
-    image.setMinZoom(1.0f);
+//    imageCropper.setZoom(1.0f, 0,0);
+//    image.setZoom(1.0f,0,0);
     image.resetZoom();
     imageCropper.resetZoom();
     imageItems.get(selectedEditIndex).setEdited(true);
     adapter.notifyItemChanged(selectedEditIndex);
     Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
     resetPressed();
+
+    Log.i("datadata_level",""+image.getCurrentZoom());
   }
 
   public Bitmap getBitmapFromZoomedImages(Bitmap bitmap, ZoomImage imageCropper, int position) {
+    Log.i("datadata_zoom",imageCropper.getCurrentZoom()+" "+imageCropper.getZoomedRect());
     float left = bitmap.getWidth() * imageCropper.getZoomedRect().left;
     float top = bitmap.getHeight() * imageCropper.getZoomedRect().top;
 
@@ -817,13 +818,15 @@ public class PickerCameraActivity extends AppCompatActivity {
     imageCropper.invalidate();
     image.invalidate();
     rotationAngle = 0;
-    Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
-    Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
-    updateImageZoom(bitmap, image, selectedEditIndex);
-    updateImageZoom(bitmap, imageCropper, selectedEditIndex);
-    image.resetZoom();
-    imageCropper.setScrollPosition(0, 0);
-    image.setScrollPosition(0, 0);
+    if(imageItems.get(selectedEditIndex).getFile()!=null) {
+      Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(selectedEditIndex).getFile().getPath());
+      Glide.with(this).load(Uri.fromFile(imageItems.get(selectedEditIndex).getFile())).into(image);
+      updateImageZoom(bitmap, image, selectedEditIndex);
+      updateImageZoom(bitmap, imageCropper, selectedEditIndex);
+      image.resetZoom();
+      imageCropper.setScrollPosition(0, 0);
+      image.setScrollPosition(0, 0);
+    }
     //imageCropper.setZoom(1);
     //image.setZoom(1);
 

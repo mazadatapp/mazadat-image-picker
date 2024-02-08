@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -109,10 +110,12 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
             if (image.getDrawable() == null) {
               pickerCameraActivity.reloadItem(position);
             }
+            model.setZoomImage(image);
           }
         });
-        image.setMinZoom(model.getZoomLevel());
-        image.setZoom(model.getZoomLevel(), 0, 0);
+
+//        image.setMinZoom(model.getZoomLevel());
+//        image.setZoom(model.getZoomLevel(), 0, 0);
         overlayIm.setAlpha(1.0f);
         image.setAlpha(1.0f);
 

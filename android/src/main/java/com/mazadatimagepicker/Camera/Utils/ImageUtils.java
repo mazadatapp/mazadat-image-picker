@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.exifinterface.media.ExifInterface;
@@ -50,6 +51,29 @@ public class ImageUtils {
     }
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     bitmap.compress(Bitmap.CompressFormat.JPEG, percentage /*ignored for PNG*/, bos);
+    byte[] bitmapdata = bos.toByteArray();
+
+    try {
+      FileOutputStream fos = new FileOutputStream(file);
+      fos.write(bitmapdata);
+      fos.flush();
+      fos.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return file;
+  }
+
+  public static File bitmapToFileExternal(Context context, Bitmap bitmap) {
+    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), UUID.randomUUID().toString() + ".jpg");
+    try {
+      file.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
     byte[] bitmapdata = bos.toByteArray();
 
     try {

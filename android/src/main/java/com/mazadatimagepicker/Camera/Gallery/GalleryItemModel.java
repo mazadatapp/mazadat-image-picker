@@ -12,6 +12,7 @@ public class GalleryItemModel {
   Boolean cropped = false;
   File croppedFile;
   float zoomPercentage = 1;
+  String path;
 
   public GalleryItemModel(Bitmap bitmap, int percentage, float zoomPercentage) {
     this.bitmap = bitmap;

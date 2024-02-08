@@ -11,7 +11,7 @@ import com.mazadatimagepicker.R;
 import com.ortiz.touchview.TouchImageView;
 
 @SuppressLint("DrawAllocation")
-public class ZoomImage extends TouchImageView {
+public class ZoomImage extends ZoomageView {
 
   public RectF rect;
   Paint mainColor;
