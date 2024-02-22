@@ -24,6 +24,7 @@ class GalleryMultiSelectController: UIViewController, PHPickerViewControllerDele
         config.filter = .images
         var imagePicker = PHPickerViewController(configuration: config)
         imagePicker.delegate = self
+        imagePicker.modalPresentationStyle = .fullScreen
         present(imagePicker, animated: true)
         
     }
