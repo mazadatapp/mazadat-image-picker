@@ -19,16 +19,16 @@ extension UIButton {
        
         self.imageEdgeInsets = UIEdgeInsets(
             top: -(totalHeight - imageSize.height),
-            left: lang == "en" ? 0 : -titleSize.width,
+            left: lang != "ar" ? 0 : -titleSize.width,
             bottom: 0,
-            right: lang == "en" ? -titleSize.width : 0
+            right: lang != "ar" ? -titleSize.width : 0
         )
         
         self.titleEdgeInsets = UIEdgeInsets(
             top: 0,
-            left: lang == "en" ? -imageSize.width : 0,
+            left: lang != "ar" ? -imageSize.width : 0,
             bottom: -(totalHeight - titleSize.height),
-            right: lang == "en" ? 0 : -imageSize.width
+            right: lang != "ar" ? 0 : -imageSize.width
         )
     }
 }

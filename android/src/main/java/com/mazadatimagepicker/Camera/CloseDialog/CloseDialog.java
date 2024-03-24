@@ -32,9 +32,9 @@ public class CloseDialog extends DialogFragment {
     Button cancelBtn = view.findViewById(R.id.cancel_btn);
     Button confirmCloseBtn = view.findViewById(R.id.close_btn);
 
-    confirmCloseBtn.setBackgroundResource(pickerCameraActivity.getLang().equals("en") ?
+    confirmCloseBtn.setBackgroundResource(!pickerCameraActivity.getLang().equals("ar") ?
       R.drawable.custom_gray_round_bottom_right_20 : R.drawable.custom_gray_round_bottom_left_20);
-    cancelBtn.setBackgroundResource(pickerCameraActivity.getLang().equals("en") ?
+    cancelBtn.setBackgroundResource(!pickerCameraActivity.getLang().equals("ar") ?
       R.drawable.custom_gray_round_bottom_left_20 : R.drawable.custom_gray_round_bottom_right_20);
 
     cancelBtn.setOnClickListener((v) -> dismiss());

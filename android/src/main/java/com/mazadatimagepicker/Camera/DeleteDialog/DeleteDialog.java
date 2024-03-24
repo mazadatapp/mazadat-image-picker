@@ -32,9 +32,9 @@ public class DeleteDialog extends DialogFragment {
     Button cancelBtn = view.findViewById(R.id.cancel_btn);
     Button confirmDeleteBtn = view.findViewById(R.id.confirm_delete_btn);
 
-    confirmDeleteBtn.setBackgroundResource(pickerCameraActivity.getLang().equals("en") ?
+    confirmDeleteBtn.setBackgroundResource(!pickerCameraActivity.getLang().equals("ar") ?
       R.drawable.custom_gray_round_bottom_right_20 : R.drawable.custom_gray_round_bottom_left_20);
-    cancelBtn.setBackgroundResource(pickerCameraActivity.getLang().equals("en") ?
+    cancelBtn.setBackgroundResource(!pickerCameraActivity.getLang().equals("ar") ?
       R.drawable.custom_gray_round_bottom_left_20 : R.drawable.custom_gray_round_bottom_right_20);
 
     cancelBtn.setOnClickListener((v) -> dismiss());

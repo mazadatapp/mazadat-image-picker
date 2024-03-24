@@ -23,7 +23,7 @@ export default function App() {
         let local2='/data/user/0/com.mazadatimagepickerexample/cache/aa1449a9-2f60-42ac-8485-ade674aba9f1.jpg'
         
         let localIos = '/Users/Karim.Saad/Library/Developer/CoreSimulator/Devices/02997294-C79E-4388-B2F3-FA76BF9E9011/data/Containers/Data/Application/5FD3F6DB-6F8D-4E5C-A291-B0B87791586C/Documents/9550A9D6-652C-44A3-8FA3-771B85E9D125.jpg,/Users/Karim.Saad/Library/Developer/CoreSimulator/Devices/02997294-C79E-4388-B2F3-FA76BF9E9011/data/Containers/Data/Application/5FD3F6DB-6F8D-4E5C-A291-B0B87791586C/Documents/80B9CCDC-D2E1-44A6-B1F6-4028DDAFADAD.jpg,/Users/Karim.Saad/Library/Developer/CoreSimulator/Devices/02997294-C79E-4388-B2F3-FA76BF9E9011/data/Containers/Data/Application/5FD3F6DB-6F8D-4E5C-A291-B0B87791586C/Documents/AC04E454-8C6F-4897-8409-550159CD4CDE.jpg'
-        editPhoto(local2, 0, "en").then((value: string) => {
+        editPhoto(local2, 0, "fr").then((value: string) => {
           console.log({ value })
           setResult(value)
         })

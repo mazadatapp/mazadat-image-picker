@@ -395,9 +395,13 @@ public class PickerCameraActivity extends AppCompatActivity {
           RectF rectF = imageItems.get(i).getZoomImage().getZoomedRect();
           runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
           Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
-          bitmap = Bitmap.createBitmap(bitmap, (int) (bitmap.getWidth() * rectF.left), (int) (bitmap.getHeight() * rectF.top), (int) (bitmap.getWidth() * rectF.width()), (int) (bitmap.getHeight() * rectF.height()));
-          File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap, imageItems.get(i).getPercentage());
-          imageItems.get(i).setFile(file);
+          if(bitmap.getWidth() > 0 && (bitmap.getWidth() * rectF.width()) > 0) {
+            bitmap = Bitmap.createBitmap(bitmap, (int) (bitmap.getWidth() * rectF.left), (int) (bitmap.getHeight() * rectF.top), (int) (bitmap.getWidth() * rectF.width()), (int) (bitmap.getHeight() * rectF.height()));
+            File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap, imageItems.get(i).getPercentage());
+            imageItems.get(i).setFile(file);
+          }else{
+            imageItems.get(i).setFile(null);
+          }
         }
       }
       StringBuilder output = new StringBuilder();
@@ -493,12 +497,13 @@ public class PickerCameraActivity extends AppCompatActivity {
   }
 
   private void addImageToList(File file, int percentage, float zoomLevel) {
-
-    imageItems.get(imageTurn).setFile(file);
-    imageItems.get(imageTurn).setPercentage(percentage);
-    imageItems.get(imageTurn).setZoomLevel(zoomLevel);
-    adapter.notifyItemChanged(imageTurn);
-    imageTurn++;
+    if (imageTurn < imageItems.size()) {
+      imageItems.get(imageTurn).setFile(file);
+      imageItems.get(imageTurn).setPercentage(percentage);
+      imageItems.get(imageTurn).setZoomLevel(zoomLevel);
+      adapter.notifyItemChanged(imageTurn);
+      imageTurn++;
+    }
 
     if (imageTurn < maxImagesSize) {
       doneBtn.setText(getString(R.string.done) + " (" + imageTurn + ")");
