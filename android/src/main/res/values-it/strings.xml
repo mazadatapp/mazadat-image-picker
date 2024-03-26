@@ -15,8 +15,8 @@
   <string name="please_add_front_id">Aggiungi l"'"immagine dell"'"ID frontale</string>
   <string name="please_add_back_id">Aggiungi l"'"immagine dell"'"ID posteriore</string>
   <string name="id_verification_hint">Cattura la parte anteriore e posteriore dell"'"ID\nAssicurati che tutti i dati siano visibili e chiari</string>
-  <string name="zoom_hint">Utilizza 2 dita per ingrandire.</string>
-  <string name="rotate_hint">continua a premere per ruotare l"'"immagine.</string>
+  <string name="zoom_hint">Utilizza 2 dita per zoomare.</string>
+  <string name="rotate_hint">Tieni premuto per ruotare l"'"immagine.</string>
 
   //gallery
   <string name="proccessing_images">Elaborazione immagini</string>

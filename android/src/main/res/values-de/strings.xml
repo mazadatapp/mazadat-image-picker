@@ -14,8 +14,8 @@
   <string name="please_add_front_id">Bitte fügen Sie das vordere ID-Bild hinzu</string>
   <string name="please_add_back_id">Bitte fügen Sie das hintere ID-Bild hinzu</string>
   <string name="id_verification_hint">Erfassen Sie die Vorder- und Rückseite des Ausweises\nStellen Sie sicher, dass alle Daten sichtbar und klar sind</string>
-  <string name="zoom_hint">Verwenden Sie zwei Finger zum Zoomen.</string>
-  <string name="rotate_hint">halten Sie gedrückt, um das Bild zu drehen.</string>
+  <string name="zoom_hint">Zum Zoomen zwei Finger verwenden.</string>
+  <string name="rotate_hint">Zum Drehen des Bildes gedrückt halten.</string>
 
   //gallery
   <string name="proccessing_images">Bilder werden verarbeitet</string>
