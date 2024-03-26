@@ -70,6 +70,9 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     let cellWidth:CGFloat = 109
     let cellHeight:CGFloat = 82
     var isEditPhotoMode=false
+    
+    var langTranslation = LangTranslation()
+    
     override func viewDidLoad() {
         
         if(editPhotoPath==nil){
@@ -123,14 +126,14 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
             
         }
         imagesCollection.reloadData()
-        doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
+        doneBtn.setTitle(langTranslation.translate(text: "Done", lang: lang) + "(\(imageTurn))", for: .normal)
         scrollToCell(index: imageItems.count-1)
         checkDoneButton()
     }
     
     func getImagesFromGallery(images:[UIImage],hasError:Bool){
         if(hasError){
-            showToast(message: "Cannot choose images more than 5MB",width: 280)
+            showToast(langTranslation.translate(text: "Cannot choose images more than 5MB" , lang: lang),width: 280)
         }
         for image in images{
             if(imageTurn < maxImagesSize){
@@ -147,7 +150,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
             }
         }
         imagesCollection.reloadData()
-        doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
+        doneBtn.setTitle(langTranslation.translate(text: "Done", lang: lang), for: .normal)
         scrollToCell(index: imageItems.count-1)
         checkDoneButton()
     }

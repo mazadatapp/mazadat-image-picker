@@ -32,6 +32,7 @@
 		50CEEF0A2987C67F006C3166 /* ImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEF092987C67F006C3166 /* ImageItem.swift */; };
 		50CEEF0C2987E772006C3166 /* EditModeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEF0B2987E772006C3166 /* EditModeTypes.swift */; };
 		50CEEF10298BB020006C3166 /* UIImageViewExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CEEF0F298BB020006C3166 /* UIImageViewExtention.swift */; };
+		BC14D9B22BB2DD6A008C8F57 /* LangTranslation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC14D9B12BB2DD6A008C8F57 /* LangTranslation.swift */; };
 		F4FF95D7245B92E800C19C63 /* MazadatImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* MazadatImagePicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,7 @@
 		50CEEF0B2987E772006C3166 /* EditModeTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditModeTypes.swift; sourceTree = "<group>"; };
 		50CEEF0F298BB020006C3166 /* UIImageViewExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtention.swift; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* MazadatImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MazadatImagePicker.m; sourceTree = "<group>"; };
+		BC14D9B12BB2DD6A008C8F57 /* LangTranslation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LangTranslation.swift; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* MazadatImagePicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MazadatImagePicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* MazadatImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MazadatImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -183,6 +185,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				BC14D9B12BB2DD6A008C8F57 /* LangTranslation.swift */,
 				50CEEF062987BF7E006C3166 /* Gallery */,
 				50CEEF032987BC17006C3166 /* CloseDialog */,
 				50CEEEFC2986D48B006C3166 /* DeleteDialog */,
@@ -278,6 +281,7 @@
 				F4FF95D7245B92E800C19C63 /* MazadatImagePicker.swift in Sources */,
 				505457172B333BFB00A0D209 /* Gif.swift in Sources */,
 				50CEEEEB2986A177006C3166 /* CameraCollection.swift in Sources */,
+				BC14D9B22BB2DD6A008C8F57 /* LangTranslation.swift in Sources */,
 				50C0DB702B0F985D006BDC90 /* GalleryMultiSelectController.swift in Sources */,
 				50CEEEEE2986A1E0006C3166 /* ImageCell.swift in Sources */,
 			);

@@ -22,7 +22,7 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.loading.isHidden = imageItems[indexPath.row].path == nil
         cell.blackLayer.isHidden = imageItems[indexPath.row].image == nil
         cell.editBtn.isEnabled=false
-        cell.editBtn.setTitle(lang == "en" ? "Select to edit" : "إضغط للتعديل", for: .normal)
+        cell.editBtn.setTitle(langTranslation.translate(text: "Select to edit", lang: lang), for: .normal)
         cell.editBtn.sizeToFit()
         cell.editBtn.centerVertically(padding: 2, lang: lang)
         cell.image_.isHidden = imageItems[indexPath.row].image == nil
@@ -40,9 +40,9 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         
         if(isIdVerification){
             if(imageTurn == 0){
-                cell.hintL.text = lang == "en" ? "Front ID" : "الوجه الأمامي"
+                cell.hintL.text = langTranslation.translate(text: "Front ID", lang: lang)
             }else{
-                cell.hintL.text = lang == "en" ? "Back ID" : "الوجه الخلفي"
+                cell.hintL.text = langTranslation.translate(text: "Back ID", lang: lang)
             }
         }
         

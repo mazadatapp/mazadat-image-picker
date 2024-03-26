@@ -54,7 +54,7 @@ extension CameraController:ImageScrollViewDelegate{
         //gallery button
         
         galleryBtn.setImage(UIImage(named: "ic_picker_gallery"), for: .normal)
-        galleryBtn.setTitle(lang == "en" ? "Gallery" : "  المكتبة", for: .normal)
+        galleryBtn.setTitle(langTranslation.translate(text: "Gallery", lang: lang), for: .normal)
         galleryBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         galleryBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 4)
         UIviews.addSubview(galleryBtn)
@@ -81,7 +81,7 @@ extension CameraController:ImageScrollViewDelegate{
         UIviews.addSubview(confirmBtn)
         confirmBtn.setImage(UIImage(named: "ic_picker_confirm"), for: .normal)
         confirmBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 12)
-        confirmBtn.setTitle(lang == "en" ? "Apply" : "تأكيد", for: .normal)
+        confirmBtn.setTitle(langTranslation.translate(text: "Apply", lang: lang), for: .normal)
         addConstraints(currentView: confirmBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.63*viewHeight, bottom: false, bottomValue: 0, leading: true, leadingValue: 16, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         confirmBtn.sizeToFit()
         confirmBtn.centerVertically(padding: 1, lang: lang)
@@ -91,7 +91,7 @@ extension CameraController:ImageScrollViewDelegate{
         UIviews.addSubview(declineBtn)
         declineBtn.setImage(UIImage(named: "ic_picker_decline"), for: .normal)
         declineBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 12)
-        declineBtn.setTitle(lang == "en" ? "Restore" : "استرجع", for: .normal)
+        declineBtn.setTitle(langTranslation.translate(text: "Restore", lang: lang), for: .normal)
         addConstraints(currentView: declineBtn, MainView: UIviews, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 0.63*viewHeight, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: -16, width: false, widthValue: 0, height: false, heightValue: 0)
         declineBtn.sizeToFit()
         declineBtn.centerVertically(padding: 1, lang: lang)
@@ -118,7 +118,8 @@ extension CameraController:ImageScrollViewDelegate{
         
         //max number of images
         if(!isIdVerification){
-            maxNoOfImagesL.text = (lang == "en" ? "The maximum number of selected photos is " : "الحد الأقصى لعدد الصور المختارة هو ") + String(maxImagesSize)
+            langTranslation.translate(text: "The maximum number of selected photos is ", lang: lang)
+            maxNoOfImagesL.text = langTranslation.translate(text: "The maximum number of selected photos is ", lang: lang) + String(maxImagesSize)
             maxNoOfImagesL.numberOfLines=0
             maxNoOfImagesL.textColor = UIColor.white
             maxNoOfImagesL.font = UIFont(name: "Montserrat-Regular", size: 12)
@@ -129,7 +130,7 @@ extension CameraController:ImageScrollViewDelegate{
         //done button
         
         UIviews.addSubview(doneBtn)
-        doneBtn.setTitle(lang == "en" ? "Done (0)" : "(0) تم", for: .normal)
+        doneBtn.setTitle(langTranslation.translate(text: "Done (0)", lang: lang), for: .normal)
         doneBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         doneBtn.backgroundColor = Colors.blueColor()
         doneBtn.cornerRadius=15
@@ -138,7 +139,7 @@ extension CameraController:ImageScrollViewDelegate{
         //crop button
         
         cropBtn.setImage(UIImage(named: "ic_picker_crop")?.maskWithColor(color: UIColor.white), for: .normal)
-        cropBtn.setTitle(lang == "en" ? "Crop" : "قص", for: .normal)
+        cropBtn.setTitle(langTranslation.translate(text: "Crop", lang: lang), for: .normal)
         cropBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 11)
         cropBtn.sizeToFit()
         UIviews.addSubview(cropBtn)
@@ -148,7 +149,7 @@ extension CameraController:ImageScrollViewDelegate{
         
         //crop button
         rotateBtn.setImage(UIImage(named: "ic_picker_rotate")?.maskWithColor(color: UIColor.white), for: .normal)
-        rotateBtn.setTitle(lang == "en" ? "Rotate" : "استدارة", for: .normal)
+        rotateBtn.setTitle(langTranslation.translate(text: "Rotate", lang: lang), for: .normal)
         rotateBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 11)
         rotateBtn.sizeToFit()
         UIviews.addSubview(rotateBtn)
@@ -158,7 +159,7 @@ extension CameraController:ImageScrollViewDelegate{
         
         //delete button
         deleteBtn.setImage(UIImage(named: "ic_picker_trash")?.maskWithColor(color: UIColor.white), for: .normal)
-        deleteBtn.setTitle(lang == "en" ? "Delete" : "مسح", for: .normal)
+        deleteBtn.setTitle(langTranslation.translate(text: "Delete", lang: lang), for: .normal)
         deleteBtn.titleLabel!.font = UIFont(name: "Montserrat-Medium", size: 11)
         //deleteBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 27, bottom: 38, right: 4)
         UIviews.addSubview(deleteBtn)
@@ -287,7 +288,7 @@ extension CameraController:ImageScrollViewDelegate{
             flashBtn.isHidden=true
             deleteBtn.isHidden=true
             
-            doneBtn.setTitle(lang == "en" ? "Done (\(imageItems.count))" : "(\(imageItems.count)) تم", for: .normal)
+            doneBtn.setTitle(langTranslation.translate(text: "Done", lang: lang) + "(\(imageItems.count))", for: .normal)
             
             
         }else{
@@ -525,14 +526,14 @@ extension CameraController:ImageScrollViewDelegate{
     func setCameraHintText(){
         //TODO
         if(editModeType == EditModeTypes.CROP){
-            cameraHintL.text = lang == "en" ? "Use 2 fingners to zoom." : "استخدم إصبعين لتقريب الصورة."
+            cameraHintL.text = langTranslation.translate(text: "Use 2 fingners to zoom.", lang: lang)
         }else if(editModeType == EditModeTypes.ROTATE){
-            cameraHintL.text = lang == "en" ? "Keep pressing to rotate the image" : "واصل الضغط للف الصورة"
+            cameraHintL.text = langTranslation.translate(text: "Keep pressing to rotate the image", lang: lang)
         }else{
             if(isIdVerification){
-                cameraHintL.text = lang == "en" ? "Capture the front and back of the ID\nEnsure that all the data is visible and clear" : "قم بتصوير البطاقة الخاصة بك من الأمام و الخلف\nتأكد من أن جميع البيانات الخاصة بك مرئية و واضحة"
+                cameraHintL.text = langTranslation.translate(text: "Capture the front and back of the ID\nEnsure that all the data is visible and clear", lang: lang)
             }else{
-                cameraHintL.text = lang == "en" ? "Please make sure your item is visible with good lighting conditions in the box below." : "اعرض .المنتج الخاص بك داخل المربع أدناه. تأكد من أن صورتك واضحة للحصول على أفضل النتائج"
+                cameraHintL.text = langTranslation.translate(text: "Please make sure your item is visible with good lighting conditions in the box below.", lang: lang)
             }
         }
     }
@@ -606,9 +607,9 @@ extension CameraController:ImageScrollViewDelegate{
         
         
         if(imageTurn>0){
-            doneBtn.setTitle(lang == "en" ? "Done (\(imageTurn))" : "تم (\(imageTurn))", for: .normal)
+            doneBtn.setTitle(langTranslation.translate(text: "Done", lang: lang) + "(\(imageTurn))", for: .normal)
         }else{
-            doneBtn.setTitle(lang == "en" ? "Done" : "تم", for: .normal)
+            doneBtn.setTitle(langTranslation.translate(text: "Done", lang: lang), for: .normal)
         }
         resetUI()
         editMode=false
@@ -634,10 +635,10 @@ extension CameraController:ImageScrollViewDelegate{
         
         if(isIdVerification){
             if(imageItems[0].image == nil){
-                showToast(message: lang == "en" ? "Please add the front ID image" : "برجاء إضافة الوجه الأمامى")
+                showToast(message: langTranslation.translate(text: "Please add the front ID image", lang: lang))
                 return
             }else if(imageItems[1].image == nil){
-                showToast(message: lang == "en" ? "Please add the back ID image" : "برجاء إضافة الوجه الخلفى")
+                showToast(message: langTranslation.translate(text: "Please add the back ID image", lang: lang))
                 return
             }
         }

@@ -11,6 +11,8 @@ import UIKit
 class DeleteDialog: UIViewController {
     var controller:CameraController!
     var lang:String!
+    var langTranslation = LangTranslation()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,7 +30,7 @@ class DeleteDialog: UIViewController {
         addConstraints(currentView: warningImage, MainView: frame, centerX: true, centerXValue: 0, centerY: false, centerYValue: 0, top: true, topValue: 24, bottom: false, bottomValue: 0, leading: false, leadingValue: 0, trailing: false, trailingValue: 0, width: false, widthValue: 0, height: false, heightValue: 0)
         
         let titleL=UILabel()
-        titleL.text = lang == "en" ? "Are you sure you want to delete this?" : "هل انت متأكد من الحذف؟"
+        titleL.text = langTranslation.translate(text: "Are you sure you want to delete this?", lang: lang)
         titleL.numberOfLines=0
         titleL.textColor = UIColor.black
         titleL.textAlignment = .center
@@ -40,7 +42,7 @@ class DeleteDialog: UIViewController {
         
         let cancelBtn=UIButton()
         frame.addSubview(cancelBtn)
-        cancelBtn.setTitle(lang == "en" ? "Cancel" : "إلغاء", for: .normal)
+        cancelBtn.setTitle(langTranslation.translate(text: "Cancel", lang: lang), for: .normal)
         cancelBtn.titleLabel?.textColor = UIColor.white
         cancelBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         cancelBtn.backgroundColor = Colors.tealishColor()
@@ -48,7 +50,7 @@ class DeleteDialog: UIViewController {
         
         let deleteBtn=UIButton()
         frame.addSubview(deleteBtn)
-        deleteBtn.setTitle(lang == "en" ? "Yes, Delete" : "نعم، احذف", for: .normal)
+        deleteBtn.setTitle(langTranslation.translate(text: "Yes, Delete", lang: lang), for: .normal)
         deleteBtn.titleLabel!.font = UIFont(name: "Montserrat-SemiBold", size: 14)
         deleteBtn.backgroundColor = Colors.blueColor()
         addConstraints(currentView: deleteBtn, MainView: frame, centerX: false, centerXValue: 0, centerY: false, centerYValue: 0, top: false, topValue: 0, bottom: true, bottomValue: 0, leading: false, leadingValue: 0, trailing: true, trailingValue: 0, width: true, widthValue: frameWidth*0.5, height: true, heightValue: 54)
