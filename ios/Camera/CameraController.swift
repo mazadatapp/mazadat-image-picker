@@ -133,7 +133,7 @@ class CameraController: SwiftyCamViewController,SwiftyCamViewControllerDelegate 
     
     func getImagesFromGallery(images:[UIImage],hasError:Bool){
         if(hasError){
-            showToast(langTranslation.translate(text: "Cannot choose images more than 5MB" , lang: lang),width: 280)
+            showToast(message: langTranslation.translate(text: "Cannot choose images more than 5MB" , lang: lang),width: 280)
         }
         for image in images{
             if(imageTurn < maxImagesSize){

@@ -119,17 +119,17 @@ class LangTranslation {
     
     
     func translate(text: String, lang: String) -> String {
-        if(lang == 'ar') {
-            return ar[text]
+        if(lang == "ar") {
+            return ar[text]!
         }
-        else if(lang == 'fr') {
-            return fr[text]
+        else if(lang == "fr") {
+            return fr[text]!
         }
-        else if(lang == 'it') {
-            return it[text]
+        else if(lang == "it") {
+            return it[text]!
         }
-        else if(lang == 'de') {
-            return de[text]
+        else if(lang == "de") {
+            return de[text]!
         }
         return text
     }
