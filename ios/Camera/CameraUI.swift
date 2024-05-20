@@ -526,7 +526,7 @@ extension CameraController:ImageScrollViewDelegate{
     func setCameraHintText(){
         //TODO
         if(editModeType == EditModeTypes.CROP){
-            cameraHintL.text = langTranslation.translate(text: "Use 2 fingners to zoom.", lang: lang)
+            cameraHintL.text = langTranslation.translate(text: "Use 2 fingers to zoom.", lang: lang)
         }else if(editModeType == EditModeTypes.ROTATE){
             cameraHintL.text = langTranslation.translate(text: "Keep pressing to rotate the image", lang: lang)
         }else{
