@@ -33,7 +33,8 @@ class LangTranslation {
         "Please add the front ID image" : "برجاء إضافة الوجه الأمامى",
         "Please add the back ID image" : "برجاء إضافة الوجه الخلفى",
         "Restore" : "استرجع",
-        "Rotate" : "استدارة"
+        "Rotate" : "استدارة",
+        "Apply" : "تطبيق"
     ]
 
     let fr: [String: String] = [
@@ -60,7 +61,8 @@ class LangTranslation {
       "Please add the front ID image": "Veuillez ajouter l'image recto de la pièce d'identité",
       "Please add the back ID image": "Veuillez ajouter l'image verso de la pièce d'identité",
       "Restore": "Restaurer",
-      "Rotate": "Faire pivoter"
+      "Rotate": "Faire pivoter",
+      "Apply" : "Appliquer"
     ]
     
     let it: [String: String] = [
@@ -87,7 +89,8 @@ class LangTranslation {
       "Please add the front ID image": "Aggiungi l'immagine del fronte del documento",
       "Please add the back ID image": "Aggiungi l'immagine del retro del documento",
       "Restore": "Ripristina",
-      "Rotate": "Ruota"
+      "Rotate": "Ruota",
+      "Apply" : "Applicare"
     ]
     
     let de: [String: String] = [
@@ -114,7 +117,8 @@ class LangTranslation {
       "Please add the front ID image": "Bitte fügen Sie das Bild der Vorderseite des Ausweises hinzu",
       "Please add the back ID image": "Bitte fügen Sie das Bild der Rückseite des Ausweises hinzu",
       "Restore": "Wiederherstellen",
-      "Rotate": "Drehen"
+      "Rotate": "Drehen",
+      "Apply" : "Anwenden"
     ]
     
     
