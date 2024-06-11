@@ -242,6 +242,7 @@ public class PickerCameraActivity extends AppCompatActivity {
           editType = EditModeTypes.NOTHING;
           enableDoneBtn();
         }
+        changeOptionsAlpha();
       }
 
       @Override
@@ -264,6 +265,7 @@ public class PickerCameraActivity extends AppCompatActivity {
           editType = EditModeTypes.NOTHING;
           enableDoneBtn();
         }
+        changeOptionsAlpha();
       }
     });
   }
@@ -664,6 +666,7 @@ public class PickerCameraActivity extends AppCompatActivity {
 
       confirmTv.setEnabled(true);
       declineTv.setEnabled(true);
+      changeOptionsAlpha();
       rotateImage();
     } else if (isEditModeOn && editType == EditModeTypes.ROTATE) {
       rotateBtn.setEnabled(false);
@@ -695,6 +698,11 @@ public class PickerCameraActivity extends AppCompatActivity {
     });
 
 
+  }
+
+  private void changeOptionsAlpha(){
+    cropBtn.setAlpha((editType == EditModeTypes.CROP || editType == EditModeTypes.NOTHING) ? 1.0f : 0.5f );
+    rotateBtn.setAlpha((editType == EditModeTypes.ROTATE || editType == EditModeTypes.NOTHING) ? 1.0f : 0.5f );
   }
 
   public float updateImageZoom(Bitmap bitmap, ZoomImage image, int position) {
@@ -845,7 +853,7 @@ public class PickerCameraActivity extends AppCompatActivity {
     editType = EditModeTypes.NOTHING;
     declineTv.setVisibility(View.GONE);
     confirmTv.setVisibility(View.GONE);
-
+    changeOptionsAlpha();
     setHintText();
     enableDoneBtn();
   }
