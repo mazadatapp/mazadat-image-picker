@@ -480,7 +480,7 @@ extension CameraController:ImageScrollViewDelegate{
             
             confirmBtn.isHidden=false
             declineBtn.isHidden=false
-            
+            changeOptionsAlpha()
             rotateImage()
             
         }else if(editModeType == EditModeTypes.ROTATE){
@@ -734,6 +734,7 @@ extension CameraController:ImageScrollViewDelegate{
         
         setCameraHintText()
         enableDoneBtn()
+        changeOptionsAlpha()
     }
     func cropImage(image: UIImage, rect: CGRect) -> UIImage {
         return image.croppedImage(inRect: rect)
@@ -778,6 +779,7 @@ extension CameraController:ImageScrollViewDelegate{
             
             disableDoneBtn()
             editModeType = EditModeTypes.CROP
+            changeOptionsAlpha()
         }
     }
     func zoomBegin() {
@@ -791,7 +793,7 @@ extension CameraController:ImageScrollViewDelegate{
         
         disableDoneBtn()
         editModeType = EditModeTypes.CROP
-        
+        changeOptionsAlpha()
     }
     
 }

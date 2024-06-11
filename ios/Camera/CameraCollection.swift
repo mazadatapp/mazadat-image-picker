@@ -131,6 +131,13 @@ extension CameraController:UICollectionViewDelegate,UICollectionViewDataSource{
         gridHorizontal1.isHidden = true
         gridHorizontal2.isHidden = true
         imageCropper.isHidden = true
+
+        changeOptionsAlpha()
+    }
+
+    func changeOptionsAlpha(){
+        cropBtn.alpha=(editModeType == EditModeTypes.CROP || editModeType == EditModeTypes.NOTHING) ? 1.0 : 0.5
+        rotateBtn.alpha=(editModeType == EditModeTypes.ROTATE || editModeType == EditModeTypes.NOTHING) ? 1.0 : 0.5
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
