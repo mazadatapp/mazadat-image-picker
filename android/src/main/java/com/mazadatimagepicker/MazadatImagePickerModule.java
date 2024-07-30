@@ -67,7 +67,7 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
 
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(BuildConfig.BROADCAST_ACTION);
-    getCurrentActivity().registerReceiver(receiver, intentFilter);
+    getCurrentActivity().registerReceiver(receiver, intentFilter,Context.RECEIVER_NOT_EXPORTED);
   }
 
   @ReactMethod
@@ -84,7 +84,7 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
 
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(BuildConfig.BROADCAST_ACTION);
-    getCurrentActivity().registerReceiver(receiver, intentFilter);
+    getCurrentActivity().registerReceiver(receiver, intentFilter,Context.RECEIVER_NOT_EXPORTED);
   }
 
   @ReactMethod
@@ -100,6 +100,6 @@ public class MazadatImagePickerModule extends ReactContextBaseJavaModule {
 
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(BuildConfig.BROADCAST_ACTION);
-    getCurrentActivity().registerReceiver(receiver, intentFilter);
+    getCurrentActivity().registerReceiver(receiver, intentFilter,Context.RECEIVER_NOT_EXPORTED);
   }
 }
