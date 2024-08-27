@@ -1,38 +1,29 @@
 <resources>
   <string name="gallery">Galerie</string>
-  <string name="camera_capture_hint">Bitte stellen Sie sicher, dass Ihr Artikel bei guten Lichtverhältnissen im Feld unten sichtbar ist</string>
+  <string name="camera_capture_hint">Bitte stellen Sie sicher, dass Ihr Artikel bei guten Lichtverhältnissen im untenstehenden Bereich sichtbar ist</string>
   <string name="crop">Zuschneiden</string>
   <string name="rotate">Drehen</string>
   <string name="delete">Löschen</string>
   <string name="apply">Anwenden</string>
   <string name="restore">Wiederherstellen</string>
   <string name="done">Fertig</string>
-  <string name="max_number_selected_images_is">Die maximale Anzahl ausgewählter Fotos beträgt</string>
+  <string name="max_number_selected_images_is">Die maximale Anzahl der ausgewählten Fotos beträgt</string>
   <string name="select_to_edit">Zum Bearbeiten auswählen</string>
-  <string name="front_id">Front-ID</string>
-  <string name="back_id">Zurück-ID</string>
-  <string name="please_add_front_id">Bitte fügen Sie das vordere ID-Bild hinzu</string>
-  <string name="please_add_back_id">Bitte fügen Sie das hintere ID-Bild hinzu</string>
+  <string name="front_id">Vorderseite des Ausweises</string>
+  <string name="back_id">Rückseite des Ausweises</string>
+  <string name="please_add_front_id">Bitte fügen Sie das Bild der Vorderseite des Ausweises hinzu</string>
+  <string name="please_add_back_id">Bitte fügen Sie das Bild der Rückseite des Ausweises hinzu</string>
   <string name="id_verification_hint">Erfassen Sie die Vorder- und Rückseite des Ausweises\nStellen Sie sicher, dass alle Daten sichtbar und klar sind</string>
-  <string name="zoom_hint">Zum Zoomen zwei Finger verwenden.</string>
+  <string name="zoom_hint">Verwenden Sie zwei Finger zum Zoomen.</string>
   <string name="rotate_hint">Zum Drehen des Bildes gedrückt halten.</string>
-
-  //gallery
   <string name="proccessing_images">Bilder werden verarbeitet</string>
-
-  //confirmation dialog
   <string name="are_you_sure_you_want_to_close">Sind Sie sicher, dass Sie schließen möchten?</string>
   <string name="cancel">Abbrechen</string>
   <string name="yes_close">Ja, schließen</string>
   <string name="all_images_and_edits_you_did_will_be_delete">Alle vorgenommenen Änderungen werden verworfen!</string>
-
-  //confirmation dialog
   <string name="are_you_sure_to_delete">Sind Sie sicher, dass Sie dies löschen möchten?</string>
   <string name="yes_delete">Ja, löschen</string>
-
-  //error
   <string name="cannot_fetch_image">Bild kann nicht abgerufen werden</string>
   <string name="please_crop_all_the_images">Bitte stellen Sie sicher, dass alle Bilder zugeschnitten sind</string>
-  <string name="max_images_are">Die maximale Anzahl an Bildern beträgt</string>
-
+  <string name="max_images_are">Die maximale Anzahl von Bildern ist</string>
 </resources>

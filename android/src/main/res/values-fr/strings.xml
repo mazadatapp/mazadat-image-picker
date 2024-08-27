@@ -1,38 +1,29 @@
 <resources>
   <string name="gallery">Galerie</string>
-  <string name="camera_capture_hint">Veuillez vous assurer que votre article est visible dans de bonnes conditions d"'"éclairage dans la case ci-dessous</string>
+  <string name="camera_capture_hint">Veuillez vous assurer que votre article est visible avec de bonnes conditions d\'éclairage dans la zone ci-dessous</string>
   <string name="crop">Recadrer</string>
-  <string name="rotate">Rotation</string>
+  <string name="rotate">Faire pivoter</string>
   <string name="delete">Supprimer</string>
   <string name="apply">Appliquer</string>
   <string name="restore">Restaurer</string>
   <string name="done">Terminé</string>
-  <string name="max_number_selected_images_is">Le nombre maximum de photos sélectionnées est</string>
+  <string name="max_number_selected_images_is">Le nombre maximum de photos sélectionnées est de</string>
   <string name="select_to_edit">Sélectionner pour modifier</string>
   <string name="front_id">ID avant</string>
   <string name="back_id">ID arrière</string>
-  <string name="please_add_front_id">Veuillez ajouter l"'"image d"'"identification du recto</string>
-  <string name="please_add_back_id">Veuillez ajouter l"'"image d"'"identification arrière</string>
-  <string name="id_verification_hint">Capturez le recto et le verso de la pièce d"'"identité\nAssurez-vous que toutes les données sont visibles et claires.</string>
+  <string name="please_add_front_id">Veuillez ajouter l\'image de l\'ID avant</string>
+  <string name="please_add_back_id">Veuillez ajouter l\'image de l\'ID arrière</string>
+  <string name="id_verification_hint">Capturez l\'avant et l\'arrière de l\'ID\nAssurez-vous que toutes les données sont visibles et claires</string>
   <string name="zoom_hint">Utilisez 2 doigts pour zoomer.</string>
-  <string name="rotate_hint">continuez d"'"appuyer pour faire pivoter l"'"image.</string>
-
-  //gallery
+  <string name="rotate_hint">Maintenez pour faire pivoter l\'image.</string>
   <string name="proccessing_images">Traitement des images</string>
-
-  //confirmation dialog
   <string name="are_you_sure_you_want_to_close">Êtes-vous sûr de vouloir fermer?</string>
   <string name="cancel">Annuler</string>
   <string name="yes_close">Oui, fermer</string>
-  <string name="all_images_and_edits_you_did_will_be_delete">Toutes les modifications apportées seront ignorées!</string>
-
-  //confirmation dialog
+  <string name="all_images_and_edits_you_did_will_be_delete">Toutes les modifications apportées seront annulées!</string>
   <string name="are_you_sure_to_delete">Êtes-vous sûr de vouloir supprimer ceci?</string>
-  <string name="yes_delete">Oui, Supprimer</string>
-
-  //error
-  <string name="cannot_fetch_image">Impossible de récupérer l"'"image</string>
+  <string name="yes_delete">Oui, supprimer</string>
+  <string name="cannot_fetch_image">Impossible de récupérer l\'image</string>
   <string name="please_crop_all_the_images">Veuillez vous assurer que toutes les images sont recadrées</string>
-  <string name="max_images_are">Le nombre maximum d"'"images est</string>
-
+  <string name="max_images_are">Le nombre maximum d\'images est</string>
 </resources>

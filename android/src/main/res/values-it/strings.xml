@@ -10,29 +10,21 @@
   <string name="done">Fatto</string>
   <string name="max_number_selected_images_is">Il numero massimo di foto selezionate è</string>
   <string name="select_to_edit">Seleziona per modificare</string>
-  <string name="front_id">ID frontale</string>
+  <string name="front_id">ID anteriore</string>
   <string name="back_id">ID posteriore</string>
-  <string name="please_add_front_id">Aggiungi l"'"immagine dell"'"ID frontale</string>
-  <string name="please_add_back_id">Aggiungi l"'"immagine dell"'"ID posteriore</string>
-  <string name="id_verification_hint">Cattura la parte anteriore e posteriore dell"'"ID\nAssicurati che tutti i dati siano visibili e chiari</string>
-  <string name="zoom_hint">Utilizza 2 dita per zoomare.</string>
-  <string name="rotate_hint">Tieni premuto per ruotare l"'"immagine.</string>
-
-  //gallery
+  <string name="please_add_front_id">Si prega di aggiungere l\'immagine dell\'ID anteriore</string>
+  <string name="please_add_back_id">Si prega di aggiungere l\'immagine dell\'ID posteriore</string>
+  <string name="id_verification_hint">Cattura la parte anteriore e posteriore dell\'ID\nAssicurati che tutti i dati siano visibili e chiari</string>
+  <string name="zoom_hint">Usa 2 dita per ingrandire.</string>
+  <string name="rotate_hint">Continua a premere per ruotare l\'immagine.</string>
   <string name="proccessing_images">Elaborazione immagini</string>
-
-  //Confirmation dialog
   <string name="are_you_sure_you_want_to_close">Sei sicuro di voler chiudere?</string>
   <string name="cancel">Annulla</string>
   <string name="yes_close">Sì, chiudi</string>
-  <string name="all_images_and_edits_you_did_will_be_delete">Tutte le modifiche apportate verranno scartate!</string>
-
-  //Confirmation dialog
+  <string name="all_images_and_edits_you_did_will_be_delete">Tutte le modifiche apportate verranno eliminate!</string>
   <string name="are_you_sure_to_delete">Sei sicuro di voler eliminare questo?</string>
   <string name="yes_delete">Sì, elimina</string>
-
-  //error
-  <string name="cannot_fetch_image">Impossibile recuperare l"'"immagine</string>
+  <string name="cannot_fetch_image">Impossibile recuperare l\'immagine</string>
   <string name="please_crop_all_the_images">Assicurati che tutte le immagini siano ritagliate</string>
   <string name="max_images_are">Il numero massimo di immagini è</string>
 </resources>
