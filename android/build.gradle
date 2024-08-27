@@ -173,6 +173,10 @@ dependencies {
   implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
 
   implementation 'com.android.support:cardview-v7:+'
+
+  //android fast networking
+  //implementation 'com.github.amitshekhariitbhu.Fast-Android-Networking:android-networking:v1.0.2'
+  //implementation 'com.github.karimmazadat:AndroidFastNetworking:1.0.0'
 // From node_modules
 }
 
