@@ -397,11 +397,11 @@ public class PickerCameraActivity extends AppCompatActivity {
           RectF rectF = imageItems.get(i).getZoomImage().getZoomedRect();
           runOnUiThread(() -> loadingCl.setVisibility(View.VISIBLE));
           Bitmap bitmap = BitmapFactory.decodeFile(imageItems.get(i).getFile().getPath());
-          if(bitmap.getWidth() > 0 && ((int)(bitmap.getWidth() * rectF.width())) > 0) {
+          if (bitmap.getWidth() > 0 && ((int) (bitmap.getWidth() * rectF.width())) > 0) {
             bitmap = Bitmap.createBitmap(bitmap, (int) (bitmap.getWidth() * rectF.left), (int) (bitmap.getHeight() * rectF.top), (int) (bitmap.getWidth() * rectF.width()), (int) (bitmap.getHeight() * rectF.height()));
             File file = ImageUtils.bitmapToFile(PickerCameraActivity.this, bitmap, imageItems.get(i).getPercentage());
             imageItems.get(i).setFile(file);
-          }else{
+          } else {
             imageItems.get(i).setFile(null);
           }
         }
@@ -700,9 +700,9 @@ public class PickerCameraActivity extends AppCompatActivity {
 
   }
 
-  private void changeOptionsAlpha(){
-    cropBtn.setAlpha((editType == EditModeTypes.CROP || editType == EditModeTypes.NOTHING) ? 1.0f : 0.5f );
-    rotateBtn.setAlpha((editType == EditModeTypes.ROTATE || editType == EditModeTypes.NOTHING) ? 1.0f : 0.5f );
+  private void changeOptionsAlpha() {
+    cropBtn.setAlpha((editType == EditModeTypes.CROP || editType == EditModeTypes.NOTHING) ? 1.0f : 0.5f);
+    rotateBtn.setAlpha((editType == EditModeTypes.ROTATE || editType == EditModeTypes.NOTHING) ? 1.0f : 0.5f);
   }
 
   public float updateImageZoom(Bitmap bitmap, ZoomImage image, int position) {

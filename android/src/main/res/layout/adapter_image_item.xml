@@ -46,13 +46,14 @@
 
     <TextView
       android:id="@+id/select_to_edit_tv"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:drawableTop="@drawable/ic_edit"
       android:fontFamily="@font/montserrat_semibold"
       android:text="@string/select_to_edit"
       android:textColor="@color/white_74"
       android:textSize="9dp"
+      android:gravity="center"
       android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
