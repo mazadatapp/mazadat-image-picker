@@ -2,7 +2,7 @@
   <string name="gallery">Galerie</string>
   <string name="camera_capture_hint">Veuillez vous assurer que votre article est visible avec de bonnes conditions d\'éclairage dans la zone ci-dessous</string>
   <string name="crop">Recadrer</string>
-  <string name="rotate">Faire pivoter</string>
+  <string name="rotate">Tourner</string>
   <string name="delete">Supprimer</string>
   <string name="apply">Appliquer</string>
   <string name="restore">Restaurer</string>

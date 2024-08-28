@@ -61,7 +61,7 @@ class LangTranslation {
         "Please add the front ID image" : "Veuillez ajouter l'image de l'ID avant",
         "Please add the back ID image" : "Veuillez ajouter l'image de l'ID arrière",
         "Restore" : "Restaurer",
-        "Rotate" : "Faire pivoter",
+        "Rotate" : "Tourner",
         "Apply" : "Appliquer"
     ]
     
