@@ -270,36 +270,6 @@ public class PickerCameraActivity extends AppCompatActivity {
     });
   }
 
-  private void downloadImage(String url) {
-
-    String name = url.split("/")[url.split("/").length - 1];
-    if (!name.toLowerCase().endsWith(".png") && !name.toLowerCase().endsWith(".jpeg") && !name.toLowerCase().endsWith(".jpg")
-      && !name.toLowerCase().endsWith(".svg") && !name.toLowerCase().endsWith(".webp")) {
-      name += ".jpg";
-    }
-    String finalName = name;
-    AndroidNetworking.download(url, getCacheDir().getPath(), name).build().setDownloadProgressListener((l, l1) -> {
-      int percentage = (int) ((double) l * 100.0 / (double) l1);
-      downloadTv.setText(percentage + "%");
-    }).startDownload(new DownloadListener() {
-      @Override
-      public void onDownloadComplete() {
-        File file = new File(getCacheDir().getPath(), finalName);
-        imageItems.get(0).setFile(file);
-        downloadPb.setVisibility(View.GONE);
-        downloadTv.setVisibility(View.GONE);
-        canPressDone = true;
-        editOrCapturePhoto(0);
-      }
-
-      @Override
-      public void onError(ANError anError) {
-        anError.printStackTrace();
-      }
-    });
-
-  }
-
   private void setHintText() {
     if (editType == EditModeTypes.CROP) {
       captureHintTv.setText(getString(R.string.zoom_hint));
@@ -528,7 +498,7 @@ public class PickerCameraActivity extends AppCompatActivity {
   public void editOrCapturePhoto(int position) {
 
     if (imageItems.get(position).getFile() != null && editType == EditModeTypes.NOTHING) {
-
+      Log.i("datadata_show","hello");
 
       selectedEditIndex = position;
       selectedPosition = position;

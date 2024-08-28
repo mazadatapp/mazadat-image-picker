@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,11 +105,13 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
 
       if (model.getFile() != null) {
         Glide.with(pickerCameraActivity).load(model.getFile()).dontTransform().into(image);
+        Log.i("datadata_show","true");
         image.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
           @Override
           public void onGlobalLayout() {
             image.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             if (image.getDrawable() == null) {
+              Log.i("datadata_show","found");
               pickerCameraActivity.reloadItem(position);
             }
             model.setZoomImage(image);
@@ -163,6 +166,7 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
     }
 
     private void checkIfImageExist(ImageItem model, int position, boolean fromCache) {
+      Log.i("datadata_image",model.getUrl());
       Glide.with(pickerCameraActivity)
         .asBitmap()
         .load(model.getUrl())
@@ -181,12 +185,15 @@ public class ImageItemsAdapter extends RecyclerView.Adapter<ImageItemsAdapter.Vi
               File file = ImageUtils.bitmapToFile(pickerCameraActivity,
                 //  ImageUtils.createBitmap(bitmap.getWidth(), (int) (bitmap.getWidth() * 3f / 4f), bitmap));
                 bitmap);
-
+              Log.i("datadata_image",model.getUrl()+" "+file.getPath());
               model.setUrl(null);
               model.setFile(file);
               model.setImageWidth(bitmap.getWidth());
               model.setImageHeight(bitmap.getHeight());
               pickerCameraActivity.reloadItem(position);
+              if(pickerCameraActivity.getSelectedPosition() == position){
+                pickerCameraActivity.runOnUiThread(() -> pickerCameraActivity.editOrCapturePhoto(position));
+              }
             });
             return true;
           }
