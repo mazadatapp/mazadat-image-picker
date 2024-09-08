@@ -78,7 +78,7 @@ class LangTranslation {
         "Front ID": "ID anteriore",
         "Back ID": "ID posteriore",
         "Gallery": "Galleria",
-        "The maximum number of selected photos is": "Il numero massimo di foto selezionate è",
+        "The maximum number of selected photos is ": "Il numero massimo di foto selezionate è ",
         "Done (0)": "Fatto (0)",
         "Crop": "Ritaglia",
         "Delete": "Elimina",
@@ -106,7 +106,7 @@ class LangTranslation {
         "Front ID": "Vorderseite des Ausweises",
         "Back ID": "Rückseite des Ausweises",
         "Gallery": "Galerie",
-        "The maximum number of selected photos is": "Die maximale Anzahl der ausgewählten Fotos ist",
+        "The maximum number of selected photos is ": "Die maximale Anzahl der ausgewählten Fotos ist ",
         "Done (0)": "Fertig (0)",
         "Crop": "Zuschneiden",
         "Delete": "Löschen",
@@ -123,6 +123,7 @@ class LangTranslation {
     
     
     func translate(text: String, lang: String) -> String {
+        print("word \(text)")
         if(lang == "ar") {
             return ar[text]!
         }
